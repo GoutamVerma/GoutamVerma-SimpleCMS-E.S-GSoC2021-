@@ -50,6 +50,6 @@ To deploy this project it is necessary to have Android 10(API Level 29) and 10 i
 
 ## License
 
-Licensed by [MIT](https://choosealicense.com/licenses/mit/)
+Licensed by [MIT](https://raw.githubusercontent.com/GoutamVerma/GoutamVerma-SimpleCMS-E.S-GSoC2021-/main/MIT%20License)
 
   
