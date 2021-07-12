@@ -26,8 +26,8 @@ To deploy this project it is necessary to have Android 10(API Level 29) and 10 i
 ## Installation
 *There is two ways to install this application :*
 
-* Running with APK, Download latest release of apk from [here](). Install it in device or emulator and then create a POI for location, export the esp file and finally import it in [Google Earth Studio](https://earth.google.com/studio/).
-* Running from source code, Import project from control version in android studio. Then connect an emulator or device and finally click on "Run" button.
+* **Running with APK**, Download latest release of apk from [here](). Install it in device or emulator and then create a POI for location, export the esp file and finally import it in [Google Earth Studio](https://earth.google.com/studio/).
+* **Running from source code**, Import project from control version in android studio. Then connect an emulator or device and finally click on "Run" button.
 
 *For more information*
 
