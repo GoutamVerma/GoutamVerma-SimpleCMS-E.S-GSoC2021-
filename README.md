@@ -26,7 +26,13 @@ To deploy this project it is necessary to have Android 10(API Level 29) and 10 i
 ## Installation
 *There is two ways to install this application :*
 
-* **Running with APK**, Download latest release of apk from [here](). Install it in device or emulator and then create a POI for location, export the esp file and finally import it in [Google Earth Studio](https://earth.google.com/studio/).
+* **Running with APK**
+1. Download the latest release of apk from here. 
+2. Install it in device or emulator
+3. Create a POI, fill the necessary details of location.
+4. Click on the “Export” button, select the feature you want to use.
+5. Finally, open Google Earth Studio in the web browser. Select “open project“ then locate the esp file and enjoy the animation. 
+
 * **Running from source code**
 1. Import the project from version control in android. 
 2. If you have a physical android tablet use that otherwise create a new AVD.(for more information click here)
