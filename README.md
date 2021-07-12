@@ -36,7 +36,7 @@ To deploy this project it is necessary to have Android 10(API Level 29) and 10 i
 * How to run project in android studio? click [here](https://developer.android.com/studio/run)
 * How to import project in Google Earth Studio? click [here](https://earth.google.com/studio/docs/the-basics/project-management/)
 ## Screenshots
-   <img src="https://raw.githubusercontent.com/dfriveros11/LiquidGalaxySimpleCMS/develop/Gif_SimpleCMS.gif"/>
+   <img src="https://raw.githubusercontent.com/GoutamVerma/GoutamVerma-SimpleCMS-E.S-GSoC2021-/main/screenshot.gif"/>
 ## Tech Stack
 
 * Java
