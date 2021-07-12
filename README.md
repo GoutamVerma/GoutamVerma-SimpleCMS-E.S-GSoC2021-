@@ -15,8 +15,9 @@ SimpleCMS E.S is an android application which is cable to mimics the functionali
 
 This application is developed as part of Google Summer of Code 2021 by Goutam Verma, with Andreu Ibañez as mentor, and Diego reviros and Ivan J as co-mentos.
 
-![logo](https://developers.google.com/open-source/gsoc/resources/downloads/GSoC-logo-horizontal-200.png)
+
 ![logo](https://4.bp.blogspot.com/-n-vRn12_mEk/XLr2zIDgUnI/AAAAAAAHBTI/69TPLvy-nsg9OPNC15bZB3-WzSX8m0PrwCLcBGAs/s1600/LOGO_LIQUID_GALAXY-sq300x300-pngtranspOK.png)
+![logo](https://developers.google.com/open-source/gsoc/resources/downloads/GSoC-logo-horizontal-200.png)
 
 ## Deployment
 
