@@ -17,7 +17,6 @@ This application is developed as part of Google Summer of Code 2021 by Goutam Ve
 
 
 ![logo](https://4.bp.blogspot.com/-n-vRn12_mEk/XLr2zIDgUnI/AAAAAAAHBTI/69TPLvy-nsg9OPNC15bZB3-WzSX8m0PrwCLcBGAs/s1600/LOGO_LIQUID_GALAXY-sq300x300-pngtranspOK.png)
-![logo](https://developers.google.com/open-source/gsoc/resources/downloads/GSoC-icon-192.png)
 
 ## Deployment
 
