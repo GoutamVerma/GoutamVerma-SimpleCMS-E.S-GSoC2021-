@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/zoomto"
+        android:title="Zoom To" />
+    <item
+        android:id="@+id/orbit"
+        android:title="Orbit" />
+    <item
+        android:id="@+id/spiral"
+        android:title="Spiral" />
+</menu>

@@ -16,12 +16,13 @@ public class GDG extends InfoScraping implements IJsonPacker {
     private String name;
     private double longitude;
     private double latitude;
+    private double position;
 
     public GDG(){
         super(Constant.GDG.getId());
     }
 
-    public GDG(long id, String urlName, String status, String city, String country, String name, double longitude, double latitude) {
+    public GDG(long id, String urlName, String status, String city, String country, String name, double longitude, double latitude,double position) {
         super(Constant.GDG.getId());
         this.id = id;
         this.urlName = urlName;
@@ -31,6 +32,7 @@ public class GDG extends InfoScraping implements IJsonPacker {
         this.name = name;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.position = position;
     }
 
     public long getId() {
@@ -64,6 +66,7 @@ public class GDG extends InfoScraping implements IJsonPacker {
     public double getLatitude() {
         return latitude;
     }
+    public double getPosition() { return position;}
 
     @Override
     public JSONObject pack() throws JSONException {

@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
 
     <application
         android:allowBackup="false"
@@ -20,6 +21,15 @@
         tools:ignore="AllowBackup"
         android:requestLegacyExternalStorage="true"
         tools:targetApi="q">
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.lglab.diego.simple_cms.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"/>
+        </provider>
 
         <activity
             android:name=".top_bar.TobBarActivity"

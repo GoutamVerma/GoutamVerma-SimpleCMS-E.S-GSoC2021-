@@ -34,6 +34,8 @@ public class POILocation {
         return longitude;
     }
 
+
+
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }

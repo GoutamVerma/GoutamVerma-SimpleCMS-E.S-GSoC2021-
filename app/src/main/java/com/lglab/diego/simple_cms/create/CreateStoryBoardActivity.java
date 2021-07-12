@@ -1,25 +1,34 @@
 package com.lglab.diego.simple_cms.create;
 
 import android.Manifest;
+import android.R.layout;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,23 +54,35 @@ import com.lglab.diego.simple_cms.db.entity.StoryBoardDB;
 import com.lglab.diego.simple_cms.db.entity.StoryBoardJsonDB;
 import com.lglab.diego.simple_cms.db.entity.StoryBoardWithJson;
 import com.lglab.diego.simple_cms.dialog.CustomDialogUtility;
+import com.lglab.diego.simple_cms.export_esp.export_esp;
+import com.lglab.diego.simple_cms.export_esp.record;
 import com.lglab.diego.simple_cms.my_storyboards.StoryBoardConstant;
 import com.lglab.diego.simple_cms.utility.ConstantPrefs;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.lglab.diego.simple_cms.dialog.CustomDialogUtility.*;
 
 /**
  * This activity is in charge of creating the storyboards with the respective different actions
  */
 public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implements
         ActionRecyclerAdapter.OnNoteListener {
+    CreateStoryBoardActionLocationActivity a = new CreateStoryBoardActionLocationActivity();
+    HashMap<String, List<Double>> people = a.getPeopleMap();
 
     private static final String TAG_DEBUG = "CreateStoryBoardActivity";
 
@@ -78,9 +99,10 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
     private boolean isStopStoryboard = false;
 
 
-    private EditText storyBoardName;
+    private EditText storyBoardName, location;
     private Button buttCreate, buttTest, buttStopTest;
     private TextView connectionStatus, sizeFile;
+    private AutoCompleteTextView actv;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,7 +127,8 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
         Button buttDelete = findViewById(R.id.butt_delete);
         Button buttSaveLocally = findViewById(R.id.butt_save_locally);
         Button buttSaveGoogleDrive = findViewById(R.id.butt_save_on_google_drive);
-
+        Button exportEsp = findViewById(R.id.exportesp);
+        Button customDialog = findViewById(R.id.customDialog);
         connectionStatus = findViewById(R.id.connection_status);
 
         //MyStoryboards
@@ -113,7 +136,6 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
 
         //Google Drive
         currentStoryBoardGoogleDriveID = getIntent().getStringExtra(StoryBoardConstant.STORY_BOARD_JSON_ID.name());
-
         if (storyboardID != Long.MIN_VALUE) {
             currentStoryBoardId = storyboardID;
             chargeStoryBoardLocally();
@@ -178,11 +200,84 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
 
         buttStopTest.setOnClickListener((view -> stopTestStoryBoard()));
 
+        exportEsp.setOnClickListener((view -> popup(view)));
+
+        customDialog.setOnClickListener((view -> dialogbox(view,a.getPeopleMap())));
+
         initRecyclerView();
 
         changeButtonClickableBackgroundColor();
     }
+    public void dialogbox(View v,HashMap position_data) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Enter name of location");
+        final View customLayout = getLayoutInflater().inflate(R.layout.customview, null);
+        builder.setView(customLayout);
+        String[] key = people.keySet().toArray(new String[0]);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreateStoryBoardActivity.this, layout.simple_dropdown_item_1line, new ArrayList<String>(Arrays.asList(key)));
+        AutoCompleteTextView editText = customLayout.findViewById(R.id.editText);
+        editText.setAdapter(adapter);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                if(position_data.containsKey(String.valueOf(editText.getText()))) {
+                                    shareFilekml(String.valueOf(editText.getText()),record.FindLocation(position_data, String.valueOf(editText.getText())));
+                                }
+                                else{
+                                    CustomDialogUtility.showDialog(CreateStoryBoardActivity.this, getResources().getString(R.string.Under_development));
+                                }
+                            }
+                        });
 
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+  /* this function is responsible for selecting item from export esp button
+  * */
+    public void popup(View V){
+        PopupMenu popup = new PopupMenu(CreateStoryBoardActivity.this, V);
+        popup.getMenuInflater().inflate(R.menu.popup,popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if(item.getItemId() == R.id.orbit) {
+                    if (!isPOI) {
+                        CustomDialogUtility.showDialog(CreateStoryBoardActivity.this,
+                                getResources().getString(R.string.You_need_a_location_to_export_esp));
+                    }
+                    else{
+                        POI poi = findLastPOI(actions.size());
+                        shareFile(poi.getPoiLocation().getName(),export_esp.orbit(poi));
+                        saveEsp(poi.getPoiLocation().getName(), export_esp.orbit(poi));
+                        }
+                }
+                if(item.getItemId() == R.id.zoomto) {
+                    if (!isPOI) {
+                        CustomDialogUtility.showDialog(CreateStoryBoardActivity.this, getResources().getString(R.string.You_need_a_location_to_export_esp));
+                    }
+                    else{
+                        POI poi = findLastPOI(actions.size());
+                        shareFile(poi.getPoiLocation().getName(), export_esp.ZoomTo(poi));
+                        saveEsp(poi.getPoiLocation().getName(), export_esp.ZoomTo(poi));
+                    }
+                }
+                if(item.getItemId() == R.id.spiral) {
+                    if (!isPOI) {
+                        CustomDialogUtility.showDialog(CreateStoryBoardActivity.this, getResources().getString(R.string.You_need_a_location_to_export_esp));
+                    }
+                    else{
+                        POI poi = findLastPOI(actions.size());
+                        shareFile(poi.getPoiLocation().getName(), export_esp.spiral(poi));
+                        saveEsp(poi.getPoiLocation().getName(), export_esp.spiral(poi));
+                      }
+                }
+                return true;
+            }
+        });
+        popup.show();
+    }
     private void loadDataJson() {
         SharedPreferences sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE);
         String storyBoardJson = sharedPreferences.getString(ConstantPrefs.STORY_BOARD_JSON.name(), "");
@@ -216,7 +311,7 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
         handler.postDelayed(() -> {
             if (isConnected.get()) {
                 isStopStoryboard = false;
-                Dialog dialog = CustomDialogUtility.getDialog(CreateStoryBoardActivity.this, "Setting Files");
+                Dialog dialog = getDialog(CreateStoryBoardActivity.this, "Setting Files");
                 dialog.show();
                 handler.postDelayed(() -> {
                     buttTest.setVisibility(View.INVISIBLE);
@@ -355,7 +450,7 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
      * @param storyBoardJson the storyboard
      */
     private void unpackStoryBoard(String storyBoardJson) {
-        Dialog dialog = CustomDialogUtility.getDialog(CreateStoryBoardActivity.this, getResources().getString(R.string.create_message_charging_storyboard));
+        Dialog dialog = getDialog(CreateStoryBoardActivity.this, getResources().getString(R.string.create_message_charging_storyboard));
         dialog.show();
         try {
             StoryBoard storyBoard = new StoryBoard();
@@ -487,6 +582,7 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
         Button cancel = v.findViewById(R.id.cancel);
         cancel.setVisibility(View.VISIBLE);
         createAlertDialog(v, ok, cancel);
+        people.clear();
     }
 
     /**
@@ -927,6 +1023,81 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
         changeButtonClickableBackgroundColor(getApplicationContext(), buttCreate);
     }
 
+    public void record(HashMap position_data){
+        POI poi = findLastPOI(actions.size());
+        record.HashMAP(poi.getPoiLocation().getName(),poi.getPoiLocation().getLongitude(),poi.getPoiLocation().getLatitude(),poi.getPoiLocation().getAltitude(),position_data);
+    }
+    public void savekml(String dirname, String data){
+        File file1 = new File(getExternalFilesDir(null),  "/" + "Placemarks");
+        if (!file1.exists()){
+            file1.mkdir();
+        }
+        try {
+            File esp = new File(file1, dirname + ".kml");
+            FileWriter writer = new FileWriter(esp);
+            writer.append(data);
+            writer.flush();
+            writer.close();
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+    private void shareFilekml(String name,String data){
+        try {
+            File file = new File(getCacheDir(),"esp");
+            file.mkdirs();
+            File esp = new File(file,name+".kml");
+            FileWriter outputStream = new FileWriter(esp);
+            outputStream.write(data);
+            outputStream.close();
+            Uri uri = FileProvider.getUriForFile(this, "com.lglab.diego.simple_cms.fileProvider", esp);
+            Intent intentShare = new Intent(Intent.ACTION_SEND);
+            intentShare.setType("*/*");
+            intentShare.putExtra(Intent.EXTRA_STREAM, uri);
+            startActivity(Intent.createChooser(intentShare, "Share the file ..."));
+            Log.d("inner intent", "kaam go gata");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("Exception", "Dikkat hori hai exception main aai!");
+        }
+    }
+    private void shareFile(String name,String data){
+        try {
+            File file = new File(getCacheDir(),"esp");
+            file.mkdirs();
+            File esp = new File(file,name+".esp");
+            FileWriter outputStream = new FileWriter(esp);
+            outputStream.write(data);
+            outputStream.close();
+            Uri uri = FileProvider.getUriForFile(this, "com.lglab.diego.simple_cms.fileProvider", esp);
+            Intent intentShare = new Intent(Intent.ACTION_SEND);
+            intentShare.setType("*/*");
+            intentShare.putExtra(Intent.EXTRA_STREAM, uri);
+            startActivity(Intent.createChooser(intentShare, "Share the file ..."));
+            Log.d("inner intent", "kaam go gata");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("Exception", "Dikkat hori hai exception main aai!");
+        }
+    }
+
+
+    public void saveEsp(String dirname,String data){
+        File file1 = new File(getExternalFilesDir(null),  "/" + "esp");
+        if (!file1.exists()){
+            file1.mkdir();
+        }
+        try {
+            File esp = new File(file1, dirname + ".esp");
+            FileWriter writer = new FileWriter(esp);
+            writer.append(data);
+            writer.flush();
+            writer.close();
+        } catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onNoteClick(int position) {
         Action selected = actions.get(position);
@@ -963,3 +1134,4 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
         }
     }
 }
+

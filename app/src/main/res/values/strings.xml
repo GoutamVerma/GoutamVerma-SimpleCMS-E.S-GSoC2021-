@@ -12,6 +12,7 @@
     <string name="connecting"> Connecting …</string>
     <string name="test_connection"> Test Location …</string>
 
+    <string name="exportesp">Export ESP</string>
     <string name="button_connect">Connect</string>
     <string name="button_try_again">Try Again</string>
     <string name="button_change">Change</string>
@@ -181,6 +182,7 @@
     <string name="You_need_a_name_to_create_a_story_board">You need to insert a name to create a storyboard</string>
     <string name="error_my_storyboards">Error. The file has been corrupted</string>
     <string name="You_must_have_a_location">You must have a location. Before any action</string>
+    <string name="You_need_a_location_to_export_esp">You need a location to export esp</string>
     <string name="You_need_a_location_to_create_a_movement">You need a location to create a movement</string>
     <string name="You_need_a_location_to_create_a_balloon">You need a location to create a balloon</string>
     <string name="You_need_a_location_to_create_a_shape">You need a location to create a shape</string>
@@ -203,6 +205,7 @@
     <string name="message_downloading_data_gdg">Downloading data from GDG</string>
     <string name="message_downloading_file">Downloading File</string>
     <string name="message_uploading_file">Uploading File</string>
+    <string name="Under_development">Location doesn\'t found in storyboard</string>
 
     //Google Drive
     <string name="message_google_drive_success_log_in">Searching files from Google Drive</string>
@@ -258,6 +261,8 @@
 
 
     //Explain texts
+    <string name="butt_rec">Capture scenario for location and export it in kml(placemark) format</string>
+    <string name="export_esp_explain">export esp file for "spiral" "orbit" and "zoom to" feature</string>
     <string name="text_version">Version 1.0.0</string>
     <string name="butt_location_explain">Open a location content</string>
     <string name="butt_movement_explain">Open a movement content</string>

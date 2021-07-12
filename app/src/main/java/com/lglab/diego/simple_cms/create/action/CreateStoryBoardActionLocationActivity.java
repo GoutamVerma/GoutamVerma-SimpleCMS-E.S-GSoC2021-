@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -21,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.lglab.diego.simple_cms.R;
+import com.lglab.diego.simple_cms.create.CreateStoryBoardActivity;
 import com.lglab.diego.simple_cms.create.utility.connection.LGConnectionTest;
 import com.lglab.diego.simple_cms.create.utility.model.ActionIdentifier;
 import com.lglab.diego.simple_cms.create.utility.model.poi.POI;
@@ -29,7 +31,11 @@ import com.lglab.diego.simple_cms.create.utility.model.ActionController;
 import com.lglab.diego.simple_cms.create.utility.model.poi.POILocation;
 import com.lglab.diego.simple_cms.dialog.CustomDialogUtility;
 import com.lglab.diego.simple_cms.utility.ConstantPrefs;
+import com.lglab.diego.simple_cms.export_esp.record;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -43,6 +49,10 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
     private Spinner altitudeModeSpinner;
     private TextView connectionStatus;
 
+    public static HashMap people = new HashMap<String, List<Double>>();
+    public HashMap<String, List<Double>> getPeopleMap(){
+        return people;
+    }
     private Handler handler = new Handler();
     private boolean isSave = false;
     private int position = -1;
@@ -119,6 +129,7 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
      * Charge the data for the poi
      * @param poi Poi that is going to be edit
      */
+
     private void loadPoiData(POI poi) {
         SharedPreferences sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE);
         loadConnectionStatus(sharedPreferences);
@@ -191,7 +202,18 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
             }, 1300);
         }
     }
+    public void record(HashMap people){
+        String name = file_name.getText().toString();
+        Double latitudeText = Double.parseDouble(latitude.getText().toString());
+        Double longitudeText =  Double.parseDouble(longitude.getText().toString());
+        Double altitudeText =  Double.parseDouble(altitude.getText().toString());
+        List<Double> values = new ArrayList<Double>();
+        values.add(longitudeText);
+        values.add(latitudeText);
+        values.add(altitudeText);
+        people.put(name,values);
 
+    }
 
     /**
      * Safe the date in shared preference
@@ -217,12 +239,15 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         editor.putString(ConstantPrefs.RANGE.name(), rangeText);
         editor.putString(ConstantPrefs.ALTITUDE_MODE.name(), altitudeModeText);
         editor.apply();
+        record.Update(people, fileNameText, Double.parseDouble(String.valueOf(longitudeText)),Double.parseDouble(String.valueOf(latitudeText)),Double.parseDouble(String.valueOf(altitudeText)));
+        Log.d("addto storyboard","yee bhi hora hai");
     }
 
     /**
      * Add a POI to the storyBoard
      */
     private void addPOI() {
+        String locationname = file_name.getText().toString();
         String latitudeText = latitude.getText().toString();
         String longitudeText = longitude.getText().toString();
         String altitudeText = altitude.getText().toString();
@@ -249,12 +274,13 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
                             Integer.parseInt(positionSave.getText().toString()) - 1);
                 setResult(Activity.RESULT_OK, returnInfoIntent);
                     finish();
+                    record(people);
+
             } else{
                 CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,  getResources().getString(R.string.activity_create_location_missing_file_name));
             }
         }
     }
-
     /**
      * Send the information of deleting the POI selected
      */
@@ -278,6 +304,8 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
             returnInfoIntent.putExtra(ActionIdentifier.POSITION.name(), position);
             returnInfoIntent.putExtra(ActionIdentifier.IS_DELETE.name(), true);
             setResult(Activity.RESULT_OK, returnInfoIntent);
+            String fileNameText = file_name.getText().toString();
+            record.Delete(people, fileNameText);
             dialog.dismiss();
             finish();
         });

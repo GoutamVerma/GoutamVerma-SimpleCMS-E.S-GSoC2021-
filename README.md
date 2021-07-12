@@ -1,63 +1,55 @@
-# Liquid Galaxy Simple CMS
 
-## Tour Demostration 
+# Liquid Galaxy SimpleCMS E.S
 
-<img src="https://raw.githubusercontent.com/dfriveros11/LiquidGalaxySimpleCMS/develop/Gif_DemoLG.gif"/>
+## Discription
 
-## Simple CMS (GIF)
+SimpleCMS E.S is an android application which is cable to mimics the functionality of Google Earth Studio and export files in .esp format. After exporting file it also save it locally under application specific folder.  
 
-<img src="https://raw.githubusercontent.com/dfriveros11/LiquidGalaxySimpleCMS/develop/Gif_SimpleCMS.gif"/>
+*This application have following features*
 
-## Description
+* **Zoom-To**  A simple camera move to a point from a higher altitude. Your first and last frames will match the exact framing of your camera in their respective steps.
 
+* **Orbit** A perfectly smooth circular orbit around a point of interest.
 
-Simple CMS is a content management system for the creation and administration of storyboards in Liquid Galaxy, developed as part of Google Summer of Code 2020 by Diego Riveros, with Andreu Ibañez as mentor, and Marc Capdevila and Moisés Martínez as co-mentors. The project Simple CMS is an android application that allows the creation of a storyboard with the following functionalities, that are going to be shown in the Liquid Galaxy: 
+* **Spiral** A gradually shrinking, descending orbit around a point of interest.
 
-1. Location. Add a position. 
-2. Movements. Add a movement or orbit. 
-3. Balloon. Add a text, image and a video.
-4. Shape. Add two or more points that will make a shape. Also, it has an extrude option, that will fill up the space of the point to the ground.
+This application is developed as part of Google Summer of Code 2021 by Goutam Verma, with Andreu Ibañez as mentor, and Diego reviros and Ivan J as co-mentos.
 
-After creating a storyboard is feasible to save it locally or in google drive. Also, it is possible to import a storyboard from google drive. It is important to mention that saving and importing storyboards are only available if you are logged in the application. 
-On the other hand, Simple CMS downloads community names, city, country and location of the different Google Developers community at Meetup.com. Finally, It is possible to do a tour of all the google developers community around the world. 
-
-## Authors
-
-- [Diego Riveros](https://www.linkedin.com/in/diego-riveros-121b22181/) :man:
+![logo](data:image/png;base64,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)
+![logo](https://4.bp.blogspot.com/-n-vRn12_mEk/XLr2zIDgUnI/AAAAAAAHBTI/69TPLvy-nsg9OPNC15bZB3-WzSX8m0PrwCLcBGAs/s1600/LOGO_LIQUID_GALAXY-sq300x300-pngtranspOK.png)
 
 ## Deployment
 
-### IMPORTANT
-In order to run the project, it requires Android 8.0 Oreo and up, also, you should have at least a 10-inch tablet. Finally, remember to install the USB of OEM controllers of your tablet (for windows). You can read more of the drivers here: [Drivers]( https://developer.android.com/studio/run/oem-usb).
+To deploy this project it is necessary to have Android 10(API Level 29) and 10 inch tablet
+.At last remember to install the USB of [OEM](https://developer.android.com/studio/run/oem-usb) controllers of your tablet
 
-There are 2 ways to install the project.
+## Installation
+*There is two ways to install this application :*
 
-### First
+* Download latest release of apk from [here](). Install it in device or emulator and then create a POI for location, export the esp file and finally import it in [Google Earth Studio](https://earth.google.com/studio/).
+* Import project from control version in android studio. Then connect an emulator or device and finally click on "Run" button.
 
-It is possible to download the last apk in Releases or [clicking in here](https://github.com/dfriveros11/LiquidGalaxySimpleCMS/releases/download/0.2/SimpleCMS-0.2.apk). After you download it to your tablet, go to the where the project has been stored. For example, My Files-> Downloaded History and click on the apk. 
+*For more information*
 
-#### Remember
+* How to import esp file in Earth Studio? click [here]()
+* How to create Android virtual device? click [here]()
+* How to run project in android studio? click [here]()
+* How to import project in Google Earth Studio? click [here]()
+## Screenshots
+    <img src "data:image/png;base64,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"/>
+## Tech Stack
 
-After clicking on the apk, the tablet might ask for permissions. Give the permissions to try the :sparkler: Simple CMS :sparkler: project! :sunglasses:
-
-### Second
-
-Download the project locally. Afterwards, open the project using Android Studio. Then, connect a device or emulator and click on the run button. For more instructions on how to do this, [check out the Android Developers official guide](https://developer.android.com/training/basics/firstapp/running-app)
-
-## Help Content
-
-<img src="https://raw.githubusercontent.com/dfriveros11/LiquidGalaxySimpleCMS/develop/Gif_HelpTab.gif"/>
-
-## Used Technologies
 * Java
-* Android 
-* Room
-* SQLite 
-* Drive
-* Jsoup
+* ESP,KML   
+* Android Studio
+* Google Earth Studio
 
-# MIT License
+## Authors
 
-This project is licensed by the MIT [License](https://github.com/dfriveros11/LiquidGalaxySimpleCMS/blob/develop/MIT%20License).
+* [Goutam Verma](https://github.com/GoutamVerma)
 
+## License
 
+Licensed by [MIT](https://choosealicense.com/licenses/mit/)
+
+  

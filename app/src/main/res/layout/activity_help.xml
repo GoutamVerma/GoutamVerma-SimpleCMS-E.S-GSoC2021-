@@ -185,6 +185,55 @@
                 android:textColor="@color/textColorPrimary"
                 android:textSize="@dimen/button_text_font_size"
                 />
+            <TextView
+                android:id="@+id/export_esp_explain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:textColor="@color/textColorClick"
+                android:textSize="@dimen/primary_text_font_size"
+                android:padding="5dp"
+                android:text="@string/export_esp_explain" />
+
+            <Button
+                android:id="@+id/exportesp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_add_image"
+                android:elevation="8dp"
+                android:fontFamily="@font/roboto_light"
+                android:minWidth="200dp"
+                android:minHeight="80dp"
+                android:text="@string/exportesp"
+                android:textAllCaps="false"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="@dimen/button_text_font_size"
+                />
+            <TextView
+                android:id="@+id/butt_rec"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:textColor="@color/textColorClick"
+                android:textSize="@dimen/primary_text_font_size"
+                android:padding="5dp"
+                android:text="@string/butt_rec" />
+
+            <Button
+                android:id="@+id/customDialog"
+                android:layout_width="wrap_content"
+                android:layout_height="37dp"
+                android:background="@drawable/button_primary"
+                android:elevation="8dp"
+                android:fontFamily="@font/roboto_light"
+                android:minWidth="200dp"
+                android:minHeight="80dp"
+                android:text="REC"
+                android:textAllCaps="false"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="@dimen/button_text_font_size"
+                />
+
 
             <TextView
                 android:id="@+id/butt_stop_explain"
