@@ -46,6 +46,13 @@ To deploy this project it is necessary to have Android 10(API Level 29) and 10 i
 8. Then finally select apk from which you wants to export esp file 
 9. Finally, [open Google Earth Studio](https://earth.google.com/studio/) in the web browser. Select “open project“ then locate the esp file and enjoy the animation. 
 
+###How to create content 
+1. Open apk in device.
+2. click on connect tab, enter the username,password and Ip address of master machine with port no(Ip:Port no)
+3. click on create tab, Under location tab enter the longitude,latitude,altitude,heading,duration,tilt,range then click add.
+4. you can repeat step 3 for as much you wants to add POI.
+5. To export esp file. click on export button. choose the feature("orbit","spiral","Zoom-to") then select apk to export esp.
+6. otherwise you can test the Storyboard(content) just by click on button "Test".
 
 *For more information*
 
