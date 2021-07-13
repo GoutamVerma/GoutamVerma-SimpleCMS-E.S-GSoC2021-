@@ -25,7 +25,7 @@ Documentation is [here](https://docs.google.com/document/d/1ctusDehQJA2rD2hkLhem
 To deploy this project it is necessary to have Android 10(API Level 29) and 10 inch tablet
 .At last remember to install the USB of [OEM](https://developer.android.com/studio/run/oem-usb) controllers of your tablet
 
-## Installation
+### Installation
 *There is two ways to install this application :*
 
 * **Running with APK**
@@ -33,7 +33,7 @@ To deploy this project it is necessary to have Android 10(API Level 29) and 10 i
 2. Install it in device or emulator
 3. Create a POI, fill the necessary details of location.
 4. Click on the “Export” button, select the feature you want to use.
-5. Finally, [open Google Earth Studio](https://earth.google.com/studio/) in the web browser. Select “open project“ then locate the esp file and enjoy the animation. 
+5. Finally, open [Google Earth Studio](https://earth.google.com/studio/) in the web browser. Select “open project“ then locate the esp file and enjoy the animation. 
 
 * **Running from source code**
 1. Import the project from version control in android. 
