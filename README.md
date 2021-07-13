@@ -43,7 +43,7 @@ Documentation is [here](https://docs.google.com/document/d/1ctusDehQJA2rD2hkLhem
 4. Click on the “Run” button(Apk will install and show UI of Apk)
 
 
-### **How to create content** 
+### **How to create Storyboard(content)** 
 1. open apk in device.
 2. click on connect tab, enter the username,password and Ip address of master machine with port no(Ip:Port no)
 3. click on create tab, Under location tab enter the longitude,latitude,altitude,heading,duration,tilt,range of POI then click add.
