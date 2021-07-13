@@ -13,7 +13,7 @@ SimpleCMS E.S is an android application which creates an animation in "Spiral" "
 
 * **Spiral** A gradually shrinking, descending orbit around a point of interest.
 
-This application is developed as part of Google Summer of Code 2021 by Goutam Verma, with Diego reviros as main-mentor, and Andreu Ibañez and Ivan J as co-mentos.
+This application is developed as part of Google Summer of Code 2021 by Goutam Verma, with Diego reviros as mentor, and Andreu Ibañez and Ivan J as co-mentos.
 
 Documentation is [here](https://docs.google.com/document/d/1ctusDehQJA2rD2hkLhemHXaoJVU2jk1SpHPEBQ8IngI/edit?usp=sharing)
 
