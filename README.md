@@ -59,7 +59,7 @@ Documentation is [here](https://docs.google.com/document/d/1ctusDehQJA2rD2hkLhem
 * How to run project in android studio? click [here](https://developer.android.com/studio/run)
 * How to import project in Google Earth Studio? click [here](https://earth.google.com/studio/docs/the-basics/project-management/)
 ## SimpleCMS E.S (gif)
-   <img src="https://raw.githubusercontent.com/GoutamVerma/GoutamVerma-SimpleCMS-E.S-GSoC2021-/main/screenshot.gif"/>
+   <img src="https://raw.githubusercontent.com/GoutamVerma/GoutamVerma-SimpleCMS-E.S-GSoC2021-/main/screenshot%20(2).gif"/>
    
    
 ## Tech Stack
