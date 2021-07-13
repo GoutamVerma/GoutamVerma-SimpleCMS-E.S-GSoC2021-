@@ -3,7 +3,7 @@
 
 ## Discription
 
-SimpleCMS E.S is an android application which creates an animation in "Spiral" "orbit" and in "Zoom-To" views and export files in .esp format. After exporting file it also save it locally under application specific folder.To view the animation we needs to import it on Google Earth Studio.
+SimpleCMS E.S is an android application which creates an animation in "Spiral" "orbit" and in "Zoom-To" views and export files in .esp format. After exporting file it also save it locally under application specific folder.To view the animation we needs to import esp file on Google Earth Studio.
 
 *This application have following features*
 
