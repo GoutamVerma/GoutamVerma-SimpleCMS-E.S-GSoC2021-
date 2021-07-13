@@ -1,6 +1,10 @@
 
 # Liquid Galaxy SimpleCMS E.S
 
+## SimpleCMS E.S (gif)
+   <img src="https://raw.githubusercontent.com/GoutamVerma/GoutamVerma-SimpleCMS-E.S-GSoC2021-/main/screenshot%20(2).gif"/>
+ 
+
 ## Discription
 
 SimpleCMS E.S is an android application which creates an animation in "Spiral" "orbit" and in "Zoom-To" views and export files in .esp format. After exporting file it also save it locally under application specific folder.To view the animation we needs to import esp file on Google Earth Studio.
@@ -13,7 +17,7 @@ SimpleCMS E.S is an android application which creates an animation in "Spiral" "
 
 * **Spiral** A gradually shrinking, descending orbit around a point of interest.
 
-This application is developed as part of Google Summer of Code 2021 by Goutam Verma, with Diego reviros as mentor, and Andreu Ibañez and Ivan J as co-mentos.
+This application is developed as part of Google Summer of Code 2021 by Goutam Verma, with Diego Riveros as mentor, and Andreu Ibañez and Ivan J as co-mentos.
 
 Documentation is [here](https://docs.google.com/document/d/1ctusDehQJA2rD2hkLhemHXaoJVU2jk1SpHPEBQ8IngI/edit?usp=sharing)
 
@@ -57,10 +61,7 @@ Documentation is [here](https://docs.google.com/document/d/1ctusDehQJA2rD2hkLhem
 * How to import project in android studio? click [here](https://developer.android.com/studio/intro/migrate)
 * How to create Android virtual device? click [here](https://developer.android.com/studio/run/managing-avds)
 * How to run project in android studio? click [here](https://developer.android.com/studio/run)
-* How to import project in Google Earth Studio? click [here](https://earth.google.com/studio/docs/the-basics/project-management/)
-## SimpleCMS E.S (gif)
-   <img src="https://raw.githubusercontent.com/GoutamVerma/GoutamVerma-SimpleCMS-E.S-GSoC2021-/main/screenshot%20(2).gif"/>
-   
+* How to import project in Google Earth Studio? click [here](https://earth.google.com/studio/docs/the-basics/project-management/)  
    
 ## Tech Stack
 
