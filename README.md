@@ -44,7 +44,7 @@ Documentation is [here](https://docs.google.com/document/d/1ctusDehQJA2rD2hkLhem
 
 
 ### **How to create content** 
-1. Open apk in d1vice.
+1. Open apk in device.
 2. click on connect tab, enter the username,password and Ip address of master machine with port no(Ip:Port no)
 3. click on create tab, Under location tab enter the longitude,latitude,altitude,heading,duration,tilt,range then click add.
 4. you can repeat step 3 for as much you wants to add POI.
