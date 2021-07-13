@@ -36,7 +36,7 @@ Documentation is [here](https://docs.google.com/document/d/1ctusDehQJA2rD2hkLhem
 1. Download the latest release of apk from [here](https://drive.google.com/file/d/1Pp6kPdrDql9gvjeJuOzrSJW5mrM-cMB_/view?usp=sharing). 
 2. Install it in device or emulator
 
-* **Running from source code**
+* **Running from source code** *for more information click [here](https://docs.google.com/document/d/16pQXN1vRQfQpLVLBa5ujwUL68fFb7b0iSVMn2ez5FHM/edit?usp=sharing)*
 1. Import the project from version control in android. 
 2. If you have a physical android tablet use that otherwise create a new AVD.(for more information click here)
 3. Connect android device or emulator
