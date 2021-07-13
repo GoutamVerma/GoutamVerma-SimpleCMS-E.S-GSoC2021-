@@ -28,8 +28,8 @@ Documentation is [here](https://docs.google.com/document/d/1ctusDehQJA2rD2hkLhem
 
 ## Deployment
 
-*Deployment process is devided into two parts,Installation and How to create content. 
-### Installation
+*Deployment process is devided into two parts,Installation and How to create content.* 
+### **Installation**
 *There is two ways to install this application :*
 
 * **Running with APK**
@@ -42,7 +42,8 @@ Documentation is [here](https://docs.google.com/document/d/1ctusDehQJA2rD2hkLhem
 3. Connect android device or emulator
 4. Click on the “Run” button(Apk will install and show UI of Apk)
 
-###How to create content 
+
+### **How to create content** 
 1. Open apk in d1vice.
 2. click on connect tab, enter the username,password and Ip address of master machine with port no(Ip:Port no)
 3. click on create tab, Under location tab enter the longitude,latitude,altitude,heading,duration,tilt,range then click add.
