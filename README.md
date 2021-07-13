@@ -3,7 +3,7 @@
 
 ## Discription
 
-SimpleCMS E.S is an android application which is cable to mimics the functionality of Google Earth Studio and export files in .esp format. After exporting file it also save it locally under application specific folder.  
+SimpleCMS E.S is an android application which is able to mimics the functionality of Google Earth Studio and export files in .esp format. After exporting file it also save it locally under application specific folder.  
 
 *This application have following features*
 
@@ -13,7 +13,7 @@ SimpleCMS E.S is an android application which is cable to mimics the functionali
 
 * **Spiral** A gradually shrinking, descending orbit around a point of interest.
 
-This application is developed as part of Google Summer of Code 2021 by Goutam Verma, with Andreu Ibañez as mentor, and Diego reviros and Ivan J as co-mentos.
+This application is developed as part of Google Summer of Code 2021 by Goutam Verma, with Diego reviros as main-mentor, and Andreu Ibañez and Ivan J as co-mentos.
 
 Documentation is [here](https://docs.google.com/document/d/1ctusDehQJA2rD2hkLhemHXaoJVU2jk1SpHPEBQ8IngI/edit?usp=sharing)
 
