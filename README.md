@@ -3,7 +3,7 @@
 
 ## Discription
 
-SimpleCMS E.S is an android application which is able to mimics the functionality of Google Earth Studio and export files in .esp format. After exporting file it also save it locally under application specific folder.  
+SimpleCMS E.S is an android application which creates an animation in "Spiral" "orbit" and in "Zoom-To" views and export files in .esp format. After exporting file it also save it locally under application specific folder.To view the animation we needs to import it on Google Earth Studio.
 
 *This application have following features*
 
@@ -20,7 +20,7 @@ Documentation is [here](https://docs.google.com/document/d/1ctusDehQJA2rD2hkLhem
 
 ![logo](https://4.bp.blogspot.com/-n-vRn12_mEk/XLr2zIDgUnI/AAAAAAAHBTI/69TPLvy-nsg9OPNC15bZB3-WzSX8m0PrwCLcBGAs/s1600/LOGO_LIQUID_GALAXY-sq300x300-pngtranspOK.png)
 
-##Prerequisite
+## Prerequisite
 * Android 10(API Level 29) 
 * 10 inch screen of tablet 
 * USB of [OEM](https://developer.android.com/studio/run/oem-usb) controllers of your tablet
