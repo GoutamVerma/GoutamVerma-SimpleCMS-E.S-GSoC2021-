@@ -41,6 +41,7 @@ Documentation is [here](https://docs.google.com/document/d/1ctusDehQJA2rD2hkLhem
 2. If you have a physical android tablet use that otherwise create a new AVD.(for more information click here)
 3. Connect android device or emulator
 4. Click on the “Run” button(Apk will install and show UI of Apk)
+
 ###How to create content 
 1. Open apk in d1vice.
 2. click on connect tab, enter the username,password and Ip address of master machine with port no(Ip:Port no)
