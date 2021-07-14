@@ -37,7 +37,7 @@ For information regarding how to create content click [here](https://docs.google
 *There is two ways to install this application :*
 
 * **Running with APK**
-1. Download the latest release of apk from [here](https://drive.google.com/file/d/1Pp6kPdrDql9gvjeJuOzrSJW5mrM-cMB_/view?usp=sharing). 
+1. Download the latest release of apk from [here](https://github.com/GoutamVerma/GoutamVerma-SimpleCMS-E.S-GSoC2021-/releases/download/0.1/0.1.SimpleCMS.E.S.apk). 
 2. Install it in device or emulator
 
 * **Running from source code**.  *for more information click [here](https://docs.google.com/document/d/16pQXN1vRQfQpLVLBa5ujwUL68fFb7b0iSVMn2ez5FHM/edit?usp=sharing)*
