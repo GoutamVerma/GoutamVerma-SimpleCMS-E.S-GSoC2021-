@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.lglab.diego.simple_cms">
+    package="com.lglab.goutam.simple_cms">
 
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -23,7 +23,7 @@
         tools:targetApi="q">
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.lglab.diego.simple_cms.fileProvider"
+            android:authorities="com.lglab.goutam.simple_cms.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -32,81 +32,81 @@
         </provider>
 
         <activity
-            android:name=".top_bar.TobBarActivity"
+            android:name="com.lglab.goutam.simple_cms.top_bar.TobBarActivity"
             android:label="@string/tittle_TobBar"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".create.CreateStoryBoardActivity"
+            android:name="com.lglab.goutam.simple_cms.create.CreateStoryBoardActivity"
             android:label="@string/tittle_create"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".create.action.CreateStoryBoardActionLocationActivity"
+            android:name="com.lglab.goutam.simple_cms.create.action.CreateStoryBoardActionLocationActivity"
             android:label="@string/tittle_create_action_location"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".create.action.CreateStoryBoardActionMovementActivity"
+            android:name="com.lglab.goutam.simple_cms.create.action.CreateStoryBoardActionMovementActivity"
             android:label="@string/tittle_create_action_movement"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".create.action.CreateStoryBoardActionBalloonActivity"
+            android:name="com.lglab.goutam.simple_cms.create.action.CreateStoryBoardActionBalloonActivity"
             android:label="@string/tittle_create_action_balloon"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".create.action.CreateStoryBoardActionShapeActivity"
+            android:name="com.lglab.goutam.simple_cms.create.action.CreateStoryBoardActionShapeActivity"
             android:label="@string/tittle_create_action_shape"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".my_storyboards.MyStoryBoardActivity"
+            android:name="com.lglab.goutam.simple_cms.my_storyboards.MyStoryBoardActivity"
             android:label="@string/tittle_my_storyboard"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".import_google_drive.ImportGoogleDriveActivity"
+            android:name="com.lglab.goutam.simple_cms.import_google_drive.ImportGoogleDriveActivity"
             android:label="@string/tittle_import_google_drive"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".create.ExportGoogleDriveActivity"
+            android:name="com.lglab.goutam.simple_cms.create.ExportGoogleDriveActivity"
             android:label="@string/tittle_export_google_drive"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".account.LogIn"
+            android:name="com.lglab.goutam.simple_cms.account.LogIn"
             android:label="@string/tittle_account"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".demo.DemoActivity"
+            android:name="com.lglab.goutam.simple_cms.demo.DemoActivity"
             android:label="@string/tittle_demo"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".about.AboutActivity"
+            android:name="com.lglab.goutam.simple_cms.about.AboutActivity"
             android:label="@string/tittle_about"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".web_scraping.WebScrapingActivity"
+            android:name="com.lglab.goutam.simple_cms.web_scraping.WebScrapingActivity"
             android:label="@string/tittle_web_scraping"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".help.HelpActivity"
+            android:name="com.lglab.goutam.simple_cms.help.HelpActivity"
             android:label="@string/tittle_help"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.lglab.goutam.simple_cms.MainActivity"
             android:label="@string/tittle_main_activity"
             android:screenOrientation="sensorLandscape"
             tools:ignore="LockedOrientationActivity" />
-        <activity android:screenOrientation="sensorLandscape" android:name="com.lglab.diego.simple_cms.SplashScreen"
+        <activity android:screenOrientation="sensorLandscape" android:name="com.lglab.goutam.simple_cms.SplashScreen"
             android:theme="@style/SplashScreen"
             tools:ignore="LockedOrientationActivity">
             <intent-filter>

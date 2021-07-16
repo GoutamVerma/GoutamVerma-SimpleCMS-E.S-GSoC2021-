@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SimpleCMS</string>
+    <string name="app_name">SimpleCMS E.S</string>
     <string name="insert_the_URL">Insert the URL to connect to Liquid Galaxy</string>
     <string name="connection_failed">Connection Failed</string>
     <string name="example_to_connect">192.38.48.77:4897</string>
