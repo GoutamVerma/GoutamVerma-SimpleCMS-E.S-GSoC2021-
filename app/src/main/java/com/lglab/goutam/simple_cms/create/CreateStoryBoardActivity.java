@@ -1049,7 +1049,7 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
             FileWriter outputStream = new FileWriter(esp);
             outputStream.write(data);
             outputStream.close();
-            Uri uri = FileProvider.getUriForFile(this, "com.lglab.diego.simple_cms.fileProvider", esp);
+            Uri uri = FileProvider.getUriForFile(this, "com.lglab.goutam.simple_cms.fileProvider", esp);
             Intent intentShare = new Intent(Intent.ACTION_SEND);
             intentShare.setType("*/*");
             intentShare.putExtra(Intent.EXTRA_STREAM, uri);
@@ -1068,7 +1068,7 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
             FileWriter outputStream = new FileWriter(esp);
             outputStream.write(data);
             outputStream.close();
-            Uri uri = FileProvider.getUriForFile(this, "com.lglab.diego.simple_cms.fileProvider", esp);
+            Uri uri = FileProvider.getUriForFile(this, "com.lglab.goutam.simple_cms.fileProvider", esp);
             Intent intentShare = new Intent(Intent.ACTION_SEND);
             intentShare.setType("*/*");
             intentShare.putExtra(Intent.EXTRA_STREAM, uri);
