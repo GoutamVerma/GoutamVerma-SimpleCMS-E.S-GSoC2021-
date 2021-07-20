@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -32,6 +33,9 @@ import com.lglab.goutam.simple_cms.dialog.CustomDialogUtility;
 import com.lglab.goutam.simple_cms.utility.ConstantPrefs;
 import com.lglab.goutam.simple_cms.export_esp.record;
 
+import org.apache.commons.codec.StringEncoderComparator;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,10 +50,11 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
 
     private EditText file_name, longitude, latitude, altitude, duration, heading, tilt, range, positionSave;
     private Spinner altitudeModeSpinner;
+    private Spinner espmode;
     private TextView connectionStatus;
 
-    public static HashMap people = new HashMap<String, List<Double>>();
-    public HashMap<String, List<Double>> getPeopleMap(){
+    public static HashMap people = new HashMap<String, List<String>>();
+    public HashMap<String, List<String>> getPeopleMap(){
         return people;
     }
     private Handler handler = new Handler();
@@ -73,6 +78,7 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         range = findViewById(R.id.range);
         positionSave = findViewById(R.id.position_save);
         altitudeModeSpinner = findViewById(R.id.altitude_mode);
+        espmode = findViewById(R.id.esp_mode);
         connectionStatus = findViewById(R.id.connection_status);
 
         Button buttTest = findViewById(R.id.butt_gdg);
@@ -86,6 +92,12 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         spinnerAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
         altitudeModeSpinner.setAdapter(spinnerAdapter);
         altitudeModeSpinner.setOnItemSelectedListener(this);
+
+        spinnerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.esp_types, R.layout.spinner_text);
+        spinnerAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+        espmode.setAdapter(spinnerAdapter);
+        espmode.setOnItemSelectedListener(this);
 
         Intent intent = getIntent();
         POI poi = intent.getParcelableExtra(ActionIdentifier.LOCATION_ACTIVITY.name());
@@ -206,10 +218,14 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         Double latitudeText = Double.parseDouble(latitude.getText().toString());
         Double longitudeText =  Double.parseDouble(longitude.getText().toString());
         Double altitudeText =  Double.parseDouble(altitude.getText().toString());
-        List<Double> values = new ArrayList<Double>();
-        values.add(longitudeText);
-        values.add(latitudeText);
-        values.add(altitudeText);
+        String esp_mode = espmode.getSelectedItem().toString();
+        String durationText = duration.getText().toString();
+        List<String> values = new ArrayList<String>();
+        values.add(String.valueOf(longitudeText));
+        values.add(String.valueOf(latitudeText));
+        values.add(String.valueOf(altitudeText));
+        values.add(esp_mode);
+        values.add(durationText);
         people.put(name,values);
 
     }
@@ -274,6 +290,15 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
                 setResult(Activity.RESULT_OK, returnInfoIntent);
                     finish();
                     record(people);
+                    File file = new File(Environment.getExternalStorageDirectory()+"/SimpleCMS");
+                    if(!file.mkdir()){
+                        file.mkdir();
+                    }
+                String filepath = file.getAbsolutePath();
+                    if(!file.mkdir()){
+                        Log.d("beta create mahi hua", filepath);
+                    }
+
 
             } else{
                 CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,  getResources().getString(R.string.activity_create_location_missing_file_name));

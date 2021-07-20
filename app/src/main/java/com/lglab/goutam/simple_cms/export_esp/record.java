@@ -10,20 +10,13 @@ import java.util.Map;
 // this class is in charge of storing coordinates point in hashmap
 
 public class record extends CreateStoryBoardActivity {
-//    this function puts values in hashmap
-    public static void HashMAP(String key, Double longitude, Double latitude, Double altitude, Map<String, List<Double>> position_data) {
-        List<Double> values = new ArrayList<Double>();
-        values.add(longitude);
-        values.add(latitude);
-        values.add(altitude);
-        position_data.put(key, values);
-    }
+
 //     this function find location values in hashmap and return placemark for that location
-    public static String FindLocation(Map<String, List<Double>> position_data, String key) {
-        List<Double> data = position_data.get(key);
-        Double longitude = data.get(0);
-        Double latitude = data.get(1);
-        Double altitude = data.get(2);
+    public static String FindLocation(Map<String, List<String>> position_data, String key) {
+        List<String> data = position_data.get(key);
+        Double longitude = Double.parseDouble(data.get(0));
+        Double latitude = Double.parseDouble(data.get(1));
+        Double altitude = Double.parseDouble(data.get(2));
         String kml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n" +
                 "  <Placemark>\n" +

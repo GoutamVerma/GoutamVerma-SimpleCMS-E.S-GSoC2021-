@@ -336,7 +336,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="400dp"
+            android:layout_marginStart="150dp"
             android:fontFamily="@font/roboto"
             android:text="@string/position_save"
             android:textColor="@color/textColorClick"
@@ -346,42 +346,65 @@
             android:id="@+id/position_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="244dp"
-            android:layout_marginStart="50dp"
+            android:layout_marginStart="20dp"
             android:autofillHints="@string/example_save"
             android:background="@drawable/rectangle_insert_url"
+            android:digits="0123456789"
             android:fontFamily="@font/roboto"
             android:hint="@string/example_save"
-            android:digits="0123456789"
+            android:imeOptions="actionDone"
             android:inputType="number"
+            android:maxLength="30"
+            android:minWidth="244dp"
+            android:singleLine="true"
+            android:textAlignment="center"
+            android:textColor="@color/textColorClick"
+            android:textColorHint="@color/hintColor"
+            android:textSize="@dimen/primary_text_font_size" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="150dp"
+            android:layout_marginStart="100dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/esp_mode"
+            android:textColor="@color/textColorClick"
+            android:textSize="@dimen/primary_text_font_size" />
+
+        <Spinner
+            android:id="@+id/esp_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="244dp"
+            android:background="@drawable/spinner_background"
+            android:fontFamily="@font/roboto"
+            android:inputType="text"
             android:maxLength="30"
             android:singleLine="true"
             android:textAlignment="center"
             android:textColorHint="@color/hintColor"
             android:textSize="@dimen/primary_text_font_size"
-            android:textColor="@color/textColorClick"
-            android:imeOptions="actionDone"
-            />
+            android:textColor="@color/textColorClick" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="2dp">
+        android:layout_height="58dp"
+        android:layout_marginTop="2dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/explain_step_position"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_marginEnd="84dp"
-            android:layout_marginStart="400dp"
+            android:layout_width="428dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="150dp"
+            android:layout_marginEnd="40dp"
             android:fontFamily="@font/roboto"
             android:text="@string/explain_step_position"
             android:textColor="@color/textColorClick"
-            android:textSize="@dimen/primary_text_font_size"
-            />
+            android:textSize="@dimen/primary_text_font_size" />
 
     </LinearLayout>
 

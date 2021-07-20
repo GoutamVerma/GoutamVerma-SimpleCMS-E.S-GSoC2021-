@@ -288,7 +288,7 @@
     <string name="butt_stop_tour_explain">Stop the GDG\'s communities tour</string>
     <string name="butt_connect_liquid_galaxy_explain">Connect to Liquid Galaxy</string>
     <string name="butt_try_again_liquid_galaxy_explain">Try to connect to the Liquid Galaxy, again</string>
-
+    <string name="esp_mode">Esp mode</string>
 
 
     //Elevation Types
@@ -298,6 +298,14 @@
         <item>clampToSeaFloor</item>
         <item>relativeToGround</item>
         <item>relativeToSeaFloor</item>
+    </string-array>
+
+    //Esp Types
+
+    <string-array name="esp_types">
+        <item>Orbit</item>
+        <item>Spiral</item>
+        <item>Zoom-To</item>
     </string-array>
 
 

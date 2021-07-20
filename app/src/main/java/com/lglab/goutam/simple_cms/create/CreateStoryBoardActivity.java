@@ -81,8 +81,7 @@ import static com.lglab.goutam.simple_cms.dialog.CustomDialogUtility.*;
 public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implements
         ActionRecyclerAdapter.OnNoteListener {
     CreateStoryBoardActionLocationActivity a = new CreateStoryBoardActionLocationActivity();
-    HashMap<String, List<Double>> people = a.getPeopleMap();
-
+    HashMap<String, List<String>> people = a.getPeopleMap();
     private static final String TAG_DEBUG = "CreateStoryBoardActivity";
 
     private static final int PERMISSION_CODE_PACK = 1000;
@@ -248,8 +247,6 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
                     }
                     else{
                         POI poi = findLastPOI(actions.size());
-                        shareFile(poi.getPoiLocation().getName(),export_esp.orbit(poi));
-                        saveEsp(poi.getPoiLocation().getName(), export_esp.orbit(poi));
                         }
                 }
                 if(item.getItemId() == R.id.zoomto) {
@@ -1022,10 +1019,6 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
         changeButtonClickableBackgroundColor(getApplicationContext(), buttCreate);
     }
 
-    public void record(HashMap position_data){
-        POI poi = findLastPOI(actions.size());
-        record.HashMAP(poi.getPoiLocation().getName(),poi.getPoiLocation().getLongitude(),poi.getPoiLocation().getLatitude(),poi.getPoiLocation().getAltitude(),position_data);
-    }
     public void savekml(String dirname, String data){
         File file1 = new File(getExternalFilesDir(null),  "/" + "Placemarks");
         if (!file1.exists()){
@@ -1063,7 +1056,9 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
     private void shareFile(String name,String data){
         try {
             File file = new File(getCacheDir(),"esp");
-            file.mkdirs();
+            if(!file.exists()) {
+                file.mkdirs();
+            }
             File esp = new File(file,name+".esp");
             FileWriter outputStream = new FileWriter(esp);
             outputStream.write(data);
