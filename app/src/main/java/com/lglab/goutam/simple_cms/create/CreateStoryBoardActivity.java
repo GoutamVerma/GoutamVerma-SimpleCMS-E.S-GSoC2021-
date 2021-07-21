@@ -68,9 +68,13 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.lglab.goutam.simple_cms.dialog.CustomDialogUtility.*;
@@ -198,7 +202,7 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
 
         buttStopTest.setOnClickListener((view -> stopTestStoryBoard()));
 
-        exportEsp.setOnClickListener((view -> popup(view)));
+        exportEsp.setOnClickListener((view -> popup(people)));
 
         customDialog.setOnClickListener((view -> dialogbox(view,a.getPeopleMap())));
 
@@ -234,45 +238,37 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
 
   /* this function is responsible for selecting item from export esp button
   * */
-    public void popup(View V){
-        PopupMenu popup = new PopupMenu(CreateStoryBoardActivity.this, V);
-        popup.getMenuInflater().inflate(R.menu.popup,popup.getMenu());
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if(item.getItemId() == R.id.orbit) {
-                    if (!isPOI) {
-                        CustomDialogUtility.showDialog(CreateStoryBoardActivity.this,
-                                getResources().getString(R.string.You_need_a_location_to_export_esp));
-                    }
-                    else{
-                        POI poi = findLastPOI(actions.size());
-                        }
-                }
-                if(item.getItemId() == R.id.zoomto) {
-                    if (!isPOI) {
-                        CustomDialogUtility.showDialog(CreateStoryBoardActivity.this, getResources().getString(R.string.You_need_a_location_to_export_esp));
-                    }
-                    else{
-                        POI poi = findLastPOI(actions.size());
-                        shareFile(poi.getPoiLocation().getName(), export_esp.ZoomTo(poi));
-                        saveEsp(poi.getPoiLocation().getName(), export_esp.ZoomTo(poi));
-                    }
-                }
-                if(item.getItemId() == R.id.spiral) {
-                    if (!isPOI) {
-                        CustomDialogUtility.showDialog(CreateStoryBoardActivity.this, getResources().getString(R.string.You_need_a_location_to_export_esp));
-                    }
-                    else{
-                        POI poi = findLastPOI(actions.size());
-                        shareFile(poi.getPoiLocation().getName(), export_esp.spiral(poi));
-                        saveEsp(poi.getPoiLocation().getName(), export_esp.spiral(poi));
-                      }
-                }
-                return true;
+    public void popup(Map<String, List<String>> position_data){
+
+        Collection getter = position_data.values();
+        Iterator i=getter.iterator();
+        while(i.hasNext()){
+            List itemss = (List) i.next();
+            Log.d("Mode", String.valueOf(itemss.get(3)) + " " + String.valueOf(itemss.get(0))+" "+String.valueOf(itemss.get(1)));
+        }
+
+    }
+    public void saveFile(String name,String data){
+        try {
+            File file = new File(getCacheDir(),"esp");
+            if(!file.exists()) {
+                file.mkdirs();
             }
-        });
-        popup.show();
+            File esp = new File(file,name+".esp");
+            FileWriter outputStream = new FileWriter(esp);
+            outputStream.write(data);
+            outputStream.close();
+            Log.d("path of thr filessss", file.getAbsolutePath());
+//            Uri uri = FileProvider.getUriForFile(this, "com.lglab.goutam.simple_cms.fileProvider", esp);
+//            Intent intentShare = new Intent(Intent.ACTION_SEND_MULTIPLE);
+//            intentShare.setType("*/*");
+//            intentShare.putExtra(Intent.EXTRA_STREAM, uri);
+//            startActivity(Intent.createChooser(intentShare, "Share the file ..."));
+//            Log.d("inner intent", "kaam go gata");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("Exception", "Dikkat hori hai exception main aai!");
+        }
     }
     private void loadDataJson() {
         SharedPreferences sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE);
@@ -1053,44 +1049,7 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
             Log.d("Exception", "Dikkat hori hai exception main aai!");
         }
     }
-    private void shareFile(String name,String data){
-        try {
-            File file = new File(getCacheDir(),"esp");
-            if(!file.exists()) {
-                file.mkdirs();
-            }
-            File esp = new File(file,name+".esp");
-            FileWriter outputStream = new FileWriter(esp);
-            outputStream.write(data);
-            outputStream.close();
-            Uri uri = FileProvider.getUriForFile(this, "com.lglab.goutam.simple_cms.fileProvider", esp);
-            Intent intentShare = new Intent(Intent.ACTION_SEND);
-            intentShare.setType("*/*");
-            intentShare.putExtra(Intent.EXTRA_STREAM, uri);
-            startActivity(Intent.createChooser(intentShare, "Share the file ..."));
-            Log.d("inner intent", "kaam go gata");
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.d("Exception", "Dikkat hori hai exception main aai!");
-        }
-    }
 
-
-    public void saveEsp(String dirname,String data){
-        File file1 = new File(getExternalFilesDir(null),  "/" + "esp");
-        if (!file1.exists()){
-            file1.mkdir();
-        }
-        try {
-            File esp = new File(file1, dirname + ".esp");
-            FileWriter writer = new FileWriter(esp);
-            writer.append(data);
-            writer.flush();
-            writer.close();
-        } catch(IOException e){
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void onNoteClick(int position) {

@@ -225,8 +225,9 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         values.add(String.valueOf(latitudeText));
         values.add(String.valueOf(altitudeText));
         values.add(esp_mode);
+        values.add(name);
         values.add(durationText);
-        people.put(name,values);
+        people.put(esp_mode,values);
 
     }
 
