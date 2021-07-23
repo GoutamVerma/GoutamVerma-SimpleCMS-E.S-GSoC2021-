@@ -289,6 +289,8 @@
     <string name="butt_connect_liquid_galaxy_explain">Connect to Liquid Galaxy</string>
     <string name="butt_try_again_liquid_galaxy_explain">Try to connect to the Liquid Galaxy, again</string>
     <string name="esp_mode">Esp mode</string>
+    <string name="You_need_a_name_to_export_esp">Please fill the name of Storyboard</string>
+    <string name="You_need_to_select_mode_of_esp">You need to select mode of esp under location</string>
 
 
     //Elevation Types
@@ -303,6 +305,7 @@
     //Esp Types
 
     <string-array name="esp_types">
+        <item>None</item>
         <item>Orbit</item>
         <item>Spiral</item>
         <item>Zoom-To</item>

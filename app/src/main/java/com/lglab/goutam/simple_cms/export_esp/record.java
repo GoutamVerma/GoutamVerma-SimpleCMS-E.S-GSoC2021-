@@ -32,15 +32,18 @@ public class record extends CreateStoryBoardActivity {
         return kml;
     }
 // this function update values in hashmap
-    public static void Update(Map<String, List<Double>> position_data,String key,Double longitude,Double latitude,Double altitude){
-        List<Double> values = new ArrayList<Double>();
-        values.add(longitude);
-        values.add(latitude);
-        values.add(altitude);
+    public static void Update(Map<String, List<String>> position_data,String key,Double longitude,Double latitude,Double altitude,String esp_mode,String durationText,String name){
+        List<String> values = new ArrayList<String>();
+        values.add(String.valueOf(longitude));
+        values.add(String.valueOf(latitude));
+        values.add(String.valueOf(altitude));
+        values.add(esp_mode);
+        values.add(name);
+        values.add(durationText);
         position_data.replace(key, values);
     }
 //    this function delete particular value from hashmap
-    public static void Delete(Map<String, List<Double>> position_data,String key){
+    public static void Delete(Map<String, List<String>> position_data,String key){
         position_data.remove(key);
     }
 }

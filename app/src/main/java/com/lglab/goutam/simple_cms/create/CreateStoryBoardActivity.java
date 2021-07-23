@@ -12,8 +12,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,6 +28,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -62,9 +65,16 @@ import com.lglab.goutam.simple_cms.utility.ConstantPrefs;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,6 +86,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.zip.Adler32;
+import java.util.zip.CheckedOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import static com.lglab.goutam.simple_cms.dialog.CustomDialogUtility.*;
 
@@ -87,7 +101,8 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
     CreateStoryBoardActionLocationActivity a = new CreateStoryBoardActionLocationActivity();
     HashMap<String, List<String>> people = a.getPeopleMap();
     private static final String TAG_DEBUG = "CreateStoryBoardActivity";
-
+    private static int BUFFER_SIZE = 6 * 1024;
+    List<String> filesListInDir = new ArrayList<String>();
     private static final int PERMISSION_CODE_PACK = 1000;
     private static final long MAX_SIZE = 5242880;
 
@@ -101,11 +116,12 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
     private boolean isStopStoryboard = false;
 
 
-    private EditText storyBoardName, location;
+    private EditText storyBoardName;
     private Button buttCreate, buttTest, buttStopTest;
     private TextView connectionStatus, sizeFile;
     private AutoCompleteTextView actv;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,9 +133,7 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
         buttCreate = topBar.findViewById(R.id.butt_create_menu);
         storyBoardName = findViewById(R.id.text_name);
         sizeFile = findViewById(R.id.size_file);
-        //Charging data for other activities
-
-
+        //Charging data for other activitie
         buttTest = findViewById(R.id.butt_test);
         buttStopTest = findViewById(R.id.butt_stop);
         Button buttLocation = findViewById(R.id.butt_location);
@@ -202,7 +216,13 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
 
         buttStopTest.setOnClickListener((view -> stopTestStoryBoard()));
 
-        exportEsp.setOnClickListener((view -> popup(people)));
+        exportEsp.setOnClickListener((view -> {
+            try {
+                popup(people);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }));
 
         customDialog.setOnClickListener((view -> dialogbox(view,a.getPeopleMap())));
 
@@ -238,19 +258,96 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
 
   /* this function is responsible for selecting item from export esp button
   * */
-    public void popup(Map<String, List<String>> position_data){
 
-        Collection getter = position_data.values();
-        Iterator i=getter.iterator();
-        while(i.hasNext()){
-            List itemss = (List) i.next();
-            Log.d("Mode", String.valueOf(itemss.get(3)) + " " + String.valueOf(itemss.get(0))+" "+String.valueOf(itemss.get(1)));
+    public void popup(Map<String, List<String>> position_data) throws IOException {
+        String Filename = storyBoardName.getText().toString();
+        if(!isPOI){
+            CustomDialogUtility.showDialog(CreateStoryBoardActivity.this,
+                    getResources().getString(R.string.You_need_a_location_to_export_esp));
         }
+        else if (Filename.equals("")) {
+            CustomDialogUtility.showDialog(CreateStoryBoardActivity.this,
+                    getResources().getString(R.string.You_need_a_name_to_export_esp));
+        }
+        else {
+            try{
+                Collection getter = position_data.values();
+                Iterator i = getter.iterator();
+                int y = 0;
+                int a = getter.size();
+                while (i.hasNext()) {
+                    y++;
+                    List itemss = (List) i.next();
+                    String orbit = "Orbit";
+                    String spiral = "Spiral";
+                    String zoomto = "Zoomto";
+                    if (itemss.contains(orbit)) {
+                        saveFile(String.valueOf(itemss.get(4)), export_esp.orbit(Double.parseDouble(String.valueOf(itemss.get(1))), Double.parseDouble(String.valueOf(itemss.get(0))), Integer.parseInt(String.valueOf(itemss.get(5))), String.valueOf(itemss.get(4))), Filename);
+                    }
+                    else if (itemss.contains(spiral)) {
+                        saveFile(String.valueOf(itemss.get(4)), export_esp.spiral(Double.parseDouble(String.valueOf(itemss.get(0))), Double.parseDouble(String.valueOf(itemss.get(1))), Integer.parseInt(String.valueOf(itemss.get(5))), String.valueOf(itemss.get(4))), Filename);
+                    }
+                    else if (itemss.contains(zoomto)) {
+                        saveFile(String.valueOf(itemss.get(4)), export_esp.ZoomTo(Double.parseDouble(String.valueOf(itemss.get(0))), Double.parseDouble(String.valueOf(itemss.get(1))), Double.parseDouble(String.valueOf(itemss.get(2))), Integer.parseInt(String.valueOf(itemss.get(5))), String.valueOf(itemss.get(4))), Filename);
+                    }
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+            try {
+                zipDirectory(Filename);
+            } catch (Exception e) {
+                e.printStackTrace();
+                CustomDialogUtility.showDialog(CreateStoryBoardActivity.this,getResources().getString(R.string.You_need_to_select_mode_of_esp));
 
+            }
+
+        }
     }
-    public void saveFile(String name,String data){
+    private void zipDirectory(String Filename) {
         try {
-            File file = new File(getCacheDir(),"esp");
+            File dir = new File("/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename);
+            String zipDirName = "/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename+"/"+Filename+".zip";
+            populateFilesList(dir);
+            File zipFile = new File(zipDirName);
+            FileOutputStream fos = new FileOutputStream(zipDirName);
+            ZipOutputStream zos = new ZipOutputStream(fos);
+            for(String filePath : filesListInDir){
+                System.out.println("Zipping "+filePath);
+                ZipEntry ze = new ZipEntry(filePath.substring(dir.getAbsolutePath().length()+1, filePath.length()));
+                zos.putNextEntry(ze);
+                FileInputStream fis = new FileInputStream(filePath);
+                byte[] buffer = new byte[1024];
+                int len;
+                while ((len = fis.read(buffer)) > 0) {
+                    zos.write(buffer, 0, len);
+                }
+                zos.closeEntry();
+                fis.close();
+            }
+            zos.close();
+            fos.close();
+            shareZIP(zipFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * This method populates all the files in a directory to a List
+     * @param dir
+     * @throws IOException
+     */
+    private void populateFilesList(File dir) throws IOException {
+        File[] files = dir.listFiles();
+        for(File file : files){
+            if(file.isFile()) filesListInDir.add(file.getAbsolutePath());
+            else populateFilesList(file);
+        }
+    }
+    public void saveFile(String name,String data,String Filename){
+        try {
+            File file = new File(getCacheDir(),Filename);
             if(!file.exists()) {
                 file.mkdirs();
             }
@@ -258,18 +355,12 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
             FileWriter outputStream = new FileWriter(esp);
             outputStream.write(data);
             outputStream.close();
-            Log.d("path of thr filessss", file.getAbsolutePath());
-//            Uri uri = FileProvider.getUriForFile(this, "com.lglab.goutam.simple_cms.fileProvider", esp);
-//            Intent intentShare = new Intent(Intent.ACTION_SEND_MULTIPLE);
-//            intentShare.setType("*/*");
-//            intentShare.putExtra(Intent.EXTRA_STREAM, uri);
-//            startActivity(Intent.createChooser(intentShare, "Share the file ..."));
-//            Log.d("inner intent", "kaam go gata");
+
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d("Exception", "Dikkat hori hai exception main aai!");
         }
     }
+
     private void loadDataJson() {
         SharedPreferences sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE);
         String storyBoardJson = sharedPreferences.getString(ConstantPrefs.STORY_BOARD_JSON.name(), "");
@@ -1039,6 +1130,18 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
             outputStream.write(data);
             outputStream.close();
             Uri uri = FileProvider.getUriForFile(this, "com.lglab.goutam.simple_cms.fileProvider", esp);
+            Intent intentShare = new Intent(Intent.ACTION_SEND);
+            intentShare.setType("*/*");
+            intentShare.putExtra(Intent.EXTRA_STREAM, uri);
+            startActivity(Intent.createChooser(intentShare, "Share the file ..."));
+            Log.d("inner intent", "kaam go gata");
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("Exception", "Dikkat hori hai exception main aai!");
+        }
+    } private void shareZIP(File name){
+        try {
+            Uri uri = FileProvider.getUriForFile(this, "com.lglab.goutam.simple_cms.fileProvider", name);
             Intent intentShare = new Intent(Intent.ACTION_SEND);
             intentShare.setType("*/*");
             intentShare.putExtra(Intent.EXTRA_STREAM, uri);

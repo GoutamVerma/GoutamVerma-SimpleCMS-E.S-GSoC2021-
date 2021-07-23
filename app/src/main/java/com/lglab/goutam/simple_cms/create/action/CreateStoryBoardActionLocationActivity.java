@@ -227,7 +227,7 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         values.add(esp_mode);
         values.add(name);
         values.add(durationText);
-        people.put(esp_mode,values);
+        people.put(name,values);
 
     }
 
@@ -244,6 +244,7 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
      */
     private void saveData(String latitudeText, String longitudeText, String altitudeText, String durationText, String headingText, String tiltText, String rangeText, String altitudeModeText) {
         String fileNameText = file_name.getText().toString();
+        String esp_mode = espmode.getSelectedItem().toString();
         SharedPreferences.Editor editor = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE).edit();
         editor.putString(ConstantPrefs.FILE_NAME.name(), fileNameText);
         editor.putString(ConstantPrefs.LATITUDE.name(), latitudeText);
@@ -255,9 +256,8 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         editor.putString(ConstantPrefs.RANGE.name(), rangeText);
         editor.putString(ConstantPrefs.ALTITUDE_MODE.name(), altitudeModeText);
         editor.apply();
-        record.Update(people, fileNameText, Double.parseDouble(String.valueOf(longitudeText)),Double.parseDouble(String.valueOf(latitudeText)),Double.parseDouble(String.valueOf(altitudeText)));
-        Log.d("addto storyboard","yee bhi hora hai");
-    }
+        record.Update(people, fileNameText, Double.parseDouble(String.valueOf(longitudeText)),Double.parseDouble(String.valueOf(latitudeText)),Double.parseDouble(String.valueOf(altitudeText)),esp_mode,durationText,String.valueOf(file_name));
+   }
 
     /**
      * Add a POI to the storyBoard
@@ -291,15 +291,6 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
                 setResult(Activity.RESULT_OK, returnInfoIntent);
                     finish();
                     record(people);
-                    File file = new File(Environment.getExternalStorageDirectory()+"/SimpleCMS");
-                    if(!file.mkdir()){
-                        file.mkdir();
-                    }
-                String filepath = file.getAbsolutePath();
-                    if(!file.mkdir()){
-                        Log.d("beta create mahi hua", filepath);
-                    }
-
 
             } else{
                 CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,  getResources().getString(R.string.activity_create_location_missing_file_name));
