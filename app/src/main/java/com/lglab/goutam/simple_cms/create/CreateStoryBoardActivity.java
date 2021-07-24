@@ -275,12 +275,15 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
                 Iterator i = getter.iterator();
                 int y = 0;
                 int a = getter.size();
-                while (i.hasNext()) {
+                Log.d("size of iterator is ", String.valueOf(a));
+                while (y<a){
+                    Log.d("looping area", String.valueOf(position_data.get(y)));
                     y++;
                     List itemss = (List) i.next();
+                    Log.d("itemss of the ", String.valueOf(itemss));
                     String orbit = "Orbit";
                     String spiral = "Spiral";
-                    String zoomto = "Zoomto";
+                    String zoomto = "Zoom-To";
                     if (itemss.contains(orbit)) {
                         saveFile(String.valueOf(itemss.get(4)), export_esp.orbit(Double.parseDouble(String.valueOf(itemss.get(1))), Double.parseDouble(String.valueOf(itemss.get(0))), Integer.parseInt(String.valueOf(itemss.get(5))), String.valueOf(itemss.get(4))), Filename);
                     }
@@ -291,12 +294,15 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
                         saveFile(String.valueOf(itemss.get(4)), export_esp.ZoomTo(Double.parseDouble(String.valueOf(itemss.get(0))), Double.parseDouble(String.valueOf(itemss.get(1))), Double.parseDouble(String.valueOf(itemss.get(2))), Integer.parseInt(String.valueOf(itemss.get(5))), String.valueOf(itemss.get(4))), Filename);
                     }
                 }
-            } catch (NumberFormatException e) {
+
+                zipDirectory(Filename);
+                File file = new File("/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename);
+                file.deleteOnExit();
+            }
+            catch (NumberFormatException e) {
                 e.printStackTrace();
             }
-            try {
-                zipDirectory(Filename);
-            } catch (Exception e) {
+            catch (Exception e) {
                 e.printStackTrace();
                 CustomDialogUtility.showDialog(CreateStoryBoardActivity.this,getResources().getString(R.string.You_need_to_select_mode_of_esp));
 
@@ -304,10 +310,11 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
 
         }
     }
+
     private void zipDirectory(String Filename) {
         try {
-            File dir = new File("/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename);
-            String zipDirName = "/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename+"/"+Filename+".zip";
+            File dir = new File("/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename+"/");
+            String zipDirName = "/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename+".zip";
             populateFilesList(dir);
             File zipFile = new File(zipDirName);
             FileOutputStream fos = new FileOutputStream(zipDirName);
