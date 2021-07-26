@@ -322,18 +322,5 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/butt_location"
         app:layout_constraintEnd_toEndOf="@+id/butt_save_on_google_drive" />
 
-    <Button
-        android:id="@+id/customDialog"
-        android:layout_width="127dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="48dp"
-        android:background="@drawable/button_primary"
-        android:inputType="text"
-        android:text="REC"
-        app:layout_constraintEnd_toStartOf="@+id/file_name"
-        app:layout_constraintHorizontal_bias="0.614"
-        app:layout_constraintStart_toEndOf="@+id/butt_test"
-        app:layout_constraintTop_toBottomOf="@+id/top_bar" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

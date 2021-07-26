@@ -15,15 +15,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -65,16 +62,11 @@ import com.lglab.goutam.simple_cms.utility.ConstantPrefs;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -84,10 +76,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.zip.Adler32;
-import java.util.zip.CheckedOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -144,7 +133,6 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
         Button buttSaveLocally = findViewById(R.id.butt_save_locally);
         Button buttSaveGoogleDrive = findViewById(R.id.butt_save_on_google_drive);
         Button exportEsp = findViewById(R.id.exportesp);
-        Button customDialog = findViewById(R.id.customDialog);
         connectionStatus = findViewById(R.id.connection_status);
 
         //MyStoryboards
@@ -224,40 +212,11 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
             }
         }));
 
-        customDialog.setOnClickListener((view -> dialogbox(view,a.getPeopleMap())));
 
         initRecyclerView();
 
         changeButtonClickableBackgroundColor();
     }
-    public void dialogbox(View v,HashMap position_data) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Enter name of location");
-        final View customLayout = getLayoutInflater().inflate(R.layout.customview, null);
-        builder.setView(customLayout);
-        String[] key = people.keySet().toArray(new String[0]);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(CreateStoryBoardActivity.this, layout.simple_dropdown_item_1line, new ArrayList<String>(Arrays.asList(key)));
-        AutoCompleteTextView editText = customLayout.findViewById(R.id.editText);
-        editText.setAdapter(adapter);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which)
-                            {
-                                if(position_data.containsKey(String.valueOf(editText.getText()))) {
-                                    shareFilekml(String.valueOf(editText.getText()),record.FindLocation(position_data, String.valueOf(editText.getText())));
-                                }
-                                else{
-                                    CustomDialogUtility.showDialog(CreateStoryBoardActivity.this, getResources().getString(R.string.Under_development));
-                                }
-                            }
-                        });
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
-  /* this function is responsible for selecting item from export esp button
-  * */
 
     public void popup(Map<String, List<String>> position_data) throws IOException {
         String Filename = storyBoardName.getText().toString();
@@ -270,43 +229,114 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
                     getResources().getString(R.string.You_need_a_name_to_export_esp));
         }
         else {
-            try{
-                Collection getter = position_data.values();
-                Iterator i = getter.iterator();
-                int y = 0;
-                int a = getter.size();
-                Log.d("size of iterator is ", String.valueOf(a));
-                while (y<a){
-                    Log.d("looping area", String.valueOf(position_data.get(y)));
-                    y++;
-                    List itemss = (List) i.next();
-                    Log.d("itemss of the ", String.valueOf(itemss));
-                    String orbit = "Orbit";
-                    String spiral = "Spiral";
-                    String zoomto = "Zoom-To";
-                    if (itemss.contains(orbit)) {
-                        saveFile(String.valueOf(itemss.get(4)), export_esp.orbit(Double.parseDouble(String.valueOf(itemss.get(1))), Double.parseDouble(String.valueOf(itemss.get(0))), Integer.parseInt(String.valueOf(itemss.get(5))), String.valueOf(itemss.get(4))), Filename);
-                    }
-                    else if (itemss.contains(spiral)) {
-                        saveFile(String.valueOf(itemss.get(4)), export_esp.spiral(Double.parseDouble(String.valueOf(itemss.get(0))), Double.parseDouble(String.valueOf(itemss.get(1))), Integer.parseInt(String.valueOf(itemss.get(5))), String.valueOf(itemss.get(4))), Filename);
-                    }
-                    else if (itemss.contains(zoomto)) {
-                        saveFile(String.valueOf(itemss.get(4)), export_esp.ZoomTo(Double.parseDouble(String.valueOf(itemss.get(0))), Double.parseDouble(String.valueOf(itemss.get(1))), Double.parseDouble(String.valueOf(itemss.get(2))), Integer.parseInt(String.valueOf(itemss.get(5))), String.valueOf(itemss.get(4))), Filename);
-                    }
+            Collection getters = position_data.values();
+            Iterator j = getters.iterator();
+            String message= "";
+            while (j.hasNext()){
+                List positioning = (List) j.next();
+                if(positioning.contains("None")) {
+                    message = message + positioning.get(6);
                 }
+            }
+            char[] chars =message.toCharArray();
+            Arrays.sort(chars);
+            String sorted = new String(chars);
+            if(message!="") {
+               try {
+                   AlertDialog.Builder builder = new AlertDialog.Builder(CreateStoryBoardActivity.this);
+                   builder.setMessage("We didn't find any esp mode on locations " +
+                           sorted.replace("", ", ").trim() + "\nDo you still wants to continue?");
+                   builder.setTitle("Alert !");
+                   builder.setCancelable(false);
+                   builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                       @Override
+                       public void onClick(DialogInterface dialog, int which) {
+                           export(position_data);
+                       }
+                   });
+                   builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                       @Override
+                       public void onClick(DialogInterface dialog, int which) {
+                           dialog.cancel();
+                       }
+                   });
+                   AlertDialog alertDialog = builder.create();
+                   alertDialog.show();
+               }
+               catch (Exception e) { e.printStackTrace(); }
+            }
+            else{
+                try{
+                AlertDialog.Builder builder = new AlertDialog.Builder(CreateStoryBoardActivity.this);
+                builder.setMessage(R.string.only_going_to_export_esp);
+                builder.setTitle("Alert !");
+                builder.setCancelable(false);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        export(position_data);
+                    }
+                });
 
-                zipDirectory(Filename);
-                File file = new File("/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename);
-                file.deleteOnExit();
-            }
-            catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-                CustomDialogUtility.showDialog(CreateStoryBoardActivity.this,getResources().getString(R.string.You_need_to_select_mode_of_esp));
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
 
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
+                catch (Exception e) {e.printStackTrace();}
+            }
+        }
+    }
+    private void export(Map<String, List<String>> position_data){
+        try{
+            String Filename = storyBoardName.getText().toString();
+            Collection getter = position_data.values();
+            Iterator i = getter.iterator();
+            int y = 0;
+            int a = getter.size();
+            Log.d("size of iterator is ", String.valueOf(a));
+            while (y<a){
+                Log.d("looping area", String.valueOf(position_data.get(y)));
+                y++;
+                List items = (List) i.next();
+                if (items.contains("Orbit")) {
+                    saveFile(String.valueOf(items.get(4)),
+                            export_esp.orbit(Double.parseDouble(String.valueOf(items.get(1))), //here items.get
+                                    Double.parseDouble(String.valueOf(items.get(0))),
+                                    Integer.parseInt(String.valueOf(items.get(5))),
+                                    String.valueOf(items.get(4))), Filename);
+                }
+                else if (items.contains("Spiral")) {
+                    saveFile(String.valueOf(items.get(4)),
+                            export_esp.spiral(Double.parseDouble(String.valueOf(items.get(0))),
+                                    Double.parseDouble(String.valueOf(items.get(1))),
+                                    Integer.parseInt(String.valueOf(items.get(5))),
+                                    String.valueOf(items.get(4))), Filename);
+                }
+                else if (items.contains("Zoom-To")) {
+                    saveFile(String.valueOf(items.get(4)),
+                            export_esp.ZoomTo(Double.parseDouble(String.valueOf(items.get(0))),
+                                    Double.parseDouble(String.valueOf(items.get(1))),
+                                    Double.parseDouble(String.valueOf(items.get(2))),
+                                    Integer.parseInt(String.valueOf(items.get(5))),
+                                    String.valueOf(items.get(4))), Filename);
+                }
+            }
+            zipDirectory(Filename);
+            File file = new File("/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename);
+            file.deleteOnExit();
+        }
+        catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            CustomDialogUtility.showDialog(CreateStoryBoardActivity.this,getResources().getString(R.string.You_need_to_select_mode_of_esp));
 
         }
     }
@@ -1146,7 +1176,8 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
             e.printStackTrace();
             Log.d("Exception", "Dikkat hori hai exception main aai!");
         }
-    } private void shareZIP(File name){
+    }
+    private void shareZIP(File name){
         try {
             Uri uri = FileProvider.getUriForFile(this, "com.lglab.goutam.simple_cms.fileProvider", name);
             Intent intentShare = new Intent(Intent.ACTION_SEND);

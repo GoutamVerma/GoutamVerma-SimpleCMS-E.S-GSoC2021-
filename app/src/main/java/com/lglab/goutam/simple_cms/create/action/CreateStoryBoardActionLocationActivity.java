@@ -85,6 +85,7 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         Button buttCancel = findViewById(R.id.butt_cancel);
         Button buttAdd = findViewById(R.id.butt_add);
         Button buttDelete = findViewById(R.id.butt_delete);
+        Button buttRec = findViewById(R.id.butt_rec);
 
 
         spinnerAdapter = ArrayAdapter.createFromResource(this,
@@ -134,8 +135,21 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         );
 
         buttDelete.setOnClickListener( (view) -> deletePoi());
+        
+        buttAdd.setOnClickListener((view) -> Record());
     }
 
+    private void Record(){
+        String latitudeText = latitude.getText().toString();
+        String longitudeText = longitude.getText().toString();
+        String altitudeText = altitude.getText().toString();
+        String durationText = duration.getText().toString();
+        String headingText = heading.getText().toString();
+        String tiltText = tilt.getText().toString();
+        String rangeText = range.getText().toString();
+        String altitudeModeText = altitudeModeSpinner.getSelectedItem().toString();
+
+    }
     /**
      * Charge the data for the poi
      * @param poi Poi that is going to be edit
@@ -162,6 +176,8 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         SharedPreferences sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE);
         loadConnectionStatus(sharedPreferences);
         file_name.setText(sharedPreferences.getString(ConstantPrefs.FILE_NAME.name(), ""));
+
+
         latitude.setText(sharedPreferences.getString(ConstantPrefs.LATITUDE.name(), ""));
         longitude.setText(sharedPreferences.getString(ConstantPrefs.LONGITUDE.name(), ""));
         altitude.setText(sharedPreferences.getString(ConstantPrefs.ALTITUDE.name(), ""));
@@ -220,6 +236,7 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         Double altitudeText =  Double.parseDouble(altitude.getText().toString());
         String esp_mode = espmode.getSelectedItem().toString();
         String durationText = duration.getText().toString();
+        String position = positionSave.getText().toString();
         List<String> values = new ArrayList<String>();
         values.add(String.valueOf(longitudeText));
         values.add(String.valueOf(latitudeText));
@@ -227,6 +244,7 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         values.add(esp_mode);
         values.add(name);
         values.add(durationText);
+        values.add(position);
         people.put(name,values);
 
     }
