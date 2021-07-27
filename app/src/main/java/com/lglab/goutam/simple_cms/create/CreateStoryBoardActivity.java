@@ -67,6 +67,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -295,6 +298,10 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
     private void export(Map<String, List<String>> position_data){
         try{
             String Filename = storyBoardName.getText().toString();
+            File files = new File("/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename);
+            if(files.isDirectory()){
+                files.delete();
+            }
             Collection getter = position_data.values();
             Iterator i = getter.iterator();
             int y = 0;

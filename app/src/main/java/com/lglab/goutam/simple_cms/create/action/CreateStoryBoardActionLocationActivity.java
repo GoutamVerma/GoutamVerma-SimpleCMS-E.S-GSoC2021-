@@ -123,33 +123,21 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
 
 
         buttCancel.setOnClickListener( (view) ->
-            finish()
+                finish()
         );
 
         buttTest.setOnClickListener( (view) ->
-            testConnection()
+                testConnection()
         );
 
         buttAdd.setOnClickListener((view) ->
-            addPOI()
+                addPOI()
         );
 
         buttDelete.setOnClickListener( (view) -> deletePoi());
-        
-        buttAdd.setOnClickListener((view) -> Record());
-    }
-
-    private void Record(){
-        String latitudeText = latitude.getText().toString();
-        String longitudeText = longitude.getText().toString();
-        String altitudeText = altitude.getText().toString();
-        String durationText = duration.getText().toString();
-        String headingText = heading.getText().toString();
-        String tiltText = tilt.getText().toString();
-        String rangeText = range.getText().toString();
-        String altitudeModeText = altitudeModeSpinner.getSelectedItem().toString();
 
     }
+
     /**
      * Charge the data for the poi
      * @param poi Poi that is going to be edit
@@ -275,13 +263,13 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         editor.putString(ConstantPrefs.ALTITUDE_MODE.name(), altitudeModeText);
         editor.apply();
         record.Update(people, fileNameText, Double.parseDouble(String.valueOf(longitudeText)),Double.parseDouble(String.valueOf(latitudeText)),Double.parseDouble(String.valueOf(altitudeText)),esp_mode,durationText,String.valueOf(file_name));
-   }
+    }
 
     /**
      * Add a POI to the storyBoard
      */
     private void addPOI() {
-        String locationname = file_name.getText().toString();
+        Log.d("yea to call hora hai","chalo bhiya aage bado");
         String latitudeText = latitude.getText().toString();
         String longitudeText = longitude.getText().toString();
         String altitudeText = altitude.getText().toString();
@@ -295,20 +283,20 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
             String fileNameText = file_name.getText().toString();
             if(!fileNameText.equals("")){
                 saveData(latitudeText, longitudeText, altitudeText, durationText, headingText, tiltText, rangeText, altitudeModeText);
-                    POILocation poiLocation = new POILocation(fileNameText, Double.parseDouble(longitudeText),
-                            Double.parseDouble(latitudeText), Double.parseDouble(altitudeText));
-                    POICamera poiCamera = new POICamera(Double.parseDouble(headingText), Double.parseDouble(tiltText),
-                            Double.parseDouble(rangeText), altitudeModeText, Integer.parseInt(durationText));
-                    POI poi = new POI().setPoiLocation(poiLocation).setPoiCamera(poiCamera);
-                    Intent returnInfoIntent = new Intent();
-                    returnInfoIntent.putExtra(ActionIdentifier.LOCATION_ACTIVITY.name(), poi);
-                    returnInfoIntent.putExtra(ActionIdentifier.IS_SAVE.name(), isSave);
-                    returnInfoIntent.putExtra(ActionIdentifier.LAST_POSITION.name(), lastPosition);
-                    returnInfoIntent.putExtra(ActionIdentifier.POSITION.name(),
-                            Integer.parseInt(positionSave.getText().toString()) - 1);
+                POILocation poiLocation = new POILocation(fileNameText, Double.parseDouble(longitudeText),
+                        Double.parseDouble(latitudeText), Double.parseDouble(altitudeText));
+                POICamera poiCamera = new POICamera(Double.parseDouble(headingText), Double.parseDouble(tiltText),
+                        Double.parseDouble(rangeText), altitudeModeText, Integer.parseInt(durationText));
+                POI poi = new POI().setPoiLocation(poiLocation).setPoiCamera(poiCamera);
+                Intent returnInfoIntent = new Intent();
+                returnInfoIntent.putExtra(ActionIdentifier.LOCATION_ACTIVITY.name(), poi);
+                returnInfoIntent.putExtra(ActionIdentifier.IS_SAVE.name(), isSave);
+                returnInfoIntent.putExtra(ActionIdentifier.LAST_POSITION.name(), lastPosition);
+                returnInfoIntent.putExtra(ActionIdentifier.POSITION.name(),
+                        Integer.parseInt(positionSave.getText().toString()) - 1);
                 setResult(Activity.RESULT_OK, returnInfoIntent);
-                    finish();
-                    record(people);
+                finish();
+                record(people);
 
             } else{
                 CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,  getResources().getString(R.string.activity_create_location_missing_file_name));
@@ -344,7 +332,7 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
             finish();
         });
         cancel.setOnClickListener( view ->
-            dialog.dismiss());
+                dialog.dismiss());
     }
 
     /**
