@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.lglab.goutam.simple_cms.R;
+import com.lglab.goutam.simple_cms.create.CreateStoryBoardActivity;
 import com.lglab.goutam.simple_cms.create.utility.connection.LGConnectionTest;
 import com.lglab.goutam.simple_cms.create.utility.model.ActionIdentifier;
 import com.lglab.goutam.simple_cms.create.utility.model.poi.POI;
@@ -30,6 +31,7 @@ import com.lglab.goutam.simple_cms.create.utility.model.poi.POICamera;
 import com.lglab.goutam.simple_cms.create.utility.model.ActionController;
 import com.lglab.goutam.simple_cms.create.utility.model.poi.POILocation;
 import com.lglab.goutam.simple_cms.dialog.CustomDialogUtility;
+import com.lglab.goutam.simple_cms.export_esp.export_esp;
 import com.lglab.goutam.simple_cms.utility.ConstantPrefs;
 import com.lglab.goutam.simple_cms.export_esp.record;
 
@@ -37,7 +39,9 @@ import org.apache.commons.codec.StringEncoderComparator;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -249,8 +253,15 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
      * @param altitudeModeText altitude mode
      */
     private void saveData(String latitudeText, String longitudeText, String altitudeText, String durationText, String headingText, String tiltText, String rangeText, String altitudeModeText) {
+
         String fileNameText = file_name.getText().toString();
         String esp_mode = espmode.getSelectedItem().toString();
+        String position = positionSave.getText().toString();
+        if(people.containsKey(fileNameText)){
+            CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
+                    getResources().getString(R.string.You_can_not_enter_same_location_name_multiple_times));
+        }
+        else{
         SharedPreferences.Editor editor = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE).edit();
         editor.putString(ConstantPrefs.FILE_NAME.name(), fileNameText);
         editor.putString(ConstantPrefs.LATITUDE.name(), latitudeText);
@@ -262,14 +273,15 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         editor.putString(ConstantPrefs.RANGE.name(), rangeText);
         editor.putString(ConstantPrefs.ALTITUDE_MODE.name(), altitudeModeText);
         editor.apply();
-        record.Update(people, fileNameText, Double.parseDouble(String.valueOf(longitudeText)),Double.parseDouble(String.valueOf(latitudeText)),Double.parseDouble(String.valueOf(altitudeText)),esp_mode,durationText,String.valueOf(file_name));
+        record.findanddelete(position, people);
+        record.Update(people, fileNameText, Double.parseDouble(String.valueOf(longitudeText)),Double.parseDouble(String.valueOf(latitudeText)),Double.parseDouble(String.valueOf(altitudeText)),esp_mode,durationText,fileNameText,position);
+    }
     }
 
     /**
      * Add a POI to the storyBoard
      */
     private void addPOI() {
-        Log.d("yea to call hora hai","chalo bhiya aage bado");
         String latitudeText = latitude.getText().toString();
         String longitudeText = longitude.getText().toString();
         String altitudeText = altitude.getText().toString();
@@ -281,7 +293,11 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         if(verificationData(latitudeText, longitudeText, altitudeText, durationText, headingText,
                 tiltText, rangeText)){
             String fileNameText = file_name.getText().toString();
-            if(!fileNameText.equals("")){
+            if(people.containsKey(fileNameText)){
+                CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
+                        getResources().getString(R.string.You_can_not_enter_same_location_name_multiple_times));
+            }
+            else if(!fileNameText.equals("")){
                 saveData(latitudeText, longitudeText, altitudeText, durationText, headingText, tiltText, rangeText, altitudeModeText);
                 POILocation poiLocation = new POILocation(fileNameText, Double.parseDouble(longitudeText),
                         Double.parseDouble(latitudeText), Double.parseDouble(altitudeText));
@@ -392,4 +408,5 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
 }

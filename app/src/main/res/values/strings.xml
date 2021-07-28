@@ -292,6 +292,7 @@
     <string name="You_need_a_name_to_export_esp">Please fill the name of Storyboard</string>
     <string name="You_need_to_select_mode_of_esp">You need to select mode of esp under location</string>
     <string name="only_going_to_export_esp">We\'re only going to export Location files! \nDo you still wants to continue?</string>
+    <string name="You_can_not_enter_same_location_name_multiple_times">You can\'t enter same location name multiple times</string>
 
 
     //Elevation Types

@@ -300,6 +300,7 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
             String Filename = storyBoardName.getText().toString();
             File files = new File("/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename);
             if(files.isDirectory()){
+                Log.d("file to deelete hori hai","piicture kja hjai");
                 files.delete();
             }
             Collection getter = position_data.values();
@@ -352,6 +353,7 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
         try {
             File dir = new File("/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename+"/");
             String zipDirName = "/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename+".zip";
+            Log.d("filename",Filename);
             populateFilesList(dir);
             File zipFile = new File(zipDirName);
             FileOutputStream fos = new FileOutputStream(zipDirName);

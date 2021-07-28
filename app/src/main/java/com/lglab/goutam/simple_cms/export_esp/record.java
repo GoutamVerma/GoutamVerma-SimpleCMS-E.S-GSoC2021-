@@ -5,6 +5,8 @@ import android.util.Log;
 import com.lglab.goutam.simple_cms.create.CreateStoryBoardActivity;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 // this class is in charge of storing coordinates point in hashmap
@@ -32,7 +34,7 @@ public class record extends CreateStoryBoardActivity {
         return kml;
     }
 // this function update values in hashmap
-    public static void Update(Map<String, List<String>> position_data,String key,Double longitude,Double latitude,Double altitude,String esp_mode,String durationText,String name){
+    public static void Update(Map<String, List<String>> position_data,String key,Double longitude,Double latitude,Double altitude,String esp_mode,String durationText,String name,String position){
         List<String> values = new ArrayList<String>();
         values.add(String.valueOf(longitude));
         values.add(String.valueOf(latitude));
@@ -40,10 +42,28 @@ public class record extends CreateStoryBoardActivity {
         values.add(esp_mode);
         values.add(name);
         values.add(durationText);
-        position_data.replace(key, values);
+        values.add(position);
+        position_data.put(key, values);
     }
 //    this function delete particular value from hashmap
     public static void Delete(Map<String, List<String>> position_data,String key){
-        position_data.remove(key);
+        try{position_data.remove(key);} catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void findanddelete(String position,Map<String, List<String>> people) {
+        Collection getter = people.values();
+        Iterator i = getter.iterator();
+        int a = getter.size();
+        String key = null;
+        while (i.hasNext()) {
+            List items = (List) i.next();
+            if (items.contains(position)) {
+                key = String.valueOf(items.get(4));
+            }
+        }
+        Delete(people, key);
     }
 }
