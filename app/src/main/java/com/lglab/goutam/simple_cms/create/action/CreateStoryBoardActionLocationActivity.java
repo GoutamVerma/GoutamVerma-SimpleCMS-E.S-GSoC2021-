@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,6 +39,10 @@ import com.lglab.goutam.simple_cms.export_esp.record;
 import org.apache.commons.codec.StringEncoderComparator;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -140,6 +145,8 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
 
         buttDelete.setOnClickListener( (view) -> deletePoi());
 
+        buttRec.setOnClickListener((view) -> reciver(22));
+
     }
 
     /**
@@ -190,6 +197,27 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
             connectionStatus.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_status_connection_green));
         }else{
             connectionStatus.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_status_connection_red));
+        }
+    }
+    public void reciver(int port){
+        try{
+        DatagramSocket ds = new DatagramSocket(port);
+        byte[] buf = null;
+        DatagramPacket Dpreceive = null;
+        DatagramPacket DpSend = null;
+        while(true){
+            buf = new byte[140];
+            Dpreceive = new DatagramPacket(buf,buf.length);
+            ds.receive(Dpreceive);
+            String inp = new String(buf,0,buf.length);
+            inp = inp.trim();
+            Log.d("dataaa aagayta hai bete",inp);
+
+    } }
+        catch (SocketException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -257,11 +285,6 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         String fileNameText = file_name.getText().toString();
         String esp_mode = espmode.getSelectedItem().toString();
         String position = positionSave.getText().toString();
-        if(people.containsKey(fileNameText)){
-            CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
-                    getResources().getString(R.string.You_can_not_enter_same_location_name_multiple_times));
-        }
-        else{
         SharedPreferences.Editor editor = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE).edit();
         editor.putString(ConstantPrefs.FILE_NAME.name(), fileNameText);
         editor.putString(ConstantPrefs.LATITUDE.name(), latitudeText);
@@ -275,7 +298,6 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         editor.apply();
         record.findanddelete(position, people);
         record.Update(people, fileNameText, Double.parseDouble(String.valueOf(longitudeText)),Double.parseDouble(String.valueOf(latitudeText)),Double.parseDouble(String.valueOf(altitudeText)),esp_mode,durationText,fileNameText,position);
-    }
     }
 
     /**
@@ -293,11 +315,7 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         if(verificationData(latitudeText, longitudeText, altitudeText, durationText, headingText,
                 tiltText, rangeText)){
             String fileNameText = file_name.getText().toString();
-            if(people.containsKey(fileNameText)){
-                CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
-                        getResources().getString(R.string.You_can_not_enter_same_location_name_multiple_times));
-            }
-            else if(!fileNameText.equals("")){
+             if(!fileNameText.equals("")){
                 saveData(latitudeText, longitudeText, altitudeText, durationText, headingText, tiltText, rangeText, altitudeModeText);
                 POILocation poiLocation = new POILocation(fileNameText, Double.parseDouble(longitudeText),
                         Double.parseDouble(latitudeText), Double.parseDouble(altitudeText));

@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
@@ -295,13 +296,20 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
             }
         }
     }
+    public static void deleteDirectory(File file){
+        for(File subfile :file.listFiles()){
+            if(subfile.isDirectory()){deleteDirectory(subfile);}
+            subfile.delete();
+        }
+
+    }
     private void export(Map<String, List<String>> position_data){
         try{
             String Filename = storyBoardName.getText().toString();
             File files = new File("/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename);
             if(files.isDirectory()){
-                Log.d("file to deelete hori hai","piicture kja hjai");
                 files.delete();
+                deleteDirectory(files);
             }
             Collection getter = position_data.values();
             Iterator i = getter.iterator();
@@ -351,6 +359,7 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
 
     private void zipDirectory(String Filename) {
         try {
+            Log.d("hashmap data",String.valueOf(people));
             File dir = new File("/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename+"/");
             String zipDirName = "/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename+".zip";
             Log.d("filename",Filename);
