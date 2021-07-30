@@ -40,10 +40,14 @@ import org.apache.commons.codec.StringEncoderComparator;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.BindException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -145,7 +149,13 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
 
         buttDelete.setOnClickListener( (view) -> deletePoi());
 
-        buttRec.setOnClickListener((view) -> reciver(22));
+        buttRec.setOnClickListener((view) -> {
+            try {
+                reciver(1024);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
 
     }
 
@@ -199,28 +209,35 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
             connectionStatus.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_status_connection_red));
         }
     }
-    public void reciver(int port){
-        try{
-        DatagramSocket ds = new DatagramSocket(port);
-        byte[] buf = null;
-        DatagramPacket Dpreceive = null;
-        DatagramPacket DpSend = null;
-        while(true){
-            buf = new byte[140];
-            Dpreceive = new DatagramPacket(buf,buf.length);
-            ds.receive(Dpreceive);
-            String inp = new String(buf,0,buf.length);
-            inp = inp.trim();
-            Log.d("dataaa aagayta hai bete",inp);
-
-    } }
-        catch (SocketException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    public void reciver(int port)  throws IOException{
+       int ports = 80;
+        Thread t1 =new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    DatagramSocket ds = new DatagramSocket(8888);
+                    Log.d("datagram socket", "cleared");
+                    byte[] receive = new byte[138];
+                    DatagramPacket DpReceive = null;
+                    while (true) {
+                        DpReceive = new DatagramPacket(receive, receive.length);
+                        Log.d("data packet", "cleared");
+                        ds.receive(DpReceive);
+                        Log.d("ds k pass data aagaya hai","cleared");
+                        Log.d("result",Arrays.toString(receive));
+                        receive = new byte[138];
+                    }
+                } catch (BindException e){
+                   Log.d("under use", "port");
+                } catch (SocketException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        t1.start();
+      }
     /**
      * Test the poi creation
      */
