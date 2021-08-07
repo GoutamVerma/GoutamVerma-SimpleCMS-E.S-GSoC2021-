@@ -13,26 +13,6 @@ import java.util.Map;
 
 public class record extends CreateStoryBoardActivity {
 
-//     this function find location values in hashmap and return placemark for that location
-    public static String FindLocation(Map<String, List<String>> position_data, String key) {
-        List<String> data = position_data.get(key);
-        Double longitude = Double.parseDouble(data.get(0));
-        Double latitude = Double.parseDouble(data.get(1));
-        Double altitude = Double.parseDouble(data.get(2));
-        String kml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<kml xmlns=\"http://www.opengis.net/kml/2.2\">\n" +
-                "  <Placemark>\n" +
-                "    <name>Simple placemark</name>\n" +
-                "    <description>Attached to the ground. Intelligently places itself \n" +
-                "       at the height of the underlying terrain.</description>\n" +
-                "    <Point>\n" +
-                "      <coordinates>" + longitude + "," + latitude + "," + altitude + "</coordinates>\n" +
-                "    </Point>\n" +
-                "  </Placemark>\n" +
-                "</kml>";
-        Log.d("kml", kml);
-        return kml;
-    }
 // this function update values in hashmap
     public static void Update(Map<String, List<String>> position_data,String key,Double longitude,Double latitude,Double altitude,String esp_mode,String durationText,String name,String position){
         List<String> values = new ArrayList<String>();
@@ -47,21 +27,19 @@ public class record extends CreateStoryBoardActivity {
     }
 //    this function delete particular value from hashmap
     public static void Delete(Map<String, List<String>> position_data,String key){
-        try{position_data.remove(key);} catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        try { position_data.remove(key); }
+        catch (Exception e) { e.printStackTrace(); }
     }
 
     public static void findanddelete(String position,Map<String, List<String>> people) {
         Collection getter = people.values();
         Iterator i = getter.iterator();
-        int a = getter.size();
         String key = null;
         while (i.hasNext()) {
             List items = (List) i.next();
-            if (items.contains(position)) {
+            if(position.equals(items.get(6))){
                 key = String.valueOf(items.get(4));
+                Log.d("chal hauia aagaya aagaya maal aagaya",String.valueOf(items.get(4)));
             }
         }
         Delete(people, key);

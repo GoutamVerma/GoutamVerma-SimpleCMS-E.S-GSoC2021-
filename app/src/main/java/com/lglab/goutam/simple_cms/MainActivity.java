@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +34,7 @@ public class MainActivity extends TobBarActivity {
     private EditText URI, username, password;
     private ImageView logo;
     private Handler handler = new Handler();
+    public String port;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,8 @@ public class MainActivity extends TobBarActivity {
 
         buttConnectLiquidGalaxy.setOnClickListener((view) -> connectionTest());
         buttTryAgain.setOnClickListener((view) -> {
+            port = URI.getText().toString();
+            Log.d("port address is ",port);
             changeToMainView();
             SharedPreferences.Editor editor = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE).edit();
             editor.putBoolean(ConstantPrefs.IS_CONNECTED.name(), false);
@@ -102,9 +106,7 @@ public class MainActivity extends TobBarActivity {
         String hostPort = URI.getText().toString();
         String usernameText = username.getText().toString();
         String passwordText = password.getText().toString();
-
         saveConnectionInfo(hostPort, usernameText, passwordText);
-
         if (!isValidHostNPort(hostPort)) {
             CustomDialogUtility.showDialog(MainActivity.this, getResources().getString(R.string.activity_connection_host_port_error));
             return;

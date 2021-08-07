@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.api.client.http.ByteArrayContent;
+import com.lglab.goutam.simple_cms.MainActivity;
 import com.lglab.goutam.simple_cms.R;
 import com.lglab.goutam.simple_cms.create.action.CreateStoryBoardActionBalloonActivity;
 import com.lglab.goutam.simple_cms.create.action.CreateStoryBoardActionLocationActivity;
@@ -58,7 +59,6 @@ import com.lglab.goutam.simple_cms.export_esp.export_esp;
 import com.lglab.goutam.simple_cms.export_esp.record;
 import com.lglab.goutam.simple_cms.my_storyboards.StoryBoardConstant;
 import com.lglab.goutam.simple_cms.utility.ConstantPrefs;
-
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -112,7 +112,6 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
     private EditText storyBoardName;
     private Button buttCreate, buttTest, buttStopTest;
     private TextView connectionStatus, sizeFile;
-    private AutoCompleteTextView actv;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -215,7 +214,6 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
                 e.printStackTrace();
             }
         }));
-
 
         initRecyclerView();
 
@@ -343,7 +341,7 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
                                     String.valueOf(items.get(4))), Filename);
                 }
             }
-            zipDirectory(Filename);
+            zipDirectory();
             File file = new File("/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename);
             file.deleteOnExit();
         }
@@ -357,16 +355,17 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
         }
     }
 
-    private void zipDirectory(String Filename) {
+    private void zipDirectory() {
         try {
-            Log.d("hashmap data",String.valueOf(people));
-            File dir = new File("/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename+"/");
+            String Filename = storyBoardName.getText().toString();
             String zipDirName = "/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename+".zip";
+            File dir = new File("/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+storyBoardName.getText().toString()+"/");
             Log.d("filename",Filename);
-            populateFilesList(dir);
+            populateFilesList();
             File zipFile = new File(zipDirName);
             FileOutputStream fos = new FileOutputStream(zipDirName);
             ZipOutputStream zos = new ZipOutputStream(fos);
+            Log.d("zipping direc",String.valueOf(filesListInDir));
             for(String filePath : filesListInDir){
                 System.out.println("Zipping "+filePath);
                 ZipEntry ze = new ZipEntry(filePath.substring(dir.getAbsolutePath().length()+1, filePath.length()));
@@ -377,7 +376,7 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
                 while ((len = fis.read(buffer)) > 0) {
                     zos.write(buffer, 0, len);
                 }
-                zos.closeEntry();
+               zos.closeEntry();
                 fis.close();
             }
             zos.close();
@@ -390,14 +389,14 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
 
     /**
      * This method populates all the files in a directory to a List
-     * @param dir
      * @throws IOException
      */
-    private void populateFilesList(File dir) throws IOException {
+    private void populateFilesList() throws IOException {
+        File dir = new File("/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+storyBoardName.getText().toString()+"/");
         File[] files = dir.listFiles();
         for(File file : files){
             if(file.isFile()) filesListInDir.add(file.getAbsolutePath());
-            else populateFilesList(file);
+            else populateFilesList();
         }
     }
     public void saveFile(String name,String data,String Filename){
@@ -1161,40 +1160,6 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
         changeButtonClickableBackgroundColor(getApplicationContext(), buttCreate);
     }
 
-    public void savekml(String dirname, String data){
-        File file1 = new File(getExternalFilesDir(null),  "/" + "Placemarks");
-        if (!file1.exists()){
-            file1.mkdir();
-        }
-        try {
-            File esp = new File(file1, dirname + ".kml");
-            FileWriter writer = new FileWriter(esp);
-            writer.append(data);
-            writer.flush();
-            writer.close();
-        } catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-    private void shareFilekml(String name,String data){
-        try {
-            File file = new File(getCacheDir(),"esp");
-            file.mkdirs();
-            File esp = new File(file,name+".kml");
-            FileWriter outputStream = new FileWriter(esp);
-            outputStream.write(data);
-            outputStream.close();
-            Uri uri = FileProvider.getUriForFile(this, "com.lglab.goutam.simple_cms.fileProvider", esp);
-            Intent intentShare = new Intent(Intent.ACTION_SEND);
-            intentShare.setType("*/*");
-            intentShare.putExtra(Intent.EXTRA_STREAM, uri);
-            startActivity(Intent.createChooser(intentShare, "Share the file ..."));
-            Log.d("inner intent", "kaam go gata");
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.d("Exception", "Dikkat hori hai exception main aai!");
-        }
-    }
     private void shareZIP(File name){
         try {
             Uri uri = FileProvider.getUriForFile(this, "com.lglab.goutam.simple_cms.fileProvider", name);
@@ -1202,10 +1167,9 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
             intentShare.setType("*/*");
             intentShare.putExtra(Intent.EXTRA_STREAM, uri);
             startActivity(Intent.createChooser(intentShare, "Share the file ..."));
-            Log.d("inner intent", "kaam go gata");
+            filesListInDir.clear();
         } catch (Exception e) {
             e.printStackTrace();
-            Log.d("Exception", "Dikkat hori hai exception main aai!");
         }
     }
 

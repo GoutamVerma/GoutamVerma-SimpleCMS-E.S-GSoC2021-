@@ -4,14 +4,14 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -23,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.lglab.goutam.simple_cms.MainActivity;
 import com.lglab.goutam.simple_cms.R;
 import com.lglab.goutam.simple_cms.create.CreateStoryBoardActivity;
 import com.lglab.goutam.simple_cms.create.utility.connection.LGConnectionTest;
@@ -35,8 +36,9 @@ import com.lglab.goutam.simple_cms.dialog.CustomDialogUtility;
 import com.lglab.goutam.simple_cms.export_esp.export_esp;
 import com.lglab.goutam.simple_cms.utility.ConstantPrefs;
 import com.lglab.goutam.simple_cms.export_esp.record;
-
 import org.apache.commons.codec.StringEncoderComparator;
+
+
 
 import java.io.File;
 import java.io.IOException;
@@ -54,10 +56,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.lglab.goutam.simple_cms.dialog.CustomDialogUtility.getDialog;
+
 /**
  * This class is in charge of getting the information of location action
  */
-public class CreateStoryBoardActionLocationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener  {
+public class CreateStoryBoardActionLocationActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
     //private static final String TAG_DEBUG = "CreateStoryBoardActionLocationActivity";
 
@@ -65,16 +69,19 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
     private Spinner altitudeModeSpinner;
     private Spinner espmode;
     private TextView connectionStatus;
-
+    ProgressDialog  progressDialog;
     public static HashMap people = new HashMap<String, List<String>>();
-    public HashMap<String, List<String>> getPeopleMap(){
+
+    public HashMap<String, List<String>> getPeopleMap() {
         return people;
     }
+
     private Handler handler = new Handler();
     private boolean isSave = false;
     private int position = -1;
     private int lastPosition = 0;
     private ArrayAdapter<CharSequence> spinnerAdapter;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,48 +126,109 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         lastPosition = intent.getIntExtra(ActionIdentifier.LAST_POSITION.name(), -1);
         int actionsSize = intent.getIntExtra(ActionIdentifier.ACTION_SIZE.name(), -1);
 
-        if(poi != null){
+        if (poi != null) {
             isSave = true;
             buttAdd.setText(getResources().getString(R.string.button_save));
             buttDelete.setVisibility(View.VISIBLE);
             loadPoiData(poi);
-        }else{
+        } else {
             loadData();
         }
 
         int positionValue;
-        if(position == -1) positionValue = actionsSize;
+        if (position == -1) positionValue = actionsSize;
         else positionValue = position;
         positionValue++;
         positionSave.setText(String.valueOf(positionValue));
 
 
-        buttCancel.setOnClickListener( (view) ->
+        buttCancel.setOnClickListener((view) ->
                 finish()
         );
 
-        buttTest.setOnClickListener( (view) ->
+        buttTest.setOnClickListener((view) ->
                 testConnection()
         );
 
         buttAdd.setOnClickListener((view) ->
                 addPOI()
         );
+        buttDelete.setOnClickListener((view) -> deletePoi());
 
-        buttDelete.setOnClickListener( (view) -> deletePoi());
-
-        buttRec.setOnClickListener((view) -> {
-            try {
-                reciver(1024);
-            } catch (IOException e) {
-                e.printStackTrace();
+        buttRec.setOnClickListener((view) ->box());
+    }
+    public void box(){
+        progressDialog = new ProgressDialog(CreateStoryBoardActionLocationActivity.this);
+        progressDialog.show();
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        capturing();
+     }
+    public void capturing(){
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                AtomicBoolean isConnected = new AtomicBoolean(false);
+                LGConnectionTest.testPriorConnection(CreateStoryBoardActionLocationActivity.this, isConnected);
+               if(isConnected.get()) {
+                DatagramSocket udpSocket = null;
+                try {
+                        SharedPreferences sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE);
+                        String hostPort = sharedPreferences.getString(ConstantPrefs.URI_TEXT.name(), "");
+                        String[] hostNPort = hostPort.split(":");
+                        int port = Integer.parseInt(hostNPort[1]);
+                        Log.d("port no is",String.valueOf(port));
+                        String msg ="";
+                        udpSocket = new DatagramSocket(port);
+                        byte[] message = new byte[8000];
+                        Log.d("UDP client: ", "about to wait to receive");
+                        Log.d("port no is ",String.valueOf(udpSocket.getLocalPort()));
+                        DatagramPacket packet = new DatagramPacket(message, message.length);
+                        udpSocket.receive(packet);
+                        String text = new String(message, 0, packet.getLength());
+                        udpSocket.setReuseAddress(true);
+                        udpSocket.close();
+                        msg = text;
+                        Log.d("Received data", msg);
+                        updater(msg);
+                        message= new byte[8000];
+                    } catch (BindException e) {
+//                        udpSocket.close();
+                        e.printStackTrace();
+                    } catch (SocketException e) {
+                        CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
+                                getResources().getString(R.string.unable_to_access_the_port));
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        Log.e("UDP client has IOException", "error: ", e);
+                    }
+                }
             }
         });
-
+        thread.start();
     }
-
+    public void updater(final String value){
+        try {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String[] values = value.split(",");
+                    latitude.setText(values[1]);
+                    longitude.setText(values[2]);
+                    altitude.setText(values[3]);
+                    heading.setText(values[4]);
+                    tilt.setText(values[5]);
+                    progressDialog.dismiss();
+                }
+            });
+        } catch (Exception e) {
+            CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
+                    getResources().getString(R.string.unable_to_put_data_on_fields));
+        }
+    }
     /**
      * Charge the data for the poi
+     *
      * @param poi Poi that is going to be edit
      */
 
@@ -199,45 +267,17 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
 
     /**
      * Set the connection status on the view
+     *
      * @param sharedPreferences sharedPreferences
      */
     private void loadConnectionStatus(SharedPreferences sharedPreferences) {
         boolean isConnected = sharedPreferences.getBoolean(ConstantPrefs.IS_CONNECTED.name(), false);
         if (isConnected) {
             connectionStatus.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_status_connection_green));
-        }else{
+        } else {
             connectionStatus.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_status_connection_red));
         }
     }
-    public void reciver(int port)  throws IOException{
-       int ports = 80;
-        Thread t1 =new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    DatagramSocket ds = new DatagramSocket(8888);
-                    Log.d("datagram socket", "cleared");
-                    byte[] receive = new byte[138];
-                    DatagramPacket DpReceive = null;
-                    while (true) {
-                        DpReceive = new DatagramPacket(receive, receive.length);
-                        Log.d("data packet", "cleared");
-                        ds.receive(DpReceive);
-                        Log.d("ds k pass data aagaya hai","cleared");
-                        Log.d("result",Arrays.toString(receive));
-                        receive = new byte[138];
-                    }
-                } catch (BindException e){
-                   Log.d("under use", "port");
-                } catch (SocketException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        t1.start();
-      }
     /**
      * Test the poi creation
      */
