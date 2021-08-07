@@ -159,18 +159,19 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
     }
     public void box(){
         progressDialog = new ProgressDialog(CreateStoryBoardActionLocationActivity.this);
-        progressDialog.show();
-        progressDialog.setContentView(R.layout.progress_dialog);
-        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        capturing();
+        AtomicBoolean isConnected = new AtomicBoolean(false);
+        LGConnectionTest.testPriorConnection(CreateStoryBoardActionLocationActivity.this, isConnected);
+        if(isConnected.get()) {
+            progressDialog.show();
+            progressDialog.setContentView(R.layout.progress_dialog);
+            progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            capturing();
+        }
      }
     public void capturing(){
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                AtomicBoolean isConnected = new AtomicBoolean(false);
-                LGConnectionTest.testPriorConnection(CreateStoryBoardActionLocationActivity.this, isConnected);
-               if(isConnected.get()) {
                 DatagramSocket udpSocket = null;
                 try {
                         SharedPreferences sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE);
@@ -203,7 +204,7 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
                         Log.e("UDP client has IOException", "error: ", e);
                     }
                 }
-            }
+
         });
         thread.start();
     }
