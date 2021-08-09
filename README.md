@@ -17,6 +17,9 @@ SimpleCMS E.S is an android application which creates an animation in "Spiral" "
 
 * **Spiral** A gradually shrinking, descending orbit around a point of interest.
 
+* **REC** it captures the current senario of Liquid Galaxy and then extract the desire data from it.
+
+
 This application is developed as part of Google Summer of Code 2021 by Goutam Verma, with Diego Riveros as mentor, and Andreu Ibañez and Ivan J as co-mentos.
 
 For information regarding how to create content click [here](https://docs.google.com/document/d/1ctusDehQJA2rD2hkLhemHXaoJVU2jk1SpHPEBQ8IngI/edit?usp=sharing)
@@ -63,10 +66,18 @@ For information regarding how to create content click [here](https://docs.google
 * How to run project in android studio? click [here](https://developer.android.com/studio/run)
 * How to import project in Google Earth Studio? click [here](https://earth.google.com/studio/docs/the-basics/project-management/)  
    
+### **How to use Export and REC button**
+1. Create a connection between Liquid Galaxy and SimpleCMS E.S through connection tab.
+2. Create Storyboard with esp mode under location tab.
+3. Use **REC** button to capture the current senario of LG(just click on it).
+4. If you wants to test the Storyboard, click on Test otherwise click on **Export** to export esp files of locations.
+
+Note: "Export" button is only going to export Location files. it does not affect or export movement, shapes and ballons
 ## Tech Stack
 
 * Java
 * ESP,KML   
+* Datagram socket
 * Android Studio
 * Google Earth Studio
 
