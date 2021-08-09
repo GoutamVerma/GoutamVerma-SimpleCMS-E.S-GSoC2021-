@@ -59,12 +59,6 @@ For information regarding how to create content click [here](https://docs.google
 6. Finally, open [Google Earth Studio](https://earth.google.com/studio/) in the web browser. Select “open project“ then locate the esp file and enjoy the animation. 
 7. otherwise you can test the Storyboard(content) just by click on button "Test".
 
-*For more information*
-
-* How to import project in android studio? click [here](https://developer.android.com/studio/intro/migrate)
-* How to create Android virtual device? click [here](https://developer.android.com/studio/run/managing-avds)
-* How to run project in android studio? click [here](https://developer.android.com/studio/run)
-* How to import project in Google Earth Studio? click [here](https://earth.google.com/studio/docs/the-basics/project-management/)  
    
 ### **How to use Export and REC button**
 1. Create a connection between Liquid Galaxy and SimpleCMS E.S through connection tab.
@@ -72,13 +66,19 @@ For information regarding how to create content click [here](https://docs.google
 3. Use **REC** button to capture the current senario of LG(just click on it).
 4. If you wants to test the Storyboard, click on Test otherwise click on **Export** to export esp files of locations.
 
+Note: "Export" button is only going to export Location files. it does not affect or export movement, shapes and ballons
+
+
 *For more information*
 
+* How to import project in android studio? click [here](https://developer.android.com/studio/intro/migrate)
+* How to create Android virtual device? click [here](https://developer.android.com/studio/run/managing-avds)
+* How to run project in android studio? click [here](https://developer.android.com/studio/run)
+* How to import project in Google Earth Studio? click [here](https://earth.google.com/studio/docs/the-basics/project-management/)  
 * How to fetch data from Liquid Galaxy? click [here](https://docs.google.com/document/d/1A1dyRsK-MfANQvHZJVEuZNdoFmKqkly_aNV_WfSJY1k/edit?usp=sharing)
 
-Note: "Export" button is only going to export Location files. it does not affect or export movement, shapes and ballons
-## Tech Stack
 
+## Tech Stack
 * Java
 * ESP,KML   
 * Datagram socket
