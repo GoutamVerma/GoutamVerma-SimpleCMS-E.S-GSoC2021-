@@ -74,7 +74,7 @@ For information regarding how to create content click [here](https://docs.google
 
 *For more information*
 
-* How to fetch data from Liquid Galaxy? click [here] (https://docs.google.com/document/d/1A1dyRsK-MfANQvHZJVEuZNdoFmKqkly_aNV_WfSJY1k/edit?usp=sharing)
+* How to fetch data from Liquid Galaxy? click [here](https://docs.google.com/document/d/1A1dyRsK-MfANQvHZJVEuZNdoFmKqkly_aNV_WfSJY1k/edit?usp=sharing)
 
 Note: "Export" button is only going to export Location files. it does not affect or export movement, shapes and ballons
 ## Tech Stack
