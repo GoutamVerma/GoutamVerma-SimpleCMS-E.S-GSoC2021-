@@ -2,7 +2,7 @@
 # Liquid Galaxy SimpleCMS E.S
 
 ## SimpleCMS E.S (gif)
-   <img src="https://raw.githubusercontent.com/GoutamVerma/GoutamVerma-SimpleCMS-E.S-GSoC2021-/main/screenshot%20(2).gif"/>
+   <img src="https://raw.githubusercontent.com/GoutamVerma/GoutamVerma-SimpleCMS-E.S-GSoC2021-/main/GIF.gif"/>
  
 
 ## Discription
