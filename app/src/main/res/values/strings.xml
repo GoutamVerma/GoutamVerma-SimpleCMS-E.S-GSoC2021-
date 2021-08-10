@@ -69,7 +69,7 @@
     <string name="menu_account">Account</string>
     <string name="menu_help">Help</string>
     <string name="menu_demo">Demo</string>
-    <string name="menu_about">Simple CMS</string>
+    <string name="menu_about">Simple CMS E.S</string>
 
     <string name="account_username">Username</string>
     <string name="account_password">Password</string>
@@ -246,12 +246,12 @@
     <string name="text_search">Type and Search</string>
 
     //About
-    <string name="my_name">Diego Riveros</string>
+    <string name="my_name">Goutam Verma</string>
     <string name="linked_id">Learn more about me at my
-        <a href="https://www.linkedin.com/in/diego-riveros-121b22181/">Linked in</a>
+        <a href="https://www.linkedin.com/in/goutam-verma-3064931a4/">Linked in</a>
     </string>
     <string name="github_account">Check out. My work at
-        <a href="https://github.com/dfriveros11">Github</a>
+        <a href="https://github.com/GoutamVerma">Github</a>
     </string>
 
     //Demo
