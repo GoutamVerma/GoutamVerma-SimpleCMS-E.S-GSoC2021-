@@ -296,6 +296,7 @@
     <string name="Port_already_in_use">Port  already in use</string>
     <string name="unable_to_access_the_port">Unable to access the port</string>
     <string name="unable_to_put_data_on_fields">Unable to put data on fileds</string>
+    <string name="getting_unwanted_error_with_port">Getting unwanted error while accesing port please restart the application</string>
 
 
     //Elevation Types

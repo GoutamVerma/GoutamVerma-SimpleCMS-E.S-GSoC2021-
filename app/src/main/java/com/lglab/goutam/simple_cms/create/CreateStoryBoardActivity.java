@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -68,6 +69,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.BindException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -98,6 +103,7 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
     List<String> filesListInDir = new ArrayList<String>();
     private static final int PERMISSION_CODE_PACK = 1000;
     private static final long MAX_SIZE = 5242880;
+    ProgressDialog  progressDialog;
 
     private RecyclerView mRecyclerView;
     List<Action> actions = new ArrayList<>();
@@ -213,6 +219,7 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
         }));
 
         initRecyclerView();
@@ -322,6 +329,7 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
                     saveFile(String.valueOf(items.get(4)),
                             export_esp.orbit(Double.parseDouble(String.valueOf(items.get(1))), //here items.get
                                     Double.parseDouble(String.valueOf(items.get(0))),
+                                    Double.parseDouble(String.valueOf(items.get(2))),
                                     Integer.parseInt(String.valueOf(items.get(5))),
                                     String.valueOf(items.get(4))), Filename);
                 }
@@ -329,6 +337,7 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
                     saveFile(String.valueOf(items.get(4)),
                             export_esp.spiral(Double.parseDouble(String.valueOf(items.get(0))),
                                     Double.parseDouble(String.valueOf(items.get(1))),
+                                    Double.parseDouble(String.valueOf(items.get(2))),
                                     Integer.parseInt(String.valueOf(items.get(5))),
                                     String.valueOf(items.get(4))), Filename);
                 }

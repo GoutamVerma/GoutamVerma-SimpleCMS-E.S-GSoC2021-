@@ -386,7 +386,7 @@ public class ActionBuildCommandUtility {
                     .append("      <longitude>").append(poi.getPoiLocation().getLongitude()).append("</longitude> \n")
                     .append("      <latitude>").append(poi.getPoiLocation().getLatitude()).append("</latitude> \n")
                     .append("      <heading>").append(heading).append("</heading> \n")
-                    .append("      <tilt>").append(60).append("</tilt> \n")
+                    .append("      <tilt>").append(poi.getPoiCamera().getTilt()).append("</tilt> \n")
                     .append("      <gx:fovy>35</gx:fovy> \n")
                     .append("      <range>").append(poi.getPoiCamera().getRange()).append("</range> \n")
                     .append("      <gx:altitudeMode>absolute</gx:altitudeMode> \n")

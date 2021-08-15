@@ -157,33 +157,31 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
 
         buttRec.setOnClickListener((view) ->box());
     }
+
     public void box(){
-        progressDialog = new ProgressDialog(CreateStoryBoardActionLocationActivity.this);
         AtomicBoolean isConnected = new AtomicBoolean(false);
         LGConnectionTest.testPriorConnection(CreateStoryBoardActionLocationActivity.this, isConnected);
         if(isConnected.get()) {
+            progressDialog = new ProgressDialog(CreateStoryBoardActionLocationActivity.this);
             progressDialog.show();
+            progressDialog.setCancelable(false);
             progressDialog.setContentView(R.layout.progress_dialog);
             progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            capturing();
-        }
-     }
-    public void capturing(){
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                DatagramSocket udpSocket = null;
-                try {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    DatagramSocket udpSocket = null;
+                    try {
                         SharedPreferences sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE);
                         String hostPort = sharedPreferences.getString(ConstantPrefs.URI_TEXT.name(), "");
                         String[] hostNPort = hostPort.split(":");
                         int port = Integer.parseInt(hostNPort[1]);
-                        Log.d("port no is",String.valueOf(port));
-                        String msg ="";
+                        Log.d("port no is", String.valueOf(port));
+                        String msg = "";
                         udpSocket = new DatagramSocket(port);
                         byte[] message = new byte[8000];
                         Log.d("UDP client: ", "about to wait to receive");
-                        Log.d("port no is ",String.valueOf(udpSocket.getLocalPort()));
+                        Log.d("port no is ", String.valueOf(udpSocket.getLocalPort()));
                         DatagramPacket packet = new DatagramPacket(message, message.length);
                         udpSocket.receive(packet);
                         String text = new String(message, 0, packet.getLength());
@@ -192,9 +190,10 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
                         msg = text;
                         Log.d("Received data", msg);
                         updater(msg);
-                        message= new byte[8000];
+                        message = new byte[8000];
                     } catch (BindException e) {
-//                        udpSocket.close();
+                            CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
+                                    getResources().getString(R.string.getting_unwanted_error_with_port));
                         e.printStackTrace();
                     } catch (SocketException e) {
                         CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
@@ -205,8 +204,9 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
                     }
                 }
 
-        });
-        thread.start();
+            });
+            thread.start();
+        }
     }
     public void updater(final String value){
         try {
@@ -244,7 +244,41 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         heading.setText(String.valueOf(poi.getPoiCamera().getHeading()));
         tilt.setText(String.valueOf(poi.getPoiCamera().getTilt()));
         range.setText(String.valueOf(poi.getPoiCamera().getRange()));
-        altitudeModeSpinner.setSelection(spinnerAdapter.getPosition(String.valueOf(poi.getPoiCamera().getAltitudeMode())));
+        altitudeModeSpinner.setSelection(orbit_position(String.valueOf(poi.getPoiCamera().getAltitudeMode())));
+        try{
+        List<String> position = (List<String>) people.get( poi.getPoiLocation().getName());
+        espmode.setSelection(esp_position(position.get(3)));
+        } catch (NullPointerException e) {
+            espmode.setSelection(0);
+        }
+    }
+    private int esp_position(String name){
+        int postion=0;
+                if(name.equals("None")){
+                    position=0;
+        }else if(name.equals("Orbit")){
+                    position=1;
+        }else if(name.equals("Spiral")){
+                    position=2;
+                } else if(name.equals("Zoom-To")){
+                    position=3;
+                }
+                return position;
+    }
+    private int orbit_position(String name) {
+        int position=0;
+        if (name.equals("absolute")){
+            position=0;
+        } else if (name.equals("clampToGround")){
+            position=1;
+        }else if(name.equals("clampToSeaFloor")){
+            position=2;
+        }else if(name.equals("relativeToGround")){
+            position=3;
+        }else if(name.equals("relativeToSeaFloor")){
+            position=4;
+        }
+        return position;
     }
 
     /**
