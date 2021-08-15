@@ -2,7 +2,7 @@
 # Liquid Galaxy SimpleCMS E.S
 
 ## SimpleCMS E.S (gif)
-   <img src="https://raw.githubusercontent.com/GoutamVerma/GoutamVerma-SimpleCMS-E.S-GSoC2021-/main/screenshot%20(2).gif"/>
+   <img src="https://raw.githubusercontent.com/GoutamVerma/GoutamVerma-SimpleCMS-E.S-GSoC2021-/main/GIF.gif"/>
  
 
 ## Discription
@@ -55,7 +55,7 @@ For information regarding how to create content click [here](https://docs.google
 2. click on connect tab, enter the username,password and Ip address of master machine with port no(Ip:Port no)
 3. click on create tab, Under location tab enter the longitude,latitude,altitude,heading,duration,tilt,range of POI then click add.
 4. you can repeat step 3 for as much you wants to add POI.
-5. To export esp file. click on "Export" button. choose the feature("orbit","spiral","Zoom-to") then select apk for exporting esp.
+5. To export esp file. click on "Export" button then select apk for exporting esp.
 6. Finally, open [Google Earth Studio](https://earth.google.com/studio/) in the web browser. Select “open project“ then locate the esp file and enjoy the animation. 
 7. otherwise you can test the Storyboard(content) just by click on button "Test".
 
