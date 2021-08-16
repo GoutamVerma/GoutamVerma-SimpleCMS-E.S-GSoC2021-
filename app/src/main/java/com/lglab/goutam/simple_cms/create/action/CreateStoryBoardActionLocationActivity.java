@@ -169,8 +169,9 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
                     DatagramSocket udpSocket = null;
                     SharedPreferences sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE);
                     String hostPort = sharedPreferences.getString(ConstantPrefs.URI_TEXT.name(), "");
+                    String hostport = "192.168.29.198:1234";
                     String msg = "";
-                    if(hostPort!="") {
+                    if(hostport!="") {
                         try {
                             String[] hostNPort = hostPort.split(":");
                             int port = Integer.parseInt(hostNPort[1]);
