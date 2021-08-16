@@ -1,5 +1,6 @@
 package com.lglab.goutam.simple_cms.create;
 
+import com.lglab.goutam.simple_cms.export_esp.datacapture;
 import android.Manifest;
 import android.R.layout;
 import android.annotation.SuppressLint;
@@ -219,7 +220,6 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }));
 
         initRecyclerView();

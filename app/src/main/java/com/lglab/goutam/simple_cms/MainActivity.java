@@ -201,7 +201,7 @@ public class MainActivity extends TobBarActivity {
                 changeToNewView();
                 ActionController.getInstance().sendBalloonWithLogos(MainActivity.this);
             }
-        }, 2000);
+        }, 5000);
     }
 
     /**

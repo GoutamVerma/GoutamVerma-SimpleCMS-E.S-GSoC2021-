@@ -263,7 +263,7 @@
     //Explain texts
     <string name="butt_rec">Capture scenario for location and export it in kml(placemark) format</string>
     <string name="export_esp_explain">export esp file for "spiral" "orbit" and "zoom to" feature</string>
-    <string name="text_version">Version 1.0.0</string>
+    <string name="text_version">Version 6.0</string>
     <string name="butt_location_explain">Open a location content</string>
     <string name="butt_movement_explain">Open a movement content</string>
     <string name="butt_balloon_explain">Open a balloon content</string>
@@ -297,6 +297,7 @@
     <string name="unable_to_access_the_port">Unable to access the port</string>
     <string name="unable_to_put_data_on_fields">Unable to put data on fileds</string>
     <string name="getting_unwanted_error_with_port">Getting unwanted error while accesing port please restart the application</string>
+    <string name="lg_is_not_connected">You are not connected to Liquid Galaxy</string>
 
 
     //Elevation Types

@@ -57,7 +57,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.lglab.goutam.simple_cms.dialog.CustomDialogUtility.getDialog;
-
+import com.lglab.goutam.simple_cms.export_esp.datacapture;
 /**
  * This class is in charge of getting the information of location action
  */
@@ -155,13 +155,9 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         );
         buttDelete.setOnClickListener((view) -> deletePoi());
 
-        buttRec.setOnClickListener((view) ->box());
+        buttRec.setOnClickListener((view) ->boxer());
     }
-
-    public void box(){
-        AtomicBoolean isConnected = new AtomicBoolean(false);
-        LGConnectionTest.testPriorConnection(CreateStoryBoardActionLocationActivity.this, isConnected);
-        if(isConnected.get()) {
+    public void boxer(){
             progressDialog = new ProgressDialog(CreateStoryBoardActionLocationActivity.this);
             progressDialog.show();
             progressDialog.setCancelable(false);
@@ -171,42 +167,48 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
                 @Override
                 public void run() {
                     DatagramSocket udpSocket = null;
-                    try {
-                        SharedPreferences sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE);
-                        String hostPort = sharedPreferences.getString(ConstantPrefs.URI_TEXT.name(), "");
-                        String[] hostNPort = hostPort.split(":");
-                        int port = Integer.parseInt(hostNPort[1]);
-                        Log.d("port no is", String.valueOf(port));
-                        String msg = "";
-                        udpSocket = new DatagramSocket(port);
-                        byte[] message = new byte[8000];
-                        Log.d("UDP client: ", "about to wait to receive");
-                        Log.d("port no is ", String.valueOf(udpSocket.getLocalPort()));
-                        DatagramPacket packet = new DatagramPacket(message, message.length);
-                        udpSocket.receive(packet);
-                        String text = new String(message, 0, packet.getLength());
-                        udpSocket.setReuseAddress(true);
-                        udpSocket.close();
-                        msg = text;
-                        Log.d("Received data", msg);
-                        updater(msg);
-                        message = new byte[8000];
-                    } catch (BindException e) {
+                    SharedPreferences sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE);
+                    String hostPort = sharedPreferences.getString(ConstantPrefs.URI_TEXT.name(), "");
+                    String msg = "";
+                    if(hostPort!="") {
+                        try {
+                            String[] hostNPort = hostPort.split(":");
+                            int port = Integer.parseInt(hostNPort[1]);
+                            udpSocket = new DatagramSocket(1234);
+                            byte[] message = new byte[8000];
+                            Log.d("UDP client: ", "about to wait to receive");
+                            Log.d("port no is ", String.valueOf(udpSocket.getLocalPort()));
+                            DatagramPacket packet = new DatagramPacket(message, message.length);
+                            udpSocket.receive(packet);
+                            String text = new String(message, 0, packet.getLength());
+                            udpSocket.setReuseAddress(true);
+                            udpSocket.close();
+                            msg = text;
+                            Log.d("Received data", msg);
+                            updater(msg);
+                            message = new byte[8000];
+
+                        } catch (BindException e) {
                             CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
                                     getResources().getString(R.string.getting_unwanted_error_with_port));
-                        e.printStackTrace();
-                    } catch (SocketException e) {
-                        CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
-                                getResources().getString(R.string.unable_to_access_the_port));
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        Log.e("UDP client has IOException", "error: ", e);
+                            e.printStackTrace();
+                        } catch (SocketException e) {
+                            CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
+                                    getResources().getString(R.string.unable_to_access_the_port));
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            Log.e("UDP client has IOException", "error: ", e);
+                        }
+                    }
+                    else {   progressDialog.dismiss();
+                            CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
+                                getResources().getString(R.string.lg_is_not_connected));
                     }
                 }
 
             });
             thread.start();
-        }
+//        }
     }
     public void updater(final String value){
         try {
