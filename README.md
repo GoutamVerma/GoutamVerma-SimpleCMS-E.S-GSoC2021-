@@ -64,10 +64,9 @@ For information regarding how to create content click [here](https://docs.google
 1. Create a connection between Liquid Galaxy and SimpleCMS E.S through connection tab.
 2. Create Storyboard with esp mode under location tab.
 3. Use **REC** button to capture the current senario of LG(just click on it).
-4. If you wants to test the Storyboard, click on Test otherwise click on **Export** to export esp files of locations.
+5. If you wants to test the Storyboard, click on Test otherwise click on **Export** to export esp files of locations.
 
-Note: "Export" button is only going to export Location files. it does not affect or export movement, shapes and ballons
-
+Note: For using the "REC" button you have to put broadcast ip in drivers.ini settings(it should be start with 192 and ends with 255) and  "Export" button is only going to export Location files. it does not affect or export movement, shapes and ballons.
 
 *For more information*
 
@@ -76,6 +75,7 @@ Note: "Export" button is only going to export Location files. it does not affect
 * How to run project in android studio? click [here](https://developer.android.com/studio/run)
 * How to import project in Google Earth Studio? click [here](https://earth.google.com/studio/docs/the-basics/project-management/)  
 * How to fetch data from Liquid Galaxy? click [here](https://docs.google.com/document/d/1A1dyRsK-MfANQvHZJVEuZNdoFmKqkly_aNV_WfSJY1k/edit?usp=sharing)
+* Troubleshoot with REC button? click [here](https://docs.google.com/document/d/1Nukl-DYu8c7Ip0S9qm9dRGgNw_nHuIaLZhhGZQYO_fY/edit?usp=sharing)
 
 
 ## Tech Stack
