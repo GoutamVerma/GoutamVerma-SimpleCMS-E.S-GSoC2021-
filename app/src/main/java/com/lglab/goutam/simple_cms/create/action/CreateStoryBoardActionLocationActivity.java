@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -23,9 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import com.lglab.goutam.simple_cms.MainActivity;
 import com.lglab.goutam.simple_cms.R;
-import com.lglab.goutam.simple_cms.create.CreateStoryBoardActivity;
 import com.lglab.goutam.simple_cms.create.utility.connection.LGConnectionTest;
 import com.lglab.goutam.simple_cms.create.utility.model.ActionIdentifier;
 import com.lglab.goutam.simple_cms.create.utility.model.poi.POI;
@@ -33,31 +30,20 @@ import com.lglab.goutam.simple_cms.create.utility.model.poi.POICamera;
 import com.lglab.goutam.simple_cms.create.utility.model.ActionController;
 import com.lglab.goutam.simple_cms.create.utility.model.poi.POILocation;
 import com.lglab.goutam.simple_cms.dialog.CustomDialogUtility;
-import com.lglab.goutam.simple_cms.export_esp.export_esp;
 import com.lglab.goutam.simple_cms.utility.ConstantPrefs;
 import com.lglab.goutam.simple_cms.export_esp.record;
-import org.apache.commons.codec.StringEncoderComparator;
 
 
-
-import java.io.File;
 import java.io.IOException;
 import java.net.BindException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.lglab.goutam.simple_cms.dialog.CustomDialogUtility.getDialog;
-import com.lglab.goutam.simple_cms.export_esp.datacapture;
 /**
  * This class is in charge of getting the information of location action
  */
@@ -65,17 +51,15 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
 
     //private static final String TAG_DEBUG = "CreateStoryBoardActionLocationActivity";
 
-    private EditText file_name, longitude, latitude, altitude, duration, heading, tilt, range, positionSave;
+    private EditText file_name, longitude, latitude, altitude, duration, heading, tilt, range, positionSave ,portno;
     private Spinner altitudeModeSpinner;
     private Spinner espmode;
     private TextView connectionStatus;
     ProgressDialog  progressDialog;
     public static HashMap people = new HashMap<String, List<String>>();
-
     public HashMap<String, List<String>> getPeopleMap() {
         return people;
     }
-
     private Handler handler = new Handler();
     private boolean isSave = false;
     private int position = -1;
@@ -158,8 +142,8 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         buttRec.setOnClickListener((view) ->boxer());
     }
     public void boxer(){
-            progressDialog = new ProgressDialog(CreateStoryBoardActionLocationActivity.this);
-            progressDialog.show();
+           progressDialog = new ProgressDialog(CreateStoryBoardActionLocationActivity.this);
+           progressDialog.show();
             progressDialog.setCancelable(false);
             progressDialog.setContentView(R.layout.progress_dialog);
             progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -168,17 +152,13 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
                 public void run() {
                     DatagramSocket udpSocket = null;
                     SharedPreferences sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE);
-                    String hostPort = sharedPreferences.getString(ConstantPrefs.URI_TEXT.name(), "");
-                    String hostport = "192.168.29.198:1234";
+                    String hostPort = sharedPreferences.getString(ConstantPrefs.PORT_NO.name(), "");
                     String msg = "";
-                    if(hostport!="") {
+                    if(hostPort!="") {
                         try {
-                            String[] hostNPort = hostPort.split(":");
-                            int port = Integer.parseInt(hostNPort[1]);
-                            udpSocket = new DatagramSocket(1234);
+                            int port = Integer.parseInt(hostPort);
+                            udpSocket = new DatagramSocket(port);
                             byte[] message = new byte[8000];
-                            Log.d("UDP client: ", "about to wait to receive");
-                            Log.d("port no is ", String.valueOf(udpSocket.getLocalPort()));
                             DatagramPacket packet = new DatagramPacket(message, message.length);
                             udpSocket.receive(packet);
                             String text = new String(message, 0, packet.getLength());
@@ -190,14 +170,17 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
                             message = new byte[8000];
 
                         } catch (BindException e) {
+                            progressDialog.dismiss();
                             CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
                                     getResources().getString(R.string.getting_unwanted_error_with_port));
                             e.printStackTrace();
                         } catch (SocketException e) {
+                            progressDialog.dismiss();
                             CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
                                     getResources().getString(R.string.unable_to_access_the_port));
                             e.printStackTrace();
                         } catch (IOException e) {
+                            progressDialog.dismiss();
                             Log.e("UDP client has IOException", "error: ", e);
                         }
                     }
@@ -209,10 +192,14 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
 
             });
             thread.start();
-//        }
-    }
+        }
+        private void portno(){
+
+        }
+
     public void updater(final String value){
         try {
+
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {

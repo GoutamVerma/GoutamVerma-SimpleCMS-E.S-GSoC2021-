@@ -22,6 +22,10 @@ import java.util.Map;
  */
 public class export_esp extends AppCompatActivity {
 
+    /**
+     * @param longitude this function calculate the esp values of longitude
+     * @return
+     */
     public static double cal_longitude(double longitude){
         double final_longitude;
         if(longitude>0){
@@ -36,6 +40,10 @@ public class export_esp extends AppCompatActivity {
         return final_longitude;
     }
 
+    /**
+     * @param latitude this function calculate the esp values of latitude
+     * @return
+     */
     public static double cal_latitude(double latitude){
         double final_latitude;
         if(latitude>0){
@@ -50,12 +58,20 @@ public class export_esp extends AppCompatActivity {
         return final_latitude;
     }
 
+    /**
+     * @param altitude this function calculate the altitude value for esp files
+     * @return
+     */
     public static double cal_altitude(double altitude){
         double devi =1.535697283351506e-8*altitude;
         Log.d("devi value",String.valueOf(devi));
         return devi;
     }
 
+    /**
+     * @param second this function calculate the duration for animation
+     * @return
+     */
     public static int cal_duration(int second){
         int duration_frame;
         duration_frame = second * 30;
@@ -63,7 +79,12 @@ public class export_esp extends AppCompatActivity {
     }
 
     /**
-     * this function return an animation for "zoom to" function in esp format
+     * @param Longitude
+     * @param Latitude
+     * @param Altitude
+     * @param Duration
+     * @param Name
+     * @return this function return the esp animation for zoom-to feature
      */
     public static String ZoomTo(Double Longitude,Double Latitude,Double Altitude,int Duration,String Name){
         double altitude1 = 0.45884035117674;
@@ -90,8 +111,14 @@ public class export_esp extends AppCompatActivity {
         String esp ="{\"type\":\"quickstart\",\"modelVersion\":16,\"settings\":{\"name\":\""+Name+"\",\"frameRate\":30,\"dimensions\":{\"width\":1920,\"height\":1080},\"duration\":"+duration+",\"timeFormat\":\"frames\"},\"scenes\":[{\"animationModel\":{\"roving\":false,\"logarithmic\":true,\"groupedPosition\":true},\"duration\":"+duration+",\"attributes\":[{\"type\":\"cameraGroup\",\"attributes\":[{\"type\":\"cameraPositionGroup\",\"attributes\":[{\"type\":\"position\",\"value\":{\"maxValueRange\":71488366.22893658,\"minValueRange\":0,\"relative\":0},\"visible\":true,\"attributesLocked\":true,\"attributes\":[{\"type\":\"longitude\",\"value\":{\"maxValueRange\":180,\"minValueRange\":-180,\"relative\":"+longitude+"},\"keyframes\":[{\"time\":0,\"value\":"+longitude+",\"transitionIn\":{\"x\":-0.2,\"y\":0,\"type\":\"auto\"},\"transitionOut\":{\"x\":0.2,\"y\":0,\"type\":\"auto\"}},{\"time\":0.8,\"value\":"+longitude+",\"transitionIn\":{\"x\":-0.32000000000000006,\"y\":0,\"influence\":0.4000000000000001,\"type\":\"custom\"},\"transitionOut\":{\"x\":0.2,\"y\":0,\"type\":\"auto\"},\"transitionLinked\":false}],\"visible\":true},{\"type\":\"latitude\",\"value\":{\"maxValueRange\":89.9999,\"minValueRange\":-89.9999,\"relative\":"+latitude+"},\"keyframes\":[{\"time\":0,\"value\":"+latitude+",\"transitionIn\":{\"x\":-0.2,\"y\":0,\"type\":\"auto\"},\"transitionOut\":{\"x\":0.2,\"y\":0,\"type\":\"auto\"}},{\"time\":0.8,\"value\":"+latitude+",\"transitionIn\":{\"x\":-0.32000000000000006,\"y\":0,\"influence\":0.4000000000000001,\"type\":\"custom\"},\"transitionOut\":{\"x\":0.2,\"y\":0,\"type\":\"auto\"},\"transitionLinked\":false}],\"visible\":true},{\"type\":\"altitude\",\"value\":{\"maxValueRange\":65117481,\"minValueRange\":1,\"relative\":0.982542908896292},\"keyframes\":[{\"time\":0,\"value\":0.982542908896292,\"transitionIn\":{\"x\":-0.2,\"y\":0,\"type\":\"auto\"},\"transitionOut\":{\"x\":0.2,\"y\":0,\"type\":\"auto\"}},{\"time\":0.8,\"value\":"+final_altitude+",\"transitionIn\":{\"x\":-0.32000000000000006,\"y\":0,\"influence\":0.4000000000000001,\"type\":\"custom\"},\"transitionOut\":{\"x\":0.2,\"y\":0,\"type\":\"auto\"},\"transitionLinked\":false}],\"visible\":true}]}]},{\"type\":\"cameraRotationGroup\",\"attributes\":[{\"type\":\"rotationX\",\"value\":{\"maxValueRange\":360,\"minValueRange\":0},\"keyframes\":[{\"time\":0,\"value\":0,\"transitionOut\":{\"x\":0.2,\"y\":0,\"type\":\"auto\"}},{\"time\":0.8,\"value\":0,\"transitionIn\":{\"x\":-0.2,\"y\":0,\"type\":\"auto\"}}],\"visible\":true},{\"type\":\"rotationY\",\"value\":{\"maxValueRange\":180,\"minValueRange\":0},\"keyframes\":[{\"time\":0,\"value\":0,\"transitionOut\":{\"x\":0.68,\"y\":0,\"influence\":0.85,\"type\":\"custom\"},\"transitionLinked\":false},{\"time\":0.8,\"value\":0,\"transitionIn\":{\"x\":-0.24,\"y\":0,\"influence\":0.3,\"type\":\"custom\"},\"transitionLinked\":false}],\"visible\":true}]},{\"type\":\"cameraTargetEffect\",\"attributes\":[{\"type\":\"poi\",\"value\":{\"maxValueRange\":71488366.22893658,\"minValueRange\":-6371022.11950216,\"relative\":0},\"visible\":true,\"attributesLocked\":true,\"attributes\":[{\"type\":\"longitudePOI\",\"value\":{\"maxValueRange\":180,\"minValueRange\":-180,\"relative\":0.18016713992972266},\"keyframes\":[{\"time\":0,\"value\":"+longitude+"}],\"visible\":true},{\"type\":\"latitudePOI\",\"value\":{\"maxValueRange\":89.9999,\"minValueRange\":-89.9999,\"relative\":"+latitude+"},\"keyframes\":[{\"time\":0,\"value\":"+latitude+"}],\"visible\":true},{\"type\":\"altitudePOI\",\"value\":{\"maxValueRange\":65117481,\"minValueRange\":1,\"relative\":"+altitude1+"},\"keyframes\":[{\"time\":0,\"value\":"+altitude1+"}],\"visible\":true}]},{\"type\":\"influence\",\"value\":{\"maxValueRange\":1,\"minValueRange\":0,\"relative\":0},\"keyframes\":[{\"time\":0,\"value\":0,\"transitionOut\":{\"x\":0.2,\"y\":0,\"type\":\"auto\"}},{\"time\":0.5333328,\"value\":0,\"transitionIn\":{\"x\":-0.2,\"y\":0,\"type\":\"auto\"}}],\"visible\":true}],\"visible\":true}]},{\"type\":\"environmentGroup\",\"attributes\":[{\"type\":\"planet\",\"value\":{\"world\":\"earth\"},\"visible\":true},{\"type\":\"clouddate\",\"value\":{\"maxValueRange\":1624026600000,\"minValueRange\":1623947400000,\"relative\":0.9318181818181818},\"visible\":true}]}]}],\"has_started\":true,\"has_finished\":true,\"playbackManager\":{\"range\":{\"start\":0,\"end\":150}}}";
         return esp;
     }
+
     /**
-     * this function return an animation for "orbit" function in esp format
+     * @param latitudee this function have the latitude value of location
+     * @param longitudee this function have the longitude value of location
+     * @param altiude this function have the altitude value of location
+     * @param duratioon
+     * @param name
+     * @return this function return the animation of orbit
      */
     public static String orbit(Double latitudee, Double longitudee,Double altiude ,int duratioon, String name){
         double latitude =cal_latitude(latitudee);
@@ -105,8 +132,15 @@ public class export_esp extends AppCompatActivity {
         String esp = "{\"type\":\"quickstart\",\"modelVersion\":16,\"settings\":{\"name\":\""+name+"\",\"frameRate\":30,\"dimensions\":{\"width\":1920,\"height\":1080},\"duration\":"+duration+",\"timeFormat\":\"frames\"},\"scenes\":[{\"animationModel\":{\"roving\":false,\"logarithmic\":false,\"groupedPosition\":true},\"duration\":"+duration+",\"attributes\":[{\"type\":\"cameraGroup\",\"attributes\":[{\"type\":\"cameraPositionGroup\",\"attributes\":[{\"type\":\"position\",\"value\":{\"maxValueRange\":71488366.22893658,\"minValueRange\":0,\"relative\":0},\"visible\":true,\"attributesLocked\":true,\"attributes\":[{\"type\":\"longitude\",\"value\":{\"maxValueRange\":180,\"minValueRange\":-180,\"relative\":"+longitude+"},\"keyframes\":[{\"time\":0,\"value\":"+longitude+",\"transitionIn\":{\"x\":0,\"y\":0,\"type\":\"linear\"},\"transitionOut\":{\"x\":0,\"y\":0,\"type\":\"linear\"}},{\"time\":0.25,\"value\":"+longitude1+",\"transitionIn\":{\"x\":-0.066,\"y\":0,\"influence\":0.5,\"type\":\"auto\"},\"transitionOut\":{\"x\":0.066,\"y\":0,\"influence\":0.5,\"type\":\"auto\"}},{\"time\":0.5,\"value\":"+longitude+",\"transitionIn\":{\"x\":0,\"y\":0,\"type\":\"linear\"},\"transitionOut\":{\"x\":0,\"y\":0,\"type\":\"linear\"}},{\"time\":0.75,\"value\":"+longitude2+",\"transitionIn\":{\"x\":-0.066,\"y\":0,\"influence\":0.5,\"type\":\"auto\"},\"transitionOut\":{\"x\":0.066,\"y\":0,\"influence\":0.5,\"type\":\"auto\"}},{\"time\":1,\"value\":"+longitude+",\"transitionIn\":{\"x\":0,\"y\":0,\"type\":\"linear\"},\"transitionOut\":{\"x\":0,\"y\":0,\"type\":\"linear\"}}],\"visible\":true},{\"type\":\"latitude\",\"value\":{\"maxValueRange\":89.9999,\"minValueRange\":-89.9999,\"relative\":"+latitude+"},\"keyframes\":[{\"time\":0,\"value\":"+latitude+",\"transitionIn\":{\"x\":-0.066,\"y\":0,\"influence\":0.5,\"type\":\"auto\"},\"transitionOut\":{\"x\":0.066,\"y\":0,\"influence\":0.5,\"type\":\"auto\"}},{\"time\":0.25,\"value\":"+latitude1+",\"transitionIn\":{\"x\":0,\"y\":0,\"type\":\"linear\"},\"transitionOut\":{\"x\":0,\"y\":0,\"type\":\"linear\"}},{\"time\":0.5,\"value\":"+latitude2+",\"transitionIn\":{\"x\":-0.066,\"y\":0,\"influence\":0.5,\"type\":\"auto\"},\"transitionOut\":{\"x\":0.066,\"y\":0,\"influence\":0.5,\"type\":\"auto\"}},{\"time\":0.75,\"value\":"+latitude1+",\"transitionIn\":{\"x\":0,\"y\":0,\"type\":\"linear\"},\"transitionOut\":{\"x\":0,\"y\":0,\"type\":\"linear\"}},{\"time\":1,\"value\":"+latitude+",\"transitionIn\":{\"x\":-0.066,\"y\":0,\"influence\":0.5,\"type\":\"auto\"},\"transitionOut\":{\"x\":0.066,\"y\":0,\"influence\":0.5,\"type\":\"auto\"}}],\"visible\":true},{\"type\":\"altitude\",\"value\":{\"maxValueRange\":65117481,\"minValueRange\":1,\"relative\":"+Altitude+"},\"keyframes\":[{\"time\":0,\"value\":"+Altitude+"},{\"time\":0.25,\"value\":"+Altitude+"},{\"time\":0.5,\"value\":"+Altitude+"},{\"time\":0.75,\"value\":"+Altitude+"},{\"time\":1,\"value\":"+Altitude+"}],\"visible\":true}]}]},{\"type\":\"cameraRotationGroup\",\"attributes\":[{\"type\":\"rotationX\",\"value\":{\"maxValueRange\":360,\"minValueRange\":0},\"visible\":true},{\"type\":\"rotationY\",\"value\":{\"maxValueRange\":180,\"minValueRange\":0},\"visible\":true}]},{\"type\":\"cameraTargetEffect\",\"attributes\":[{\"type\":\"poi\",\"value\":{\"maxValueRange\":71488366.22893658,\"minValueRange\":-6371022.11950216,\"relative\":0},\"visible\":true,\"attributesLocked\":true,\"attributes\":[{\"type\":\"longitudePOI\",\"value\":{\"maxValueRange\":180,\"minValueRange\":-180,\"relative\":"+longitude+"},\"keyframes\":[{\"time\":0,\"value\":"+longitude+"}],\"visible\":true},{\"type\":\"latitudePOI\",\"value\":{\"maxValueRange\":89.9999,\"minValueRange\":-89.9999,\"relative\":"+latitude1+"},\"keyframes\":[{\"time\":0,\"value\":"+latitude1+"}],\"visible\":true},{\"type\":\"altitudePOI\",\"value\":{\"maxValueRange\":65117481,\"minValueRange\":1,\"relative\":9.677648139072125e-7},\"keyframes\":[{\"time\":0,\"value\":9.677648139072125e-7}],\"visible\":true}]},{\"type\":\"influence\",\"value\":{\"maxValueRange\":1,\"minValueRange\":0},\"visible\":true}],\"visible\":true}]},{\"type\":\"environmentGroup\",\"attributes\":[{\"type\":\"planet\",\"value\":{\"world\":\"earth\"},\"visible\":true},{\"type\":\"clouddate\",\"value\":{\"maxValueRange\":1623810600000,\"minValueRange\":1623731400000,\"relative\":0.9318181818181818},\"visible\":true}]}]}],\"has_started\":true,\"has_finished\":true,\"playbackManager\":{\"range\":{\"start\":0,\"end\":600}}}";
         return esp;
     }
+
+
     /**
-     * this function return an animation for "Spiral" function in esp format
+     * @param Longitude
+     * @param Latitude
+     * @param Altitude
+     * @param Duration
+     * @param Name this function return the animation of spiral
+     * @return
      */
     public static String spiral(Double Longitude, Double Latitude,Double Altitude ,int Duration, String Name){
         String esp = "";

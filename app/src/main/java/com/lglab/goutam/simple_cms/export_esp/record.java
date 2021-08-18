@@ -9,11 +9,16 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-// this class is in charge of storing coordinates point in hashmap
 
+/**
+ * this class is in charge of managing the data for storyboard locations only
+ */
 public class record extends CreateStoryBoardActivity {
 
-// this function update values in hashmap
+
+    /**
+     * @param position_data this function update the values in record which content data of locaiton
+     */
     public static void Update(Map<String, List<String>> position_data,String key,Double longitude,Double latitude,Double altitude,String esp_mode,String durationText,String name,String position){
         List<String> values = new ArrayList<String>();
         values.add(String.valueOf(longitude));
@@ -25,12 +30,18 @@ public class record extends CreateStoryBoardActivity {
         values.add(position);
         position_data.put(key, values);
     }
-//    this function delete particular value from hashmap
+
+    /**
+     * @param position_data this function delete the data from hashmap
+     */
     public static void Delete(Map<String, List<String>> position_data,String key){
         try { position_data.remove(key); }
         catch (Exception e) { e.printStackTrace(); }
     }
 
+    /**
+     * @param position this function first find the location and then delete the location
+     */
     public static void findanddelete(String position,Map<String, List<String>> people) {
         Collection getter = people.values();
         Iterator i = getter.iterator();

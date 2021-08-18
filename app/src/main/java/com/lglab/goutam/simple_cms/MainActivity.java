@@ -9,16 +9,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.lglab.goutam.simple_cms.connection.LGCommand;
 import com.lglab.goutam.simple_cms.connection.LGConnectionManager;
 import com.lglab.goutam.simple_cms.connection.LGConnectionSendFile;
+import com.lglab.goutam.simple_cms.create.action.CreateStoryBoardActionLocationActivity;
 import com.lglab.goutam.simple_cms.create.utility.model.ActionController;
 import com.lglab.goutam.simple_cms.dialog.CustomDialogUtility;
 import com.lglab.goutam.simple_cms.top_bar.TobBarActivity;
 import com.lglab.goutam.simple_cms.utility.ConstantPrefs;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -34,7 +38,8 @@ public class MainActivity extends TobBarActivity {
     private EditText URI, username, password;
     private ImageView logo;
     private Handler handler = new Handler();
-    public String port;
+    private String port;
+    public Switch portidentity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +57,7 @@ public class MainActivity extends TobBarActivity {
         URI = findViewById(R.id.uri);
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
+        portidentity = findViewById(R.id.portchrom);
 
         textUsername = findViewById(R.id.text_username);
         textPassword = findViewById(R.id.text_password);
@@ -61,6 +67,7 @@ public class MainActivity extends TobBarActivity {
 
         buttConnectLiquidGalaxy.setOnClickListener((view) -> connectionTest());
         buttTryAgain.setOnClickListener((view) -> {
+            updateforport();
             port = URI.getText().toString();
             Log.d("port address is ",port);
             changeToMainView();
@@ -103,6 +110,7 @@ public class MainActivity extends TobBarActivity {
      * Create a connection to the liquid galaxy and Test if it is working
      */
     private void connectionTest() {
+        updateforport();
         String hostPort = URI.getText().toString();
         String usernameText = username.getText().toString();
         String passwordText = password.getText().toString();
@@ -130,6 +138,7 @@ public class MainActivity extends TobBarActivity {
         editor.putString(ConstantPrefs.URI_TEXT.name(), hostPort);
         editor.putString(ConstantPrefs.USER_NAME.name(), usernameText);
         editor.putString(ConstantPrefs.USER_PASSWORD.name(), passwordText);
+        editor.putString(ConstantPrefs.PORT_NO.name(), updateforport());
         editor.putBoolean(ConstantPrefs.TRY_TO_RECONNECT.name(), true);
         editor.apply();
     }
@@ -252,6 +261,17 @@ public class MainActivity extends TobBarActivity {
      */
     private void changeButtonClickableBackgroundColor() {
         changeButtonClickableBackgroundColor(getApplicationContext(), buttConnectMenu);
+    }
+    public String updateforport(){
+        Boolean switchstate = portidentity.isChecked();
+        String port;
+        if (switchstate){
+            port="45678";
+        }
+        else{
+            port="2567";
+        }
+        return port;
     }
 
 }

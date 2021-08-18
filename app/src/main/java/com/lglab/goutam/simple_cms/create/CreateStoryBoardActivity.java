@@ -1,8 +1,6 @@
 package com.lglab.goutam.simple_cms.create;
 
-import com.lglab.goutam.simple_cms.export_esp.datacapture;
 import android.Manifest;
-import android.R.layout;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,12 +14,9 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.FileUtils;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -36,7 +31,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.api.client.http.ByteArrayContent;
-import com.lglab.goutam.simple_cms.MainActivity;
 import com.lglab.goutam.simple_cms.R;
 import com.lglab.goutam.simple_cms.create.action.CreateStoryBoardActionBalloonActivity;
 import com.lglab.goutam.simple_cms.create.action.CreateStoryBoardActionLocationActivity;
@@ -58,7 +52,6 @@ import com.lglab.goutam.simple_cms.db.entity.StoryBoardJsonDB;
 import com.lglab.goutam.simple_cms.db.entity.StoryBoardWithJson;
 import com.lglab.goutam.simple_cms.dialog.CustomDialogUtility;
 import com.lglab.goutam.simple_cms.export_esp.export_esp;
-import com.lglab.goutam.simple_cms.export_esp.record;
 import com.lglab.goutam.simple_cms.my_storyboards.StoryBoardConstant;
 import com.lglab.goutam.simple_cms.utility.ConstantPrefs;
 
@@ -70,13 +63,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.BindException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.SocketException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -301,6 +287,10 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
             }
         }
     }
+
+    /**
+     * @param file this function delete the pre-consisting files
+     */
     public static void deleteDirectory(File file){
         for(File subfile :file.listFiles()){
             if(subfile.isDirectory()){deleteDirectory(subfile);}
@@ -308,6 +298,10 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
         }
 
     }
+
+    /**
+     * @param position_data this function is in charge of export esp files
+     */
     private void export(Map<String, List<String>> position_data){
         try{
             String Filename = storyBoardName.getText().toString();
@@ -364,6 +358,9 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
         }
     }
 
+    /**
+     * this function create the zip files of esp files
+     */
     private void zipDirectory() {
         try {
             String Filename = storyBoardName.getText().toString();
@@ -408,6 +405,12 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
             else populateFilesList();
         }
     }
+
+    /**
+     * @param name this function is in charge of saving files in cache directory
+     * @param data
+     * @param Filename
+     */
     public void saveFile(String name,String data,String Filename){
         try {
             File file = new File(getCacheDir(),Filename);
