@@ -7,7 +7,7 @@
 
 ## Discription
 
-SimpleCMS E.S is an android application which creates an animation in "Spiral" "orbit" and in "Zoom-To" views and export files in .esp format. After exporting file it also save it locally under application specific folder.To view the animation we needs to import esp file on Google Earth Studio.
+SimpleCMS E.S is an android application which creates an animation in "Spiral" "orbit" and in "Zoom-To" views and export files in .esp format. After exporting file it saves it locally under application specific folder.To view the animation we needs to import esp file on Google Earth Studio. Other then export function this application also records the current senario of LiquidGalaxy.
 
 *This application have following features*
 
@@ -20,7 +20,7 @@ SimpleCMS E.S is an android application which creates an animation in "Spiral" "
 * **REC** it captures the current senario of Liquid Galaxy and then extract the desire data from it.
 
 
-This application is developed as part of Google Summer of Code 2021 by Goutam Verma, with Diego Riveros as mentor, and Andreu Ibañez and Ivan J as co-mentos.
+This application is developed as part of Google Summer of Code 2021 by Goutam Verma, with Diego Riveros as mentor, and Andreu Ibañez, Ivan J as co-mentos.
 
 For information regarding how to create content click [here](https://docs.google.com/document/d/1ctusDehQJA2rD2hkLhemHXaoJVU2jk1SpHPEBQ8IngI/edit?usp=sharing)
 
