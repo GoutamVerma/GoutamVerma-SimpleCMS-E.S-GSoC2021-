@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +32,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.api.client.http.ByteArrayContent;
+import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelExec;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
 import com.lglab.goutam.simple_cms.R;
 import com.lglab.goutam.simple_cms.create.action.CreateStoryBoardActionBalloonActivity;
 import com.lglab.goutam.simple_cms.create.action.CreateStoryBoardActionLocationActivity;
@@ -63,6 +68,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -84,6 +90,7 @@ import static com.lglab.goutam.simple_cms.dialog.CustomDialogUtility.*;
 public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implements
         ActionRecyclerAdapter.OnNoteListener {
     CreateStoryBoardActionLocationActivity a = new CreateStoryBoardActionLocationActivity();
+    export_esp capture_data = new export_esp();
     HashMap<String, List<String>> people = a.getPeopleMap();
     private static final String TAG_DEBUG = "CreateStoryBoardActivity";
     private static int BUFFER_SIZE = 6 * 1024;
@@ -197,7 +204,6 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
         buttSaveGoogleDrive.setOnClickListener((view) -> saveStoryboardGoogleDrive());
 
         buttTest.setOnClickListener((view) -> testStoryboard());
-
         buttStopTest.setOnClickListener((view -> stopTestStoryBoard()));
 
         exportEsp.setOnClickListener((view -> {
@@ -303,47 +309,53 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
      * @param position_data this function is in charge of export esp files
      */
     private void export(Map<String, List<String>> position_data){
+
+
+        String Filename = storyBoardName.getText().toString();
+        export_esp ab = new export_esp();
+
         try{
-            String Filename = storyBoardName.getText().toString();
             File files = new File("/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename);
             if(files.isDirectory()){
                 files.delete();
                 deleteDirectory(files);
             }
-            Collection getter = position_data.values();
-            Iterator i = getter.iterator();
-            int y = 0;
-            int a = getter.size();
-            Log.d("size of iterator is ", String.valueOf(a));
-            while (y<a){
-                Log.d("looping area", String.valueOf(position_data.get(y)));
-                y++;
-                List items = (List) i.next();
-                if (items.contains("Orbit")) {
-                    saveFile(String.valueOf(items.get(4)),
-                            export_esp.orbit(Double.parseDouble(String.valueOf(items.get(1))), //here items.get
-                                    Double.parseDouble(String.valueOf(items.get(0))),
-                                    Double.parseDouble(String.valueOf(items.get(2))),
-                                    Integer.parseInt(String.valueOf(items.get(5))),
-                                    String.valueOf(items.get(4))), Filename);
-                }
-                else if (items.contains("Spiral")) {
-                    saveFile(String.valueOf(items.get(4)),
-                            export_esp.spiral(Double.parseDouble(String.valueOf(items.get(0))),
-                                    Double.parseDouble(String.valueOf(items.get(1))),
-                                    Double.parseDouble(String.valueOf(items.get(2))),
-                                    Integer.parseInt(String.valueOf(items.get(5))),
-                                    String.valueOf(items.get(4))), Filename);
-                }
-                else if (items.contains("Zoom-To")) {
-                    saveFile(String.valueOf(items.get(4)),
-                            export_esp.ZoomTo(Double.parseDouble(String.valueOf(items.get(0))),
-                                    Double.parseDouble(String.valueOf(items.get(1))),
-                                    Double.parseDouble(String.valueOf(items.get(2))),
-                                    Integer.parseInt(String.valueOf(items.get(5))),
-                                    String.valueOf(items.get(4))), Filename);
-                }
-            }
+            saveFile(Filename+" ESP",ab.espinone(),Filename);
+
+//            Collection getter = position_data.values();
+//            Iterator i = getter.iterator();
+//            int y = 0;
+//            int a = getter.size();
+//            Log.d("size of iterator is ", String.valueOf(a));
+//            while (y<a){
+//                Log.d("looping area", String.valueOf(position_data.get(y)));
+//                y++;
+//                List items = (List) i.next();
+//                if (items.contains("Orbit")) {
+//                    saveFile(String.valueOf(items.get(4)),
+//                            export_esp.orbit(Double.parseDouble(String.valueOf(items.get(1))), //here items.get
+//                                    Double.parseDouble(String.valueOf(items.get(0))),
+//                                    Double.parseDouble(String.valueOf(items.get(2))),
+//                                    Integer.parseInt(String.valueOf(items.get(5))),
+//                                    String.valueOf(items.get(4))), Filename);
+//                }
+//                else if (items.contains("Spiral")) {
+//                    saveFile(String.valueOf(items.get(4)),
+//                            export_esp.spiral(Double.parseDouble(String.valueOf(items.get(0))),
+//                                    Double.parseDouble(String.valueOf(items.get(1))),
+//                                    Double.parseDouble(String.valueOf(items.get(2))),
+//                                    Integer.parseInt(String.valueOf(items.get(5))),
+//                                    String.valueOf(items.get(4))), Filename);
+//                }
+//                else if (items.contains("Zoom-To")) {
+//                    saveFile(String.valueOf(items.get(4)),
+//                            export_esp.ZoomTo(Double.parseDouble(String.valueOf(items.get(0))),
+//                                    Double.parseDouble(String.valueOf(items.get(1))),
+//                                    Double.parseDouble(String.valueOf(items.get(2))),
+//                                    Integer.parseInt(String.valueOf(items.get(5))),
+//                                    String.valueOf(items.get(4))), Filename);
+//                }
+//            }
             zipDirectory();
             File file = new File("/data/user/0/com.lglab.goutam.simple_cms_es/cache/"+Filename);
             file.deleteOnExit();

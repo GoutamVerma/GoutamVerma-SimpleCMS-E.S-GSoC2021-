@@ -17,6 +17,7 @@ import com.lglab.goutam.simple_cms.connection.LGConnectionManager;
 import com.lglab.goutam.simple_cms.connection.LGConnectionSendFile;
 import com.lglab.goutam.simple_cms.create.action.CreateStoryBoardActionLocationActivity;
 import com.lglab.goutam.simple_cms.create.utility.model.ActionController;
+import com.lglab.goutam.simple_cms.demo.DemoActivity;
 import com.lglab.goutam.simple_cms.dialog.CustomDialogUtility;
 import com.lglab.goutam.simple_cms.top_bar.TobBarActivity;
 import com.lglab.goutam.simple_cms.utility.ConstantPrefs;
@@ -34,12 +35,11 @@ public class MainActivity extends TobBarActivity {
     private static final Pattern HOST_PORT = Pattern.compile("^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]):[0-9]+$");
 
     private Button buttConnectMenu, buttConnectLiquidGalaxy, buttTryAgain;
-    private TextView connecting, textUsername, textPassword, textInsertUrl;
-    private EditText URI, username, password;
+    private TextView connecting, textUsername, textPassword, textInsertUrl,portname;
+    private EditText URI, username, password,portidentity;
     private ImageView logo;
     private Handler handler = new Handler();
     private String port;
-    public Switch portidentity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +57,7 @@ public class MainActivity extends TobBarActivity {
         URI = findViewById(R.id.uri);
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
+        portname = findViewById(R.id.chromobook);
         portidentity = findViewById(R.id.portchrom);
 
         textUsername = findViewById(R.id.text_username);
@@ -97,11 +98,13 @@ public class MainActivity extends TobBarActivity {
             String text = sharedPreferences.getString(ConstantPrefs.URI_TEXT.name(), "");
             String usernameText = sharedPreferences.getString(ConstantPrefs.USER_NAME.name(), "");
             String passwordText = sharedPreferences.getString(ConstantPrefs.USER_PASSWORD.name(), "");
+            String portno =  sharedPreferences.getString(ConstantPrefs.PORT_NO.name(), "");
             boolean isTryToReconnect = sharedPreferences.getBoolean(ConstantPrefs.TRY_TO_RECONNECT.name(), false);
 
             if(!text.equals("")) URI.setText(text);
             if(!usernameText.equals("")) username.setText(usernameText);
             if(!passwordText.equals("")) password.setText(passwordText);
+            if(!portno.equals("")) portidentity.setText(portno);
             if(isTryToReconnect) buttConnectLiquidGalaxy.setText(getResources().getString(R.string.button_try_again));
         }
     }
@@ -114,12 +117,17 @@ public class MainActivity extends TobBarActivity {
         String hostPort = URI.getText().toString();
         String usernameText = username.getText().toString();
         String passwordText = password.getText().toString();
+        String portno = portidentity.getText().toString();
+        if(portno.equals("")){
+            CustomDialogUtility.showDialog(MainActivity.this,
+                    "Please Enter the port number");
+            return;
+        }
         saveConnectionInfo(hostPort, usernameText, passwordText);
         if (!isValidHostNPort(hostPort)) {
             CustomDialogUtility.showDialog(MainActivity.this, getResources().getString(R.string.activity_connection_host_port_error));
             return;
         }
-
         Dialog dialog = CustomDialogUtility.getDialog(this, getResources().getString(R.string.connecting));
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
@@ -227,6 +235,8 @@ public class MainActivity extends TobBarActivity {
         textInsertUrl.setVisibility(View.INVISIBLE);
         logo.setVisibility(View.VISIBLE);
         buttTryAgain.setVisibility(View.VISIBLE);
+        portname.setVisibility(View.INVISIBLE);
+        portidentity.setVisibility(View.INVISIBLE);
     }
 
     /**
@@ -243,6 +253,8 @@ public class MainActivity extends TobBarActivity {
         textInsertUrl.setVisibility(View.VISIBLE);
         logo.setVisibility(View.INVISIBLE);
         buttTryAgain.setVisibility(View.INVISIBLE);
+        portidentity.setVisibility(View.VISIBLE);
+        portname.setVisibility(View.VISIBLE);
         loadSharedData();
     }
 
@@ -263,15 +275,8 @@ public class MainActivity extends TobBarActivity {
         changeButtonClickableBackgroundColor(getApplicationContext(), buttConnectMenu);
     }
     public String updateforport(){
-        Boolean switchstate = portidentity.isChecked();
-        String port;
-        if (switchstate){
-            port="45678";
-        }
-        else{
-            port="2567";
-        }
-        return port;
+        String portText = portidentity.getText().toString();
+        return portText;
     }
 
 }

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,6 +23,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelExec;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
 import com.lglab.goutam.simple_cms.R;
 import com.lglab.goutam.simple_cms.create.utility.connection.LGConnectionTest;
 import com.lglab.goutam.simple_cms.create.utility.model.ActionIdentifier;
@@ -35,6 +40,7 @@ import com.lglab.goutam.simple_cms.export_esp.record;
 
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.BindException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -139,9 +145,10 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         );
         buttDelete.setOnClickListener((view) -> deletePoi());
 
-        buttRec.setOnClickListener((view) ->boxer());
+        buttRec.setOnClickListener((view) ->capture());
     }
-    public void boxer(){
+
+    public void capture(){
            progressDialog = new ProgressDialog(CreateStoryBoardActionLocationActivity.this);
            progressDialog.show();
             progressDialog.setCancelable(false);
@@ -150,52 +157,69 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    DatagramSocket udpSocket = null;
                     SharedPreferences sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE);
-                    String hostPort = sharedPreferences.getString(ConstantPrefs.PORT_NO.name(), "");
-                    String msg = "";
-                    if(hostPort!="") {
+                    boolean isConnected = sharedPreferences.getBoolean(ConstantPrefs.IS_CONNECTED.name(), false);
+                    if (isConnected) {
+                        String users = sharedPreferences.getString(ConstantPrefs.USER_NAME.name(), "");
+                        String hostPort = sharedPreferences.getString(ConstantPrefs.PORT_NO.name(), "");
+                        String command1 = "nc -ulp " + hostPort;
+                        System.out.println("host port is " + hostPort);
+                        String url = sharedPreferences.getString(ConstantPrefs.URI_TEXT.name(), "");
+                        String[] arr_url = url.split(":");
+                        String password = sharedPreferences.getString(ConstantPrefs.USER_PASSWORD.name(), "");
                         try {
-                            int port = Integer.parseInt(hostPort);
-                            udpSocket = new DatagramSocket(port);
-                            byte[] message = new byte[8000];
-                            DatagramPacket packet = new DatagramPacket(message, message.length);
-                            udpSocket.receive(packet);
-                            String text = new String(message, 0, packet.getLength());
-                            udpSocket.setReuseAddress(true);
-                            udpSocket.close();
-                            msg = text;
-                            Log.d("Received data", msg);
-                            updater(msg);
-                            message = new byte[8000];
+                            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                            StrictMode.setThreadPolicy(policy);
+                            java.util.Properties config = new java.util.Properties();
+                            config.put("StrictHostKeyChecking", "no");
+                            JSch jsch = new JSch();
+                            Session session = jsch.getSession(users, arr_url[0], Integer.parseInt(arr_url[1]));
+                            session.setPassword(password);
+                            session.setConfig(config);
+                            session.connect();
+                            System.out.println("Connected");
+                            Channel channel = session.openChannel("exec");
+                            ((ChannelExec) channel).setCommand(command1);
+                            channel.setInputStream(null);
+                            ((ChannelExec) channel).setErrStream(System.err);
+                            InputStream in = channel.getInputStream();
+                            channel.connect();
+                            byte[] tmp = new byte[1024];
+                            while (true) {
+                                while (in.available() > 0) {
+                                    int i = in.read(tmp, 0, 1024);
+                                    if (i < 0) break;
+                                    String text = new String(tmp, 0, i);
+                                    System.out.print(text);
+                                    Log.d("output of ssh ", text);
+                                    updater(text);
+                                    channel.disconnect();
+                                    session.disconnect();
 
-                        } catch (BindException e) {
-                            progressDialog.dismiss();
-                            CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
-                                    getResources().getString(R.string.getting_unwanted_error_with_port));
+                                }
+                                if (channel.isClosed()) {
+                                    break;
+                                }
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (Exception ee) {
+                                }
+                            }
+
+                        } catch (Exception e) {
                             e.printStackTrace();
-                        } catch (SocketException e) {
-                            progressDialog.dismiss();
-                            CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
-                                    getResources().getString(R.string.unable_to_access_the_port));
-                            e.printStackTrace();
-                        } catch (IOException e) {
-                            progressDialog.dismiss();
-                            Log.e("UDP client has IOException", "error: ", e);
                         }
-                    }
-                    else {   progressDialog.dismiss();
-                            CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
+                    } else {
+                        CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
                                 getResources().getString(R.string.lg_is_not_connected));
+                        progressDialog.dismiss();
+                        return;
                     }
                 }
-
             });
             thread.start();
         }
-        private void portno(){
 
-        }
 
     public void updater(final String value){
         try {

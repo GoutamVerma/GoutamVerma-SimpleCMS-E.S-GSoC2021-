@@ -67,8 +67,6 @@ public class CreateStoryBoardActionMovementActivity extends AppCompatActivity {
         duration = findViewById(R.id.duration);
         positionSave = findViewById(R.id.position_save);
 
-
-
         SharedPreferences sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE);
         loadConnectionStatus(sharedPreferences);
 

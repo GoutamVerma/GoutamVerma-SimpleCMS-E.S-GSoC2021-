@@ -375,27 +375,62 @@ public class ActionBuildCommandUtility {
         return command.toString();
     }
 
+//    private static void orbit(POI poi, StringBuilder command) {
+//        double heading = poi.getPoiCamera().getHeading();
+//        int orbit = 0;
+//        while (orbit <= 36) {
+//            if (heading >= 360) heading = heading - 360;
+//            command.append("    <gx:FlyTo>\n").append("    <gx:duration>1.2</gx:duration> \n")
+//                    .append("    <gx:flyToMode>smooth</gx:flyToMode> \n")
+//                    .append("     <LookAt> \n")
+//                    .append("      <longitude>").append(poi.getPoiLocation().getLongitude()).append("</longitude> \n")
+//                    .append("      <latitude>").append(poi.getPoiLocation().getLatitude()).append("</latitude> \n")
+//                    .append("      <heading>").append(heading).append("</heading> \n")
+//                    .append("      <tilt>").append(poi.getPoiCamera().getTilt()).append("</tilt> \n")
+//                    .append("      <gx:fovy>35</gx:fovy> \n")
+//                    .append("      <range>").append(poi.getPoiCamera().getRange()).append("</range> \n")
+//                    .append("      <gx:altitudeMode>absolute</gx:altitudeMode> \n")
+//                    .append("      </LookAt> \n")
+//                    .append("    </gx:FlyTo> \n\n");
+//            heading = heading + 10;
+//            orbit++;
+//        }
+//    }
     private static void orbit(POI poi, StringBuilder command) {
         double heading = poi.getPoiCamera().getHeading();
         int orbit = 0;
-        while (orbit <= 36) {
-            if (heading >= 360) heading = heading - 360;
-            command.append("    <gx:FlyTo>\n").append("    <gx:duration>1.2</gx:duration> \n")
-                    .append("    <gx:flyToMode>smooth</gx:flyToMode> \n")
+//        while (orbit <= 36) {
+//            if (heading >= 360) heading = heading - 360;
+            command.append("    <gx:FlyTo>\n").append("    <gx:duration>12</gx:duration> \n")
+                    .append("    <gx:flyToMode>bounce</gx:flyToMode> \n")
                     .append("     <LookAt> \n")
-                    .append("      <longitude>").append(poi.getPoiLocation().getLongitude()).append("</longitude> \n")
-                    .append("      <latitude>").append(poi.getPoiLocation().getLatitude()).append("</latitude> \n")
-                    .append("      <heading>").append(heading).append("</heading> \n")
-                    .append("      <tilt>").append(poi.getPoiCamera().getTilt()).append("</tilt> \n")
+                    .append("      <longitude>-73.994016").append("</longitude> \n")
+                    .append("      <latitude>40.764932").append("</latitude> \n")
+                    .append(" <altitude>0</altitude>\n")
+                    .append("      <heading>0").append("</heading> \n")
+                    .append("      <tilt>10").append("</tilt> \n")
                     .append("      <gx:fovy>35</gx:fovy> \n")
-                    .append("      <range>").append(poi.getPoiCamera().getRange()).append("</range> \n")
-                    .append("      <gx:altitudeMode>absolute</gx:altitudeMode> \n")
+                    .append("      <range>1200").append("</range> \n")
+                    .append("      <gx:altitudeMode>relativeToGround</gx:altitudeMode> \n")
+                    .append("      </LookAt> \n")
+                    .append("    </gx:FlyTo> \n\n")
+                    .append("    <gx:FlyTo>\n").append("    <gx:duration>12</gx:duration> \n")
+                    .append("    <gx:flyToMode>bounce</gx:flyToMode> \n")
+                    .append("     <LookAt> \n")
+                    .append("      <longitude>-73.985016").append("</longitude> \n")
+                    .append("      <latitude>40.755932").append("</latitude> \n")
+                    .append(" <altitude>0</altitude>\n")
+                    .append("      <heading>0").append("</heading> \n")
+                    .append("      <tilt>10").append("</tilt> \n")
+                    .append("      <gx:fovy>35</gx:fovy> \n")
+                    .append("      <range>1200").append("</range> \n")
+                    .append("      <gx:altitudeMode>relativeToGround</gx:altitudeMode> \n")
                     .append("      </LookAt> \n")
                     .append("    </gx:FlyTo> \n\n");
-            heading = heading + 10;
-            orbit++;
+//            heading = heading + 10;
+//            orbit++;
         }
-    }
+
 
     private static void movement(POI poi, StringBuilder command, int duration) {
         POILocation poiLocation = poi.getPoiLocation();

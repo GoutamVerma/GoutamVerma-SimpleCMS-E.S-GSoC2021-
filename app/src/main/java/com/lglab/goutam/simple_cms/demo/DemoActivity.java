@@ -62,7 +62,7 @@ public class DemoActivity extends TobBarActivity {
     /**
      * Run the demo that is pre saved
      */
-    private void runDemo() {
+    public void runDemo() {
         getDialog();
         if (actionsSaved.isEmpty()) {
             try {
@@ -109,7 +109,7 @@ public class DemoActivity extends TobBarActivity {
     /**
      * It gives a dialog with a cancel button
      */
-    private void getDialog() {
+     void getDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(DemoActivity.this);
         @SuppressLint("InflateParams") View v = getLayoutInflater().inflate(R.layout.dialog_fragment, null);
         v.getBackground().setAlpha(220);

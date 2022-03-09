@@ -253,6 +253,9 @@
     <string name="github_account">Check out. My work at
         <a href="https://github.com/GoutamVerma">Github</a>
     </string>
+    <string name="liquid_galaxy">Liquid Galaxy org Home
+        <a href="https://www.liquidgalaxy.eu">Page</a>
+    </string>
 
     //Demo
     <string name="start_demo">Check out your Liquid Galaxy \n Running Barranquilla, Colombia Demo</string>
@@ -299,6 +302,7 @@
     <string name="getting_unwanted_error_with_port">Getting unwanted error while accesing port please restart the application</string>
     <string name="getting_unwanted_error_with_ports">recieve is on </string>
     <string name="lg_is_not_connected">You are not connected to Liquid Galaxy</string>
+
 
 
     //Elevation Types
