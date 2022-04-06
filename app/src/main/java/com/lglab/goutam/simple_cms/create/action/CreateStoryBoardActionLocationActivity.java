@@ -149,76 +149,76 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
     }
 
     public void capture(){
-           progressDialog = new ProgressDialog(CreateStoryBoardActionLocationActivity.this);
-           progressDialog.show();
-            progressDialog.setCancelable(false);
-            progressDialog.setContentView(R.layout.progress_dialog);
-            progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    SharedPreferences sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE);
-                    boolean isConnected = sharedPreferences.getBoolean(ConstantPrefs.IS_CONNECTED.name(), false);
-                    if (isConnected) {
-                        String users = sharedPreferences.getString(ConstantPrefs.USER_NAME.name(), "");
-                        String hostPort = sharedPreferences.getString(ConstantPrefs.PORT_NO.name(), "");
-                        String command1 = "nc -ulp " + hostPort;
-                        System.out.println("host port is " + hostPort);
-                        String url = sharedPreferences.getString(ConstantPrefs.URI_TEXT.name(), "");
-                        String[] arr_url = url.split(":");
-                        String password = sharedPreferences.getString(ConstantPrefs.USER_PASSWORD.name(), "");
-                        try {
-                            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                            StrictMode.setThreadPolicy(policy);
-                            java.util.Properties config = new java.util.Properties();
-                            config.put("StrictHostKeyChecking", "no");
-                            JSch jsch = new JSch();
-                            Session session = jsch.getSession(users, arr_url[0], Integer.parseInt(arr_url[1]));
-                            session.setPassword(password);
-                            session.setConfig(config);
-                            session.connect();
-                            System.out.println("Connected");
-                            Channel channel = session.openChannel("exec");
-                            ((ChannelExec) channel).setCommand(command1);
-                            channel.setInputStream(null);
-                            ((ChannelExec) channel).setErrStream(System.err);
-                            InputStream in = channel.getInputStream();
-                            channel.connect();
-                            byte[] tmp = new byte[1024];
-                            while (true) {
-                                while (in.available() > 0) {
-                                    int i = in.read(tmp, 0, 1024);
-                                    if (i < 0) break;
-                                    String text = new String(tmp, 0, i);
-                                    System.out.print(text);
-                                    Log.d("output of ssh ", text);
-                                    updater(text);
-                                    channel.disconnect();
-                                    session.disconnect();
+        progressDialog = new ProgressDialog(CreateStoryBoardActionLocationActivity.this);
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                SharedPreferences sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE);
+                boolean isConnected = sharedPreferences.getBoolean(ConstantPrefs.IS_CONNECTED.name(), false);
+                if (isConnected) {
+                    String users = sharedPreferences.getString(ConstantPrefs.USER_NAME.name(), "");
+                    String hostPort = sharedPreferences.getString(ConstantPrefs.PORT_NO.name(), "");
+                    String command1 = "nc -ulp " + hostPort;
+                    System.out.println("host port is " + hostPort);
+                    String url = sharedPreferences.getString(ConstantPrefs.URI_TEXT.name(), "");
+                    String[] arr_url = url.split(":");
+                    String password = sharedPreferences.getString(ConstantPrefs.USER_PASSWORD.name(), "");
+                    try {
+                        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                        StrictMode.setThreadPolicy(policy);
+                        java.util.Properties config = new java.util.Properties();
+                        config.put("StrictHostKeyChecking", "no");
+                        JSch jsch = new JSch();
+                        Session session = jsch.getSession(users, arr_url[0], Integer.parseInt(arr_url[1]));
+                        session.setPassword(password);
+                        session.setConfig(config);
+                        session.connect();
+                        System.out.println("Connected");
+                        Channel channel = session.openChannel("exec");
+                        ((ChannelExec) channel).setCommand(command1);
+                        channel.setInputStream(null);
+                        ((ChannelExec) channel).setErrStream(System.err);
+                        InputStream in = channel.getInputStream();
+                        channel.connect();
+                        byte[] tmp = new byte[1024];
+                        while (true) {
+                            while (in.available() > 0) {
+                                int i = in.read(tmp, 0, 1024);
+                                if (i < 0) break;
+                                String text = new String(tmp, 0, i);
+                                System.out.print(text);
+                                Log.d("output of ssh ", text);
+                                updater(text);
+                                channel.disconnect();
+                                session.disconnect();
 
-                                }
-                                if (channel.isClosed()) {
-                                    break;
-                                }
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (Exception ee) {
-                                }
                             }
-
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                            if (channel.isClosed()) {
+                                break;
+                            }
+                            try {
+                                Thread.sleep(1000);
+                            } catch (Exception ee) {
+                            }
                         }
-                    } else {
-                        CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
-                                getResources().getString(R.string.lg_is_not_connected));
-                        progressDialog.dismiss();
-                        return;
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                } else {
+                    CustomDialogUtility.showDialog(CreateStoryBoardActionLocationActivity.this,
+                            getResources().getString(R.string.lg_is_not_connected));
+                    progressDialog.dismiss();
+                    return;
                 }
-            });
-            thread.start();
-        }
+            }
+        });
+        thread.start();
+    }
 
 
     public void updater(final String value){
@@ -260,24 +260,24 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         range.setText(String.valueOf(poi.getPoiCamera().getRange()));
         altitudeModeSpinner.setSelection(orbit_position(String.valueOf(poi.getPoiCamera().getAltitudeMode())));
         try{
-        List<String> position = (List<String>) people.get( poi.getPoiLocation().getName());
-        espmode.setSelection(esp_position(position.get(3)));
+            List<String> position = (List<String>) people.get( poi.getPoiLocation().getName());
+            espmode.setSelection(esp_position(position.get(3)));
         } catch (NullPointerException e) {
             espmode.setSelection(0);
         }
     }
     private int esp_position(String name){
         int postion=0;
-                if(name.equals("None")){
-                    position=0;
+        if(name.equals("None")){
+            position=0;
         }else if(name.equals("Orbit")){
-                    position=1;
+            position=1;
         }else if(name.equals("Spiral")){
-                    position=2;
-                } else if(name.equals("Zoom-To")){
-                    position=3;
-                }
-                return position;
+            position=2;
+        } else if(name.equals("Zoom-To")){
+            position=3;
+        }
+        return position;
     }
     private int orbit_position(String name) {
         int position=0;
@@ -421,7 +421,7 @@ public class CreateStoryBoardActionLocationActivity extends AppCompatActivity im
         if(verificationData(latitudeText, longitudeText, altitudeText, durationText, headingText,
                 tiltText, rangeText)){
             String fileNameText = file_name.getText().toString();
-             if(!fileNameText.equals("")){
+            if(!fileNameText.equals("")){
                 saveData(latitudeText, longitudeText, altitudeText, durationText, headingText, tiltText, rangeText, altitudeModeText);
                 POILocation poiLocation = new POILocation(fileNameText, Double.parseDouble(longitudeText),
                         Double.parseDouble(latitudeText), Double.parseDouble(altitudeText));

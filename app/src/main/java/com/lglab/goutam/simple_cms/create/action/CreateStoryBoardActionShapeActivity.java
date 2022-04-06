@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,10 +31,17 @@ import com.lglab.goutam.simple_cms.create.utility.model.poi.POI;
 import com.lglab.goutam.simple_cms.create.utility.model.shape.Point;
 import com.lglab.goutam.simple_cms.create.utility.model.shape.Shape;
 import com.lglab.goutam.simple_cms.dialog.CustomDialogUtility;
+import com.lglab.goutam.simple_cms.export_esp.record;
 import com.lglab.goutam.simple_cms.utility.ConstantPrefs;
 
+
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -60,6 +68,9 @@ public class CreateStoryBoardActionShapeActivity extends AppCompatActivity {
     private int lastPosition = 0;
     private SwitchCompat switchCompatExtrude;
 
+    CreateStoryBoardActionLocationActivity a = new CreateStoryBoardActionLocationActivity();
+    record rec = new record();
+    HashMap<String, List<String>> people = a.getPeopleMap();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -214,6 +225,11 @@ public class CreateStoryBoardActionShapeActivity extends AppCompatActivity {
             returnInfoIntent.putExtra(ActionIdentifier.LAST_POSITION.name(), lastPosition);
             setResult(Activity.RESULT_OK, returnInfoIntent);
             finish();
+            byte[] array = new byte[7];
+            new Random().nextBytes(array);
+            String gen = new String(array, Charset.forName("UTF-8"));
+            record.Update(people, String.valueOf(position), Double.parseDouble(String.valueOf(poi.getPoiLocation().getLongitude())),Double.parseDouble(String.valueOf(poi.getPoiLocation().getLatitude())),Double.parseDouble(String.valueOf(poi.getPoiLocation().getAltitude())),"Zoom-To","7",gen,String.valueOf(position));
+            //can be saved through positon
         }
     }
 
@@ -221,6 +237,7 @@ public class CreateStoryBoardActionShapeActivity extends AppCompatActivity {
      * Send the action of deleting the shape
      */
     private void deleteShape() {
+        record.Delete(people, String.valueOf(position));
         Intent returnInfoIntent = new Intent();
         returnInfoIntent.putExtra(ActionIdentifier.POSITION.name(), position);
         returnInfoIntent.putExtra(ActionIdentifier.IS_DELETE.name(), true);

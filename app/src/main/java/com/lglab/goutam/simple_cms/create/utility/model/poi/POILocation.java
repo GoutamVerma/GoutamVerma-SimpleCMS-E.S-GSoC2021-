@@ -10,7 +10,6 @@ public class POILocation {
     private double longitude;
     private double altitude;
 
-
     public POILocation(String name, double longitude, double latitude, double altitude) {
         this.name = name;
         this.latitude = latitude;

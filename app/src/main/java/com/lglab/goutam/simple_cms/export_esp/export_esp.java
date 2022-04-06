@@ -43,6 +43,8 @@ public class export_esp extends AppCompatActivity {
                  total_points += 5;
             } else if (items.contains("Zoom-To")) {
                 total_points += 3;
+            } else if(items.contains("Point")){
+                total_points+=3;
             }
         }
         Log.d("totla points",String.valueOf(total_points));
@@ -112,8 +114,49 @@ public class export_esp extends AppCompatActivity {
         Log.d("complete esp file of orbit is", String.valueOf(esp));
         return String.valueOf(esp);
     }
-
-
+    public String Point_to_point(double longitudee,double latitudess,double altitude){
+        double keyframe1;
+        if(initial_value == 0){
+            keyframe1 = initial_value;
+            Log.d("keyframe valye is ",String.valueOf(keyframe1));
+        }else {
+            keyframe1 = initial_value + time_calculate();
+            longitudes.append(",");
+            altitudes.append(",");
+            latitudes.append(",");
+            POIlatitudes.append(",");
+            POIaltitudes.append(",");
+            POIlongitudes.append(",");
+        }
+        double keyframe2 = keyframe1 + time_calculate();
+        double keyframe3 = keyframe2 + time_calculate();
+        initial_value = keyframe3;
+        double longitude =cal_longitude(longitudee);
+        double longitude1 = longitude - 0.0000521498534771 ;
+        double longitude2 = longitude + 0.0000521498534771;
+        point_latitude(keyframe1, keyframe2, keyframe3,latitudess,altitude);
+        String longitude_esp = "{\"time\":"+keyframe1+",\"value\":"+longitude+",\"transitionIn\":{\"x\":0,\"y\":0,\"type\":\"linear\"},\"transitionOut\":{\"x\":0,\"y\":0,\"type\":\"linear\"}},{\"time\":"+keyframe2+",\"value\":"+longitude+",\"transitionIn\":{\"x\":-0.066,\"y\":0,\"influence\":0.5,\"type\":\"auto\"},\"transitionOut\":{\"x\":0.066,\"y\":0,\"influence\":0.5,\"type\":\"auto\"}},{\"time\":"+keyframe3+",\"value\":"+longitude+",\"transitionIn\":{\"x\":0,\"y\":0,\"type\":\"linear\"},\"transitionOut\":{\"x\":0,\"y\":0,\"type\":\"linear\"}}";
+        String longitude_poi_orbit = "{\"time\":"+keyframe2+",\"value\":"+longitude+"},{\"time\":"+keyframe3+",\"value\":"+longitude+"}";
+        POIlongitudes.append(longitude_poi_orbit);
+        return longitude_esp;
+    }
+    public void point_latitude(double keyframe1, double keyframe2, double keyframe3,double latitudee,double altitude ){
+        String latitude_esp = "";
+        double latitude =cal_latitude(latitudee);
+        point_altitude(keyframe1, keyframe2, keyframe3, altitude);
+        latitude_esp = "{\"time\":"+keyframe1+",\"value\":"+latitude+",\"transitionIn\":{\"x\":-0.066,\"y\":0,\"influence\":0.5,\"type\":\"auto\"},\"transitionOut\":{\"x\":0.066,\"y\":0,\"influence\":0.5,\"type\":\"auto\"}},{\"time\":"+keyframe1+",\"value\":"+latitude+",\"transitionIn\":{\"x\":0,\"y\":0,\"type\":\"linear\"},\"transitionOut\":{\"x\":0,\"y\":0,\"type\":\"linear\"}},{\"time\":"+keyframe1+",\"value\":"+latitude+",\"transitionIn\":{\"x\":-0.066,\"y\":0,\"influence\":0.5,\"type\":\"auto\"},\"transitionOut\":{\"x\":0.066,\"y\":0,\"influence\":0.5,\"type\":\"auto\"}}";
+        String latitude_poi_orbit = "{\"time\":"+keyframe1+",\"value\":"+latitude+"},{\"time\":"+keyframe1+",\"value\":"+latitude+"}";
+        POIlatitudes.append(latitude_poi_orbit);
+        latitudes.append(latitude_esp);
+    }
+    public void point_altitude(double keyframe1, double keyframe2, double keyframe3,double altitude){
+        String altitude_esp = "";
+        double Altitude = cal_altitude(altitude);
+        altitude_esp = "{\"time\":"+keyframe1+",\"value\":"+Altitude+"},{\"time\":"+keyframe1+",\"value\":"+Altitude+"},{\"time\":"+keyframe1+",\"value\":"+Altitude+"}";
+        altitudes.append(altitude_esp);
+        String altitude_poi_orbit = "{\"time\":"+keyframe1+",\"value\":"+Altitude+"},{\"time\":"+keyframe1+",\"value\":"+Altitude+"},{\"time\":"+keyframe1+",\"value\":"+Altitude+"}";
+        POIaltitudes.append(altitude_poi_orbit);
+    }
     public String orbit_longitude(double longitudee,double latitudess,double altitude){
         double keyframe1;
         if(initial_value == 0){

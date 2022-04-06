@@ -34,8 +34,9 @@ public class Movement extends Action implements IJsonPacker, Parcelable {
     private POI poi;
     private double newHeading;
     private double newTilt;
-    private boolean isOrbitMode;
+    private String isMode;
     private int duration;
+    private String KML_mode;
 
     /**
      * Empty Constructor
@@ -44,13 +45,14 @@ public class Movement extends Action implements IJsonPacker, Parcelable {
         super(ActionIdentifier.MOVEMENT_ACTIVITY.getId());
     }
 
-    public Movement(long id, POI poi, double newHeading, double newTilt, boolean isOrbitMode, int duration){
+    public Movement(long id, POI poi, double newHeading, double newTilt, String isMode, int duration,String Kml_mode){
         super(id, ActionIdentifier.MOVEMENT_ACTIVITY.getId());
         this.poi = poi;
         this.newHeading = newHeading;
         this.newTilt = newTilt;
-        this.isOrbitMode = isOrbitMode;
+        this.isMode = isMode;
         this.duration = duration;
+        this.KML_mode = Kml_mode;
     }
 
     public Movement(Parcel in) {
@@ -58,8 +60,9 @@ public class Movement extends Action implements IJsonPacker, Parcelable {
         this.poi = in.readParcelable(POI.class.getClassLoader());
         this.newHeading = in.readDouble();
         this.newTilt = in.readDouble();
-        this.isOrbitMode = in.readInt() != 0;
+        this.isMode = in.readString();
         this.duration = in.readInt();
+        this.KML_mode = in.readString();
     }
 
     public Movement(Movement movement) {
@@ -67,8 +70,9 @@ public class Movement extends Action implements IJsonPacker, Parcelable {
         this.poi = movement.poi;
         this.newHeading = movement.newHeading;
         this.newTilt = movement.newTilt;
-        this.isOrbitMode = movement.isOrbitMode;
+        this.isMode = movement.isMode;
         this.duration = movement.duration;
+        this.KML_mode = movement.KML_mode;
     }
 
     public POI getPoi() {
@@ -98,15 +102,22 @@ public class Movement extends Action implements IJsonPacker, Parcelable {
         return this;
     }
 
-    public boolean isOrbitMode() {
-        return isOrbitMode;
+    public String isOrbitMode() {
+        return isMode;
     }
 
-    public Movement setOrbitMode(boolean orbitMode) {
-        isOrbitMode = orbitMode;
+    public Movement setOrbitMode(String orbitMode) {
+        isMode = orbitMode;
         return this;
     }
+    public String get_KML_mode(){
+        return KML_mode;
+    }
 
+    public Movement set_KML_Mode(String kml){
+        this.KML_mode = kml;
+        return this;
+    }
     public int getDuration() {
         return duration;
     }
@@ -125,8 +136,9 @@ public class Movement extends Action implements IJsonPacker, Parcelable {
         if(poi != null) obj.put("movement_poi", poi.pack());
         obj.put("movement_new_heading", newHeading);
         obj.put("movement_new_tilt", newTilt);
-        obj.put("movement_orbit_mode", isOrbitMode);
+        obj.put("movement_orbit_mode", KML_mode);
         obj.put("movement_duration", duration);
+//        obj.put("movement_kml_mode",KML_mode);
 
         return obj;
     }
@@ -145,9 +157,9 @@ public class Movement extends Action implements IJsonPacker, Parcelable {
         }
         newHeading = obj.getDouble("movement_new_heading");
         newTilt = obj.getDouble("movement_new_tilt");
-        isOrbitMode = obj.getBoolean("movement_orbit_mode");
+        KML_mode = obj.getString("movement_orbit_mode");
         duration = obj.getInt("movement_duration");
-
+//        KML_mode = obj.getString("movement_kml_mode");
         return this;
     }
 
@@ -170,7 +182,8 @@ public class Movement extends Action implements IJsonPacker, Parcelable {
         parcel.writeParcelable(poi, flags);
         parcel.writeDouble(newHeading);
         parcel.writeDouble(newTilt);
-        parcel.writeInt(isOrbitMode ? 1 : 0);
+        parcel.writeString(KML_mode);
         parcel.writeInt(duration);
+        parcel.writeString(KML_mode);
     }
 }

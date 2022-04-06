@@ -60,18 +60,8 @@ public class DemoThread implements Runnable {
             } else if (actionSend instanceof Movement) {
                 Movement movement = (Movement) actionSend;
                 POI poi = movement.getPoi();
-                if (movement.isOrbitMode()) {
-                    actionController.orbit(poi, null);
-                } else {
-                    POICamera camera = poi.getPoiCamera();
-                    POICamera poiCamera = new POICamera(camera.getHeading(), camera.getTilt(), camera.getRange(), camera.getAltitudeMode(), camera.getDuration());
-                    POI poiSend = new POI();
-                    poiCamera.setHeading(movement.getNewHeading());
-                    poiCamera.setTilt(movement.getNewTilt());
-                    poiSend.setPoiCamera(poiCamera);
-                    poiSend.setPoiLocation(poi.getPoiLocation());
-                    actionController.moveToPOI(poiSend, null);
-                }
+                actionController.orbit(poi, null);
+
                 duration = movement.getDuration() * 1000;
             } else if (actionSend instanceof Balloon) {
                 Balloon balloon = (Balloon) actionSend;

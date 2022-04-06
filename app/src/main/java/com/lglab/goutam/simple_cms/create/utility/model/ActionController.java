@@ -87,6 +87,7 @@ public class ActionController {
      * @param listener Listener
      */
     public void orbit(POI poi, LGCommand.Listener listener) {
+
         LGCommand lgCommandOrbit = new LGCommand(ActionBuildCommandUtility.buildCommandOrbit(poi), LGCommand.CRITICAL_MESSAGE, (String result) -> {
             if (listener != null) {
                 listener.onResponse(result);

@@ -57,23 +57,14 @@
         android:padding="20dp">
 
 
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switch_button"
+        <Spinner
+            android:id="@+id/kml_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="352dp"
-            android:thumb="@drawable/custom_switch_button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/orbit_mode"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:track="@drawable/custom_switch_button_track" />
-
-        <TextView
-            android:id="@+id/orbit_mode"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:minWidth="244dp"
+            android:background="@drawable/spinner_background"
             android:layout_marginEnd="64dp"
+            android:maxLength="30"
             android:layout_marginBottom="352dp"
             android:fontFamily="@font/roboto"
             android:text="@string/orbit_mode"

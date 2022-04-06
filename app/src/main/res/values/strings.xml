@@ -294,7 +294,7 @@
     <string name="esp_mode">Esp mode</string>
     <string name="You_need_a_name_to_export_esp">Please fill the name of Storyboard</string>
     <string name="You_need_to_select_mode_of_esp">You need to select mode of esp under location</string>
-    <string name="only_going_to_export_esp">We\'re only going to export Location files! \nDo you still wants to continue?</string>
+    <string name="only_going_to_export_esp">We\'re going to export complete storyboard! \nDo you still wants to continue?</string>
     <string name="You_can_not_enter_same_location_name_multiple_times">You can\'t enter same location name multiple times</string>
     <string name="Port_already_in_use">Port  already in use</string>
     <string name="unable_to_access_the_port">Unable to access the port</string>
@@ -321,6 +321,13 @@
         <item>Orbit</item>
         <item>Spiral</item>
         <item>Zoom-To</item>
+    </string-array>
+
+    <string-array name="kml_mode">
+        <item>Zoom-To</item>
+        <item>Orbit</item>
+        <item>Spiral</item>
+        <item>Fly-To-Orbit</item>
     </string-array>
 
 

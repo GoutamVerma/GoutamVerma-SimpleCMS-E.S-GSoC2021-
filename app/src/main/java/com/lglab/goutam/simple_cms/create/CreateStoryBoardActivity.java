@@ -506,8 +506,9 @@ public class CreateStoryBoardActivity extends ExportGoogleDriveActivity implemen
                 duration = duration + poi.getPoiCamera().getDuration();
             } else if (action instanceof Movement) {
                 Movement movement = (Movement) action;
-                if(movement.isOrbitMode()) duration = duration + 45;
-                else  duration = duration + movement.getDuration();
+//                if(movement.get_KML_mode().equals("Orbit"))
+                duration = duration + 45;
+//                else  duration = duration + movement.getDuration();
             } else if (action instanceof Balloon) {
                 Balloon balloon = (Balloon) action;
                 duration = duration + balloon.getDuration();

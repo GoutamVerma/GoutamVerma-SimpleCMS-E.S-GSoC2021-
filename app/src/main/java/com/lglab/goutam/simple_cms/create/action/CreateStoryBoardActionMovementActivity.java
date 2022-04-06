@@ -1,4 +1,4 @@
-package com.lglab.goutam.simple_cms.create.action;
+    package com.lglab.goutam.simple_cms.create.action;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,10 +6,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +21,7 @@ import androidx.core.content.ContextCompat;
 
 import com.lglab.goutam.simple_cms.R;
 import com.lglab.goutam.simple_cms.create.utility.connection.LGConnectionTest;
+import com.lglab.goutam.simple_cms.create.utility.model.ActionBuildCommandUtility;
 import com.lglab.goutam.simple_cms.create.utility.model.ActionIdentifier;
 import com.lglab.goutam.simple_cms.create.utility.model.movement.Movement;
 import com.lglab.goutam.simple_cms.create.utility.model.poi.POI;
@@ -44,7 +48,9 @@ public class CreateStoryBoardActionMovementActivity extends AppCompatActivity {
     private TextView locationNameTitle;
     private EditText duration, positionSave;
     private SeekBar seekBarHeading, seekBarTilt;
-    private SwitchCompat switchCompatOrbitMode;
+//    private SwitchCompat switchCompatOrbitMode;
+    private Spinner Animation;
+    private ArrayAdapter<CharSequence> spinnerAdapter;
 
     private Handler handler = new Handler();
     private POI poi;
@@ -66,20 +72,24 @@ public class CreateStoryBoardActionMovementActivity extends AppCompatActivity {
         locationNameTitle = findViewById(R.id.location_name_title);
         duration = findViewById(R.id.duration);
         positionSave = findViewById(R.id.position_save);
-
+        Animation = findViewById(R.id.kml_mode);
         SharedPreferences sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE);
         loadConnectionStatus(sharedPreferences);
 
         seekBarHeading = findViewById(R.id.seek_bar_heading);
         seekBarTilt = findViewById(R.id.seek_bar_tilt);
-        switchCompatOrbitMode = findViewById(R.id.switch_button);
+//        switchCompatOrbitMode = findViewById(R.id.switch_button);
 
         Button buttTest = findViewById(R.id.butt_gdg);
         Button buttCancel = findViewById(R.id.butt_cancel);
         Button buttAdd = findViewById(R.id.butt_add);
         Button buttDelete = findViewById(R.id.butt_delete);
 
-
+        spinnerAdapter = ArrayAdapter.createFromResource(this,
+                R.array.kml_mode, R.layout.spinner_text);
+        spinnerAdapter.setDropDownViewResource(R.layout.simple_spinner_dropdown);
+        Animation.setAdapter(spinnerAdapter);
+//        Animation.setOnItemSelectedListener(this);
         Intent intent = getIntent();
         poi = intent.getParcelableExtra(ActionIdentifier.LOCATION_ACTIVITY.name());
         if(poi != null){
@@ -113,13 +123,13 @@ public class CreateStoryBoardActionMovementActivity extends AppCompatActivity {
             seekBarHeading.setProgress((int) movement.getNewHeading());
             seekBarTilt.setMax(90);
             seekBarTilt.setProgress((int) movement.getNewTilt());
-            boolean isOrbitMode = movement.isOrbitMode();
-            switchCompatOrbitMode.setChecked(isOrbitMode);
-            setSwitchAndSeekBar(isOrbitMode);
+//            String isOrbitMode = movement.isOrbitMode();
+//            switchCompatOrbitMode.setChecked(isOrbitMode.equals("Orbit"));
+//            setSwitchAndSeekBar(isOrbitMode.equals("Orbit"));
             duration.setText(String.valueOf(movement.getDuration()));
         }
 
-        switchCompatOrbitMode.setOnCheckedChangeListener((buttonView, isChecked) -> setSwitchAndSeekBar(isChecked));
+//        switchCompatOrbitMode.setOnCheckedChangeListener((buttonView, isChecked) -> setSwitchAndSeekBar(isChecked));
 
 
         seekBarHeading.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -169,7 +179,7 @@ public class CreateStoryBoardActionMovementActivity extends AppCompatActivity {
         );
 
         buttDelete.setOnClickListener((view) ->
-            deleteMovement() );
+                deleteMovement() );
     }
 
 
@@ -184,6 +194,7 @@ public class CreateStoryBoardActionMovementActivity extends AppCompatActivity {
             seekBarTilt.setProgressDrawable(ContextCompat.getDrawable(this, R.drawable.custom_seek_bar_black));
             seekBarHeading.setProgressDrawable(ContextCompat.getDrawable(this, R.drawable.custom_seek_bar_black));
         } else {
+            Animation.setEnabled(false);
             seekBarTilt.setEnabled(true);
             seekBarHeading.setEnabled(true);
             seekBarTilt.setProgressDrawable(ContextCompat.getDrawable(this, R.drawable.custom_seek_bar));
@@ -200,17 +211,19 @@ public class CreateStoryBoardActionMovementActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(ConstantPrefs.SHARED_PREFS.name(), MODE_PRIVATE);
         handler.postDelayed(() -> {
             if(isConnected.get()){
-                if(switchCompatOrbitMode.isChecked()){
+//                if(switchCompatOrbitMode.isChecked()){
+                    ActionBuildCommandUtility.mode = Animation.getSelectedItem().toString();
+                    Toast.makeText(this, ActionBuildCommandUtility.mode+" TEST MODE", Toast.LENGTH_SHORT).show();
                     ActionController.getInstance().orbit(poi, null);
-                } else{
-                    POI poiSend = new POI(poi);
-                    POICamera poiCamera = poiSend.getPoiCamera();
-                    POICamera poiCameraSend = new POICamera(seekBarHeading.getProgress(),
-                            seekBarTilt.getProgress(), poiCamera.getRange(),
-                            poiCamera.getAltitudeMode(), poiCamera.getDuration());
-                    poiSend.setPoiCamera(poiCameraSend);
-                    ActionController.getInstance().moveToPOI(poiSend, null);
-                }
+//                } else{
+//                    POI poiSend = new POI(poi);
+//                    POICamera poiCamera = poiSend.getPoiCamera();
+//                    POICamera poiCameraSend = new POICamera(seekBarHeading.getProgress(),
+//                            seekBarTilt.getProgress(), poiCamera.getRange(),
+//                            poiCamera.getAltitudeMode(), poiCamera.getDuration());
+//                    poiSend.setPoiCamera(poiCameraSend);
+//                    ActionController.getInstance().moveToPOI(poiSend, null);
+//                }
             }
             loadConnectionStatus(sharedPreferences);
         }, 1200);
@@ -245,12 +258,14 @@ public class CreateStoryBoardActionMovementActivity extends AppCompatActivity {
         int seekBarHeadingValue = seekBarHeading.getProgress();
         int seekBarTiltValue = seekBarTilt.getProgress();
         String durationString = duration.getText().toString();
+        String CompatMode = Animation.getSelectedItem().toString();
         if(durationString.equals("")){
             CustomDialogUtility.showDialog(CreateStoryBoardActionMovementActivity.this, getResources().getString(R.string.activity_create_missing_duration_field_error));
         }else{
             int durationInt = Integer.parseInt(durationString);
             Movement movement = new Movement().setNewHeading(seekBarHeadingValue)
-                    .setNewTilt(seekBarTiltValue).setPoi(poi).setOrbitMode(switchCompatOrbitMode.isChecked()).setDuration(durationInt);
+                    .setNewTilt(seekBarTiltValue).setPoi(poi).set_KML_Mode(CompatMode).setDuration(durationInt);
+            ActionBuildCommandUtility.mode = Animation.getSelectedItem().toString();
             Intent returnInfoIntent = new Intent();
             returnInfoIntent.putExtra(ActionIdentifier.MOVEMENT_ACTIVITY.name(), movement);
             returnInfoIntent.putExtra(ActionIdentifier.IS_SAVE.name(), isSave);

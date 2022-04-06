@@ -2,7 +2,11 @@ package com.lglab.goutam.simple_cms.create.utility.model;
 
 
 import android.util.Log;
+import android.widget.Toast;
 
+import com.lglab.goutam.simple_cms.create.CreateStoryBoardActivity;
+import com.lglab.goutam.simple_cms.create.action.CreateStoryBoardActionLocationActivity;
+import com.lglab.goutam.simple_cms.create.action.CreateStoryBoardActionMovementActivity;
 import com.lglab.goutam.simple_cms.create.utility.model.balloon.Balloon;
 import com.lglab.goutam.simple_cms.create.utility.model.movement.Movement;
 import com.lglab.goutam.simple_cms.create.utility.model.poi.POI;
@@ -13,6 +17,7 @@ import com.lglab.goutam.simple_cms.create.utility.model.shape.Shape;
 
 import java.util.List;
 
+
 /**
  * This class is in charge of creating the commands that are going to be send to the liquid galaxy
  */
@@ -22,6 +27,7 @@ public class ActionBuildCommandUtility {
 
     private static String BASE_PATH = "/var/www/html/";
     public static String RESOURCES_FOLDER_PATH = BASE_PATH + "resources/";
+    public static String mode = "";
 
 
     /**
@@ -131,25 +137,25 @@ public class ActionBuildCommandUtility {
                 "  <body>\n" +
                 "    <div class=\"p-lg-5\" align=\"center\">\n" +
                 "\n";
-                String description = "";
-                if(!balloon.getDescription().equals("")) {
-                    description = "        <h5>" + balloon.getDescription() + "</h5>\n" +
-                            "        <br>\n";
-                }
-                String imageCommand = "";
+        String description = "";
+        if(!balloon.getDescription().equals("")) {
+            description = "        <h5>" + balloon.getDescription() + "</h5>\n" +
+                    "        <br>\n";
+        }
+        String imageCommand = "";
 
-                if(balloon.getImagePath() != null && !balloon.getImagePath().equals("")) {
-                    imageCommand =  "        <img src=\"./resources/" + getFileName(balloon.getImagePath()) + "\"> \n" +
-                            "        <br>\n";
-                }
-                String videoCommand = "";
-                if(balloon.getVideoPath() != null && !balloon.getVideoPath().equals("")) {
-                    videoCommand = "<iframe" +
-                            " src=\""+ balloon.getVideoPath() + "\" frameborder=\"0\"" +
-                            " allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen>" +
-                            "</iframe>";
-                }
-                String endCommand = "    </div>\n    <script src=\"https://code.jquery.com/jquery-3.2.1.slim.min.js\" integrity=\"sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN\" crossorigin=\"anonymous\"></script>\n" +
+        if(balloon.getImagePath() != null && !balloon.getImagePath().equals("")) {
+            imageCommand =  "        <img src=\"./resources/" + getFileName(balloon.getImagePath()) + "\"> \n" +
+                    "        <br>\n";
+        }
+        String videoCommand = "";
+        if(balloon.getVideoPath() != null && !balloon.getVideoPath().equals("")) {
+            videoCommand = "<iframe" +
+                    " src=\""+ balloon.getVideoPath() + "\" frameborder=\"0\"" +
+                    " allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen>" +
+                    "</iframe>";
+        }
+        String endCommand = "    </div>\n    <script src=\"https://code.jquery.com/jquery-3.2.1.slim.min.js\" integrity=\"sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN\" crossorigin=\"anonymous\"></script>\n" +
                 "    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js\" integrity=\"sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q\" crossorigin=\"anonymous\"></script>\n" +
                 "    <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js\" integrity=\"sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl\" crossorigin=\"anonymous\"></script>\n" +
                 "  </body>\n" +
@@ -165,8 +171,8 @@ public class ActionBuildCommandUtility {
                 "' > " +
                 BASE_PATH +
                 "balloon.kml";
-                Log.w(TAG_DEBUG, startCommand + description +  imageCommand + videoCommand + endCommand);
-                return startCommand + description + imageCommand + videoCommand + endCommand;
+        Log.w(TAG_DEBUG, startCommand + description +  imageCommand + videoCommand + endCommand);
+        return startCommand + description + imageCommand + videoCommand + endCommand;
     }
 
     /**
@@ -254,12 +260,20 @@ public class ActionBuildCommandUtility {
     public static String buildCommandOrbit(POI poi) {
         StringBuilder command = new StringBuilder();
         command.append( "echo '").append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n")
-        .append("<kml xmlns=\"http://www.opengis.net/kml/2.2\"\n")
-        .append("xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:kml=\"http://www.opengis.net/kml/2.2\" xmlns:atom=\"http://www.w3.org/2005/Atom\"> \n")
-        .append("<gx:Tour> \n").append(" <name>Orbit</name> \n").append(" <gx:Playlist> \n");
-        orbit(poi, command);
+                .append("<kml xmlns=\"http://www.opengis.net/kml/2.2\"\n")
+                .append("xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:kml=\"http://www.opengis.net/kml/2.2\" xmlns:atom=\"http://www.w3.org/2005/Atom\"> \n")
+                .append("<gx:Tour> \n").append(" <name>Orbit</name> \n").append(" <gx:Playlist> \n");
+        if(mode.equals("Orbit")){
+            orbit(poi, command);
+        }else if(mode.equals("Zoom-To")){
+            ZoomTo(poi,command);
+        }else if(mode.equals("Spiral")){
+            Spiral(poi,command);
+        }else if(mode.equals("Fly-To-Orbit")){
+            fly_to_orbit(poi,command);
+        }
         command.append(" </gx:Playlist>\n")
-        .append("</gx:Tour>\n").append("</kml> " + "' > ")
+                .append("</gx:Tour>\n").append("</kml> " + "' > ")
                 .append(BASE_PATH).append("Orbit.kml");
         Log.w(TAG_DEBUG, "Command: " + command.toString());
         return  command.toString();
@@ -357,79 +371,153 @@ public class ActionBuildCommandUtility {
     private static String MovementCommand(Movement movement) {
         POI poi = movement.getPoi();
         StringBuilder command = new StringBuilder();
-        if(movement.isOrbitMode()){
+        if(movement.get_KML_mode().equals("Orbit")) {
             orbit(poi, command);
-            Log.w(TAG_DEBUG, "ORBIT COMMAND: " + command.toString());
-        }else{
-            POICamera camera = poi.getPoiCamera();
-            POICamera poiCamera = new POICamera(camera.getHeading(), camera.getTilt(), camera.getRange(), camera.getAltitudeMode(), camera.getDuration());
-            POI poiSend = new POI();
-            poiCamera.setHeading(movement.getNewHeading());
-            poiCamera.setTilt(movement.getNewTilt());
-            poiSend.setPoiCamera(poiCamera);
-            poiSend.setPoiLocation(poi.getPoiLocation());
-            movement(poiSend, command, movement.getDuration());
-            Log.w(TAG_DEBUG, "MOVEMENT COMMAND: " + command.toString());
-
+        }else if(movement.get_KML_mode().equals("Zoom-To")){
+            ZoomTo(poi,command);
+        }else if(movement.get_KML_mode().equals("Spiral")) {
+            Spiral(poi,command);
+        }else if(movement.get_KML_mode().equals("Fly-To-Orbit")){
+            fly_to_orbit(poi,command);
         }
+        Log.w(TAG_DEBUG, "ORBIT COMMAND: " + command.toString());
+
+//        }else{
+//            POICamera camera = poi.getPoiCamera();
+//            POICamera poiCamera = new POICamera(camera.getHeading(), camera.getTilt(), camera.getRange(), camera.getAltitudeMode(), camera.getDuration());
+//            POI poiSend = new POI();
+//            poiCamera.setHeading(movement.getNewHeading());
+//            poiCamera.setTilt(movement.getNewTilt());
+//            poiSend.setPoiCamera(poiCamera);
+//            poiSend.setPoiLocation(poi.getPoiLocation());
+//            movement(poiSend, command, movement.getDuration());
+//            Log.w(TAG_DEBUG, "MOVEMENT COMMAND: " + command.toString());
+//
+//        }
         return command.toString();
     }
 
-//    private static void orbit(POI poi, StringBuilder command) {
-//        double heading = poi.getPoiCamera().getHeading();
-//        int orbit = 0;
-//        while (orbit <= 36) {
-//            if (heading >= 360) heading = heading - 360;
-//            command.append("    <gx:FlyTo>\n").append("    <gx:duration>1.2</gx:duration> \n")
-//                    .append("    <gx:flyToMode>smooth</gx:flyToMode> \n")
-//                    .append("     <LookAt> \n")
-//                    .append("      <longitude>").append(poi.getPoiLocation().getLongitude()).append("</longitude> \n")
-//                    .append("      <latitude>").append(poi.getPoiLocation().getLatitude()).append("</latitude> \n")
-//                    .append("      <heading>").append(heading).append("</heading> \n")
-//                    .append("      <tilt>").append(poi.getPoiCamera().getTilt()).append("</tilt> \n")
-//                    .append("      <gx:fovy>35</gx:fovy> \n")
-//                    .append("      <range>").append(poi.getPoiCamera().getRange()).append("</range> \n")
-//                    .append("      <gx:altitudeMode>absolute</gx:altitudeMode> \n")
-//                    .append("      </LookAt> \n")
-//                    .append("    </gx:FlyTo> \n\n");
-//            heading = heading + 10;
-//            orbit++;
-//        }
-//    }
-    private static void orbit(POI poi, StringBuilder command) {
+        private static void orbit(POI poi, StringBuilder command) {
         double heading = poi.getPoiCamera().getHeading();
         int orbit = 0;
-//        while (orbit <= 36) {
-//            if (heading >= 360) heading = heading - 360;
-            command.append("    <gx:FlyTo>\n").append("    <gx:duration>12</gx:duration> \n")
-                    .append("    <gx:flyToMode>bounce</gx:flyToMode> \n")
+        while (orbit <= 36) {
+            if (heading >= 360) heading = heading - 360;
+            command.append("    <gx:FlyTo>\n").append("    <gx:duration>1.2</gx:duration> \n")
+                    .append("    <gx:flyToMode>smooth</gx:flyToMode> \n")
                     .append("     <LookAt> \n")
-                    .append("      <longitude>-73.994016").append("</longitude> \n")
-                    .append("      <latitude>40.764932").append("</latitude> \n")
-                    .append(" <altitude>0</altitude>\n")
-                    .append("      <heading>0").append("</heading> \n")
-                    .append("      <tilt>10").append("</tilt> \n")
+                    .append("      <longitude>").append(poi.getPoiLocation().getLongitude()).append("</longitude> \n")
+                    .append("      <latitude>").append(poi.getPoiLocation().getLatitude()).append("</latitude> \n")
+                    .append("      <altitude>").append(poi.getPoiLocation().getAltitude()).append("</altitude> \n")
+                    .append("      <heading>").append(heading).append("</heading> \n")
+                    .append("      <tilt>").append(poi.getPoiCamera().getTilt()).append("</tilt> \n")
                     .append("      <gx:fovy>35</gx:fovy> \n")
-                    .append("      <range>1200").append("</range> \n")
-                    .append("      <gx:altitudeMode>relativeToGround</gx:altitudeMode> \n")
-                    .append("      </LookAt> \n")
-                    .append("    </gx:FlyTo> \n\n")
-                    .append("    <gx:FlyTo>\n").append("    <gx:duration>12</gx:duration> \n")
-                    .append("    <gx:flyToMode>bounce</gx:flyToMode> \n")
-                    .append("     <LookAt> \n")
-                    .append("      <longitude>-73.985016").append("</longitude> \n")
-                    .append("      <latitude>40.755932").append("</latitude> \n")
-                    .append(" <altitude>0</altitude>\n")
-                    .append("      <heading>0").append("</heading> \n")
-                    .append("      <tilt>10").append("</tilt> \n")
-                    .append("      <gx:fovy>35</gx:fovy> \n")
-                    .append("      <range>1200").append("</range> \n")
-                    .append("      <gx:altitudeMode>relativeToGround</gx:altitudeMode> \n")
+                    .append("      <range>").append(poi.getPoiCamera().getRange()).append("</range> \n")
+                    .append("      <gx:altitudeMode>absolute</gx:altitudeMode> \n")
                     .append("      </LookAt> \n")
                     .append("    </gx:FlyTo> \n\n");
-//            heading = heading + 10;
-//            orbit++;
+            heading = heading + 10;
+            orbit++;
         }
+    }
+    private static void Spiral(POI poi, StringBuilder command) {
+        double heading = poi.getPoiCamera().getHeading();
+        int orbit = 0;
+        int diff=10;
+        while (orbit <= 36) {
+            if (heading >= 360) heading = heading - 360;
+            command.append("    <gx:FlyTo>\n").append("    <gx:duration>1.2</gx:duration> \n")
+                    .append("    <gx:flyToMode>smooth</gx:flyToMode> \n")
+                    .append("     <LookAt> \n")
+                    .append("      <longitude>").append(poi.getPoiLocation().getLongitude()).append("</longitude> \n")
+                    .append("      <latitude>").append(poi.getPoiLocation().getLatitude()).append("</latitude> \n")
+                    .append("      <altitude>").append(poi.getPoiLocation().getAltitude()-diff).append("</altitude> \n")
+                    .append("      <heading>").append(heading).append("</heading> \n")
+                    .append("      <tilt>").append(poi.getPoiCamera().getTilt()).append("</tilt> \n")
+                    .append("      <gx:fovy>35</gx:fovy> \n")
+                    .append("      <range>").append(poi.getPoiCamera().getRange()).append("</range> \n")
+                    .append("      <gx:altitudeMode>absolute</gx:altitudeMode> \n")
+                    .append("      </LookAt> \n")
+                    .append("    </gx:FlyTo> \n\n");
+            heading = heading + 50;
+            diff+=100;
+            orbit++;
+        }
+    }
+
+
+    private static void fly_to_orbit(POI poi, StringBuilder command) {
+        double heading = poi.getPoiCamera().getHeading();
+        command.append("    <gx:FlyTo>\n").append("    <gx:duration>7</gx:duration> \n")
+                .append("    <gx:flyToMode>bounce</gx:flyToMode> \n")
+                .append("     <LookAt> \n")
+                .append("      <longitude>").append(poi.getPoiLocation().getLongitude()).append("</longitude> \n")
+                .append("      <latitude>").append(poi.getPoiLocation().getLatitude()).append("</latitude> \n")
+                .append(" <altitude>50000000000").append("</altitude>\n")
+                .append("      <heading>0").append("</heading> \n")
+                .append("      <tilt>0").append("</tilt> \n")
+                .append("      <range>1200").append("</range> \n")
+                .append("      <gx:altitudeMode>relativeToGround</gx:altitudeMode> \n")
+                .append("      </LookAt> \n")
+                .append("    </gx:FlyTo>\n\n");
+
+        command.append("    <gx:FlyTo>\n").append("    <gx:duration>7</gx:duration> \n")
+                .append("    <gx:flyToMode>bounce</gx:flyToMode> \n")
+                .append("     <LookAt> \n")
+                .append("      <longitude>").append(poi.getPoiLocation().getLongitude()).append("</longitude> \n")
+                .append("      <latitude>").append(poi.getPoiLocation().getLatitude()).append("</latitude> \n")
+                .append(" <altitude>").append(poi.getPoiLocation().getAltitude()).append("</altitude>\n")
+                .append("      <heading>0").append("</heading> \n")
+                .append("      <tilt>0").append("</tilt> \n")
+                .append("      <range>1200").append("</range> \n")
+                .append("      <gx:altitudeMode>relativeToGround</gx:altitudeMode> \n")
+                .append("      </LookAt> \n")
+                .append("    </gx:FlyTo>\n\n");
+        int orbit = 0;
+        while (orbit <= 36) {
+            if (heading >= 360) heading = heading - 360;
+            command.append("    <gx:FlyTo>\n").append("    <gx:duration>1.2</gx:duration> \n")
+                    .append("    <gx:flyToMode>smooth</gx:flyToMode> \n")
+                    .append("     <LookAt> \n")
+                    .append("      <longitude>").append(poi.getPoiLocation().getLongitude()).append("</longitude> \n")
+                    .append("      <latitude>").append(poi.getPoiLocation().getLatitude()).append("</latitude> \n")
+                    .append("      <altitude>").append(poi.getPoiLocation().getAltitude()).append("</altitude> \n")
+                    .append("      <heading>").append(heading).append("</heading> \n")
+                    .append("      <tilt>").append(poi.getPoiCamera().getTilt()).append("</tilt> \n")
+                    .append("      <gx:fovy>35</gx:fovy> \n")
+                    .append("      <range>").append(poi.getPoiCamera().getRange()).append("</range> \n")
+                    .append("      <gx:altitudeMode>absolute</gx:altitudeMode> \n")
+                    .append("      </LookAt> \n")
+                    .append("    </gx:FlyTo> \n\n");
+            heading = heading + 10;
+            orbit++;
+        }
+    }
+    private static void ZoomTo(POI poi, StringBuilder command) {
+        command.append("    <gx:FlyTo>\n").append("    <gx:duration>7</gx:duration> \n")
+                .append("    <gx:flyToMode>bounce</gx:flyToMode> \n")
+                .append("     <LookAt> \n")
+                .append("      <longitude>").append(poi.getPoiLocation().getLongitude()).append("</longitude> \n")
+                .append("      <latitude>").append(poi.getPoiLocation().getLatitude()).append("</latitude> \n")
+                .append(" <altitude>50000000000").append("</altitude>\n")
+                .append("      <heading>0").append("</heading> \n")
+                .append("      <tilt>0").append("</tilt> \n")
+                .append("      <range>1200").append("</range> \n")
+                .append("      <gx:altitudeMode>relativeToGround</gx:altitudeMode> \n")
+                .append("      </LookAt> \n")
+                .append("    </gx:FlyTo> \n\n")
+                .append("    <gx:FlyTo>\n").append("    <gx:duration>12</gx:duration> \n")
+                .append("    <gx:flyToMode>bounce</gx:flyToMode> \n")
+                .append("     <LookAt> \n")
+                .append("      <longitude>").append(poi.getPoiLocation().getLongitude()).append("</longitude> \n")
+                .append("      <latitude>").append(poi.getPoiLocation().getLatitude()).append("</latitude> \n")
+                .append(" <altitude>").append(poi.getPoiLocation().getAltitude()).append("</altitude>\n")
+                .append("      <heading>0").append("</heading> \n")
+                .append("      <tilt>0").append("</tilt> \n")
+                .append("      <range>1200").append("</range> \n")
+                .append("      <gx:altitudeMode>relativeToGround</gx:altitudeMode> \n")
+                .append("      </LookAt> \n")
+                .append("    </gx:FlyTo> \n\n");
+    }
 
 
     private static void movement(POI poi, StringBuilder command, int duration) {
